@@ -6,6 +6,7 @@
 #define __symb 16
 #define __abs 8
 #define ig__ 3 
+#define len_op 6
 
 #ifndef MAGENTA_LEX_H
 #define MAGENTA_LEX_H
@@ -14,7 +15,10 @@ typedef std::vector<std::string> token;
 
 enum error_id {
 INIT_ID = 0,
-LEXICAL_CHARACTER_DONT_FOUND = 1
+LEXICAL_CHARACTER_DONT_FOUND = 1,
+SEMANTIC_CHARACTER_ILLEGAL = 2,
+SEMANTIC_OPERATOR_INCONSISTENT = 3,
+SEMANTIC_WRITE_FUNC = 4
 };
 
 struct st_ {
@@ -30,6 +34,7 @@ class lex_ {
 	public:	
 	const char* abstract_logic[__abs][2] = {{"function", ") "}, {"if", " "}, {"while", " "}, {"ret", " "}, {"else", " "}, {"#", " "}, {"end", " "}, {"func", " "}}; //only one character [x] of abstract_logic[__abs][x]
     char char_ign[ig__][2] =  { {'\"', '\"'}, {'(', ')'}, {'[', ']'}}; // warning precedence order
+    std::string operators[len_op] = {"+", "-", "*", "/", "%", ","}; // operators list expect "," but this is interpreter like this
 	void lex__(std::string x_);
 	std::string l__(std::string str, std::string sep, std::string sep_);
     st_ check__();
