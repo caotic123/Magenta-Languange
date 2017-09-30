@@ -66,6 +66,7 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
     std::string c;
     int n__len_;
     int q = 0;
+    std::string e;
     for (i; i <= str.length(); i++) {
         c = str.substr(i, 1);
         i_ = (sep == sep_) ? ((c == sep) ? ((i_ == 1) ? 0 : 1) : i_) : (c == sep) ? i_ + 1 : (c == sep_) ? i_ - 1 : i_;
@@ -73,6 +74,7 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
         if (!_b && c == sep) {
             _b = true;
             l[0] = i;
+            e = str.substr(l[0]+(str.length()-l[0] > 9) ? 9 : 0, (str.length()-(l[0]+(str.length()-l[0] > 9) ? 9 : 0) > 4) ? 4 : 0);
         }
 
         if (_b && c == sep_ && i_ == 0) {
@@ -89,6 +91,13 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
             _b = false;
         }
     }
+    if (i_ !=0) {
+    	printf("LEXICAL ERROR: LINE OF CODE BROKEN\n");
+    	printf("In ...%s...\n", e.c_str());
+    	printf("Use of illegal way of characters \"(\" \")\"\n");
+    	system("pause");
+    	exit(0);
+	}
 
     return str;
 }

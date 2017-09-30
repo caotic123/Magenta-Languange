@@ -4,12 +4,16 @@ void error(st_ st) {
 	switch (st.error) {
 	case LEXICAL_CHARACTER_DONT_FOUND:
 		printf("Illegal character: used in line %d\n", st.l);
+		break;
 	case SEMANTIC_CHARACTER_ILLEGAL:
 		printf("Illegal expression: used illegal combination of characters in %d\n", st.l);
+		break;
 	case SEMANTIC_OPERATOR_INCONSISTENT:
 		printf("Illegal expression: the use of the operator in this way is illegal %d\n", st.l);
+		break;
 	case SEMANTIC_WRITE_FUNC:
 		printf("Illegal function: the use of the function in this way is illegal %d\n", st.l);
+		break;
     default:
     	printf("A unknow error ocurred\n");
     }
@@ -65,6 +69,18 @@ bool __str(std::string expression)
     return p;
 }
 
+bool is_sep(char char_ign[ig__][2], std::string c) {
+  bool x=false;
+  std::string s, s_;
+  for(int i=0; i <= ig__-1; i++) {
+    s = char_ign[i][0];
+    s_ = char_ign[i][1];
+    x = (c == s || c == s_) ? true : x;
+  }
+
+  return x;
+}
+
 void analy_exp(char op[ig__][2], std::string op_[len_op], std::string str)
 {
     std::string c;
@@ -101,13 +117,13 @@ void analy_exp(char op[ig__][2], std::string op_[len_op], std::string str)
         if (is_operator(c, op_)) {
             y__ = false;
             for (q_ = i + 1; q_ <= str.length() - 1; q_++) {
-                if (str.substr(q_, 1) != " " && !is_operator(str.substr(q_, 1), op_)) {
+                if (str.substr(q_, 1) != " " && !is_sep(op, str.substr(q_, 1)) && !is_operator(str.substr(q_, 1), op_)) {
                     y__ = true;
                     break;
                 }
             }
             for (q_ = i - 1; q_ >= 0 && y__; q_--) {
-                if (str.substr(q_, 1) != " " && !is_operator(str.substr(q_, 1), op_)) {
+                if (str.substr(q_, 1) != " " && !is_sep(op, str.substr(q_, 1)) && !is_operator(str.substr(q_, 1), op_)) {
                     y__ = true;					   
                     break;
                 }
@@ -153,19 +169,20 @@ void magenta::__analysis() {
 	for (token::iterator token_ = token__.begin() ; token_ != token__.end(); ++token_) {
 		if (__func(*token_)) {
 			if (!__str(*token_)) {
-			
+			printf("%s\n", get_str_tok(getn_expression((*token_))).c_str());
 				analy_exp(lex->char_ign, lex->operators, get_str_tok(getn_expression((*token_))));
-			printf("%s\n", (*token_).c_str());
+			printf("%s %s %d\n", (*token_).c_str(), get_str_tok(getn_expression((*token_))).c_str(), getn_expression(*token_));
 		}
 	}
 }
-	
+
+
 }
 
 void magenta::__token() {
  lex->lex__(code__);
  st_ st = lex->check__();
- if (lex->check__()._) {
+ if (st._) {
  	printf("Error ocurred\n");
  	error(st);
  }

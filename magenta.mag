@@ -1,5 +1,5 @@
-function fat()
-#a = n
+function fat(n)
+#a = n-1
 while(n >= 0)
 #a = a-1
 #n = n*a
