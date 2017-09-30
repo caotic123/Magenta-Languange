@@ -1,0 +1,27 @@
+function fat()
+#a = n
+while(n >= 0)
+#a = a-1
+#n = n*a
+end
+ret a
+
+function fib(x)
+#a = 1
+#b = 1
+#_ = 0
+#y = 0
+while(y <= x)
+#_ = a+b
+#a = b
+#b = _
+end
+ret b
+
+function x_(x) ret x
+
+function init()
+#x = 12
+#x = fat(x)
+func print(x)
+func print("alou")
