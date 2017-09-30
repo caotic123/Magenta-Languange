@@ -40,13 +40,14 @@ st_ char___(char sym_[__symb][2], char* str)
         error_handle._ = true;
         error_handle.error = LEXICAL_CHARACTER_DONT_FOUND;
     }
-   
-    error_handle.l = 0; 
+
+    error_handle.l = 0;
     return error_handle;
 }
 
-token lex_::get__token_() {
-	return token_lex;
+token lex_::get__token_()
+{
+    return token_lex;
 }
 
 st_ new_st()
@@ -74,7 +75,7 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
         if (!_b && c == sep) {
             _b = true;
             l[0] = i;
-            e = str.substr(l[0]+(str.length()-l[0] > 9) ? 9 : 0, (str.length()-(l[0]+(str.length()-l[0] > 9) ? 9 : 0) > 4) ? 4 : 0);
+            e = str.substr(l[0] + (str.length() - l[0] > 9) ? 9 : 0, (str.length() - (l[0] + (str.length() - l[0] > 9) ? 9 : 0) > 4) ? 4 : 0);
         }
 
         if (_b && c == sep_ && i_ == 0) {
@@ -91,19 +92,20 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
             _b = false;
         }
     }
-    if (i_ !=0) {
-    	printf("LEXICAL ERROR: LINE OF CODE BROKEN\n");
-    	printf("In ...%s...\n", e.c_str());
-    	printf("Use of illegal way of characters \"(\" \")\"\n");
-    	system("pause");
-    	exit(0);
-	}
+    if (i_ != 0) {
+        printf("LEXICAL ERROR: LINE OF CODE BROKEN\n");
+        printf("In ...%s...\n", e.c_str());
+        printf("Use of illegal way of characters \"(\" \")\"\n");
+        system("pause");
+        exit(0);
+    }
 
     return str;
 }
 
-token lex_::get__exp() {
-	return n__;
+token lex_::get__exp()
+{
+    return n__;
 }
 
 int next_abs(const char* a_[__abs][2], char* u, int ___a)
@@ -124,6 +126,7 @@ int next_abs(const char* a_[__abs][2], char* u, int ___a)
 st_ lex_::check__()
 {
     char* __;
+    bool check_b;
     st_ st = char___(sym_, __input);
 
     if (st._) {
@@ -145,6 +148,7 @@ st_ lex_::check__()
 
     int q = 0;
     while (true) {
+        check_b = false;
         for (int _ = 0; _ <= (__abs - 1); _++) {
             if (strcmp(c(__, q, strlen(abstract_logic[_][0])), abstract_logic[_][0]) == 0) {
                 int q = next_abs(abstract_logic, __, _);
@@ -153,8 +157,17 @@ st_ lex_::check__()
                 }
                 token_lex.push_back(c(__, 0, q));
                 __ = c(__, next_abs(abstract_logic, __, _), strlen(__) - q);
+                check_b = true;
                 break;
             }
+        }
+        if (!check_b) {
+            printf("Compilation interrupted\n");
+            if (strlen(__) - 10 > 9) {
+                printf("Error in use of %s\n", c(__, 0, 9));
+            }
+
+            printf("Check the logical structures names\n");
         }
     }
 

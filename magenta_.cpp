@@ -169,9 +169,7 @@ void magenta::__analysis() {
 	for (token::iterator token_ = token__.begin() ; token_ != token__.end(); ++token_) {
 		if (__func(*token_)) {
 			if (!__str(*token_)) {
-			printf("%s\n", get_str_tok(getn_expression((*token_))).c_str());
 				analy_exp(lex->char_ign, lex->operators, get_str_tok(getn_expression((*token_))));
-			printf("%s %s %d\n", (*token_).c_str(), get_str_tok(getn_expression((*token_))).c_str(), getn_expression(*token_));
 		}
 	}
 }
