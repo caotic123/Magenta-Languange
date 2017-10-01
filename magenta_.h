@@ -31,6 +31,7 @@ private:
 	std::string code__;
 	void __token();
 	bool __func(std::string s);
+	bool __if(std::string s);
 };
 
 #endif

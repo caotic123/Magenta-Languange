@@ -14,6 +14,12 @@ void error(st_ st) {
 	case SEMANTIC_WRITE_FUNC:
 		printf("Illegal function: the use of the function in this way is illegal %d\n", st.l);
 		break;
+	case SEMANTIC_WRITE_COND:
+		printf("Illegal condition: the use of the condition in this way is illegal %d\n", st.l);
+		break;
+	case SEMANTIC_OPERATOR_COND_PRECEDENCE:
+		printf("Illegal condtion: check condition precedence %d\n", st.l);
+		break;
     default:
     	printf("A unknow error ocurred\n");
     }
@@ -27,7 +33,7 @@ void error_(const char* s, const char* ex_, int i, error_id error__) {
 	st.error = error__;
 	st.l = i;
 	st._ = true;
-	printf("%s Incorret use of %s\n", s, ex_);
+	printf("%s Incorret use of \"%s\"\n", s, ex_);
 	error(st);
 }
 
@@ -43,6 +49,12 @@ bool magenta::__func(std::string s) {
 	return false;
 }
 
+bool magenta::__if(std::string s) {
+	if (s.substr(0, strlen(lex->abstract_logic[1][0])) == (std::string)lex->abstract_logic[1][0]) {
+		return true;
+	}
+	return false;
+}
 
 bool is_operator(std::string c, std::string op_[len_op]) {
   bool x=false;
@@ -79,6 +91,51 @@ bool is_sep(char char_ign[ig__][2], std::string c) {
   }
 
   return x;
+}
+
+bool i_c_ex(std::string cond_ex[_cond_p], std::string c_) {
+  bool b = false;
+  for (int i=0; i <= 3; i++) {
+    b = (c_ == cond_ex[i]) ? true : b;
+  }
+  return b;
+}
+
+int get_priority(std::string x_,  std::string cond_ex[_cond_p]) {
+  bool b = false;
+  for (int i=0; i <= 3; i++) {
+    if (x_ == cond_ex[i]) {
+      return i+1;
+    }
+  }
+  
+  return 0;
+}
+
+int* analyse_cond(std::string cond, std::string cond_ex[_cond_p]) {
+  int* op = (int*)malloc(sizeof(int)*3);
+  std::string c_;
+  for (int i=0; i <= cond.length()-1; i++) {
+    c_ = cond.substr(i, 1);
+    if (i_c_ex(cond_ex, c_)) {
+      if (c_ != cond_ex[0] && c_ != cond_ex[1] && !i_c_ex(cond_ex, cond.substr(i+1, 1))) {error_(cond.c_str(), c_.c_str(), i, SEMANTIC_WRITE_COND) ;}
+      if (i_c_ex(cond_ex, cond.substr(i+1, 1)) && get_priority(c_, cond_ex) > get_priority(cond.substr(i+1, 1), cond_ex)) {
+        error_(cond.c_str(), c_.c_str(), i,  SEMANTIC_OPERATOR_COND_PRECEDENCE);
+      }
+      if (!i_c_ex(cond_ex, cond.substr(i+1, 1)))
+      {
+      	op[0] = i-1;
+      	op[1] = i+1;
+	  }
+	  else {
+      op[0] = i-1;
+      op[1] = i+2;
+    }
+    
+      break;
+    }
+  }
+  return op;
 }
 
 void analy_exp(char op[ig__][2], std::string op_[len_op], std::string str)
@@ -164,13 +221,27 @@ std::string magenta::get_str_tok(int n) {
 	return exp_[n];
 }
 
+std::string get_t(std::string str, int p, int x) {
+	return str.substr(p, (x==0) ? (str.length()-x) : x);
+}
+
 void magenta::__analysis() {
 	std::string exp;
+	std::string s;
+	int* t;
 	for (token::iterator token_ = token__.begin() ; token_ != token__.end(); ++token_) {
 		if (__func(*token_)) {
 			if (!__str(*token_)) {
 				analy_exp(lex->char_ign, lex->operators, get_str_tok(getn_expression((*token_))));
-		}
+	    }	
+	}
+	
+
+	if (__if(*token_)) {
+		s = get_str_tok(getn_expression((*token_)));
+		t = analyse_cond(s, lex->cond_ex);
+		analy_exp(lex->char_ign, lex->operators, get_t(s, 1, t[0]));
+		analy_exp(lex->char_ign, lex->operators, get_t(s, t[1], (s.length()-t[1])-1));
 	}
 }
 
