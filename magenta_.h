@@ -32,6 +32,8 @@ private:
 	void __token();
 	bool __func(std::string s);
 	bool __if(std::string s);
+	bool call__func(std::string s);
+	bool var_decl(std::string s);
 };
 
 #endif

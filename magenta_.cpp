@@ -49,6 +49,13 @@ bool magenta::__func(std::string s) {
 	return false;
 }
 
+bool magenta::call__func(std::string s) {
+	if (s.substr(0, strlen(lex->abstract_logic[7][0])) == (std::string)lex->abstract_logic[7][0] && s.substr(strlen(lex->abstract_logic[7][0]), 1) == " ") {
+		return true;
+	}
+	return false;
+}
+
 bool magenta::__if(std::string s) {
 	if (s.substr(0, strlen(lex->abstract_logic[1][0])) == (std::string)lex->abstract_logic[1][0]) {
 		return true;
@@ -65,9 +72,16 @@ bool is_operator(std::string c, std::string op_[len_op]) {
   return x;
 }
 
-bool __str(std::string expression)
+bool __str(std::string expression, char char_ign[ig__][2])
 {
     int p = 0;
+    std::string s;
+	s = char_ign[1][0];
+
+   if(expression.substr(0, 1) == s) {
+     expression = expression.substr(1, expression.length()-2);
+   }
+    
     for (int i = 0; i <= expression.length() - 1; i++) {
         if (expression.substr(i, 1) == "\"") {
             p++;
@@ -217,12 +231,63 @@ int getn_expression(std::string str_) {
   return atoi(buf.substr(1, buf.length()-2).c_str());
 }
 
+bool magenta::var_decl(std::string s) {
+  std::string c,p;
+  p = lex->abstract_logic[5][0];
+  for (int i=0; i <= s.length()-1; i++) {
+    c = s.substr(i, 1);
+    if (c == p) {return true;}
+    if (c != " " && c != p) {
+      return false;
+    }
+  }
+  return false;
+}
+  
+
 std::string magenta::get_str_tok(int n) {
-	return exp_[n];
+	return secure_string_format(exp_[n]);
 }
 
 std::string get_t(std::string str, int p, int x) {
 	return str.substr(p, (x==0) ? (str.length()-x) : x);
+}
+
+std::string secure_string_format(std::string s) {
+  std::string c;
+  int p[2];
+  p[0] = 0;
+  p[1] = s.length();
+  bool _z = 1;
+  bool cond = (s.substr(0, 1) == " ") ? false : true;
+  
+  for(int __=(!cond) ? 0 : s.length();  (!cond) ? (__<= s.length()-1) : (__ >= 0) ; (!cond) ? __++ : __-- ) {
+    c = s.substr(__, 1);
+    if (c != " ") {
+      p[(!cond) ? 0 : 1] = __;
+      if (cond) { break;}
+      __ = s.length();
+      cond = (cond) ? cond : true ;
+    }
+    
+  }
+
+  
+  return s.substr(p[0], (p[1]-p[0])+1);
+}
+
+int get_n_variable_decl(std::string cond_ex[_cond_p], std::string s) {
+  std::string c;
+  std::string c_= cond_ex[3];
+  for (int _=0; _ <= s.length()-1; _++) {
+    c = s.substr(_, 1);
+    if (c == c_) {
+    	printf("%s\n", secure_string_format(s.substr(_+1, s.length()-(_+1))).c_str());
+     return atoi(secure_string_format(s.substr(_+1, s.length()-(_+1))).c_str());
+    }
+  }
+  
+  return 0;
 }
 
 void magenta::__analysis() {
@@ -231,18 +296,30 @@ void magenta::__analysis() {
 	int* t;
 	for (token::iterator token_ = token__.begin() ; token_ != token__.end(); ++token_) {
 		if (__func(*token_)) {
-			if (!__str(*token_)) {
-				analy_exp(lex->char_ign, lex->operators, get_str_tok(getn_expression((*token_))));
+			s = get_str_tok(getn_expression((*token_)));
+			if (!__str(s, lex->char_ign)) {
+				analy_exp(lex->char_ign, lex->operators, s);
 	    }	
 	}
 	
-
 	if (__if(*token_)) {
 		s = get_str_tok(getn_expression((*token_)));
 		t = analyse_cond(s, lex->cond_ex);
 		analy_exp(lex->char_ign, lex->operators, get_t(s, 1, t[0]));
 		analy_exp(lex->char_ign, lex->operators, get_t(s, t[1], (s.length()-t[1])-1));
 	}
+
+	if (call__func(*token_)) {
+		s = get_str_tok(getn_expression((*token_)));
+		if (!__str(s, lex->char_ign)) {analy_exp(lex->char_ign, lex->operators, s);}
+	}
+
+	if (var_decl(*token_)) {
+		s = get_n_variable_decl(lex->cond_ex, (*token_));
+	//	if (!__str(s, lex->char_ign)) {	printf("%s\n", s.c_str()); analy_exp(lex->char_ign, lex->operators, s);}
+	}
+	
+	
 }
 
 

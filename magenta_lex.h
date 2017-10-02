@@ -31,6 +31,7 @@ struct st_ {
 };
 
 char* c(char* y, int t, int a);
+std::string secure_string_format(std::string s);
 
 class lex_ {
 	

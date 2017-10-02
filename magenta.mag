@@ -24,7 +24,7 @@ function init()
 if ((x+x)/2 >= 32/3+(2+34))
 func print("x is most bigger that 32")
 end
-#x = 12
+#x = (12)
 #x = fat(x)
 func print(x)
 func print("alou")
