@@ -20,7 +20,9 @@ module = new magneta_module();
 void __tok(std::string __o);
 void load__file(std::string name);
 void __analysis();
-std::string get_str_tok(int n);
+std::string get_str_tok(std::string s_, int n);
+int getn_expression(std::string str_);
+int get_n_variable_decl(std::string s);
 
 private:
 	lex_* lex;
@@ -34,6 +36,8 @@ private:
 	bool __if(std::string s);
 	bool call__func(std::string s);
 	bool var_decl(std::string s);
+	bool __while(std::string s);
+	bool __ret(std::string s);
 };
 
 #endif

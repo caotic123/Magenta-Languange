@@ -19,6 +19,8 @@ void error(st_ st) {
 		break;
 	case SEMANTIC_OPERATOR_COND_PRECEDENCE:
 		printf("Illegal condtion: check condition precedence %d\n", st.l);
+	case SEMANTIC_EXPRESSION_CRITICAL_ERROR:
+		printf("Illegal expression: check expression (?) %d\n", st.l);
 		break;
     default:
     	printf("A unknow error ocurred\n");
@@ -37,13 +39,24 @@ void error_(const char* s, const char* ex_, int i, error_id error__) {
 	error(st);
 }
 
+
+int to_int_exp_n(std::string s_, std::string s) {
+  int n;
+  n = strtol (s.c_str(), NULL, 10);
+  if (n == 0) {
+  	error_(s_.c_str(), "? maybe ()", 0, SEMANTIC_EXPRESSION_CRITICAL_ERROR);
+  }
+  return n;
+}
+
 void magenta::load__file(std::string name)  {
 code__ = module->getFile__(name);
 __token();
 }
 
+
 bool magenta::__func(std::string s) {
-	if (s.substr(0, strlen(lex->abstract_logic[0][0])) == (std::string)lex->abstract_logic[0][0]) {
+	if (s.substr(0, strlen(lex->abstract_logic[0][0])) == (std::string)lex->abstract_logic[0][0] && s.substr(strlen(lex->abstract_logic[0][0]), 1) == " ") {
 		return true;
 	}
 	return false;
@@ -58,6 +71,20 @@ bool magenta::call__func(std::string s) {
 
 bool magenta::__if(std::string s) {
 	if (s.substr(0, strlen(lex->abstract_logic[1][0])) == (std::string)lex->abstract_logic[1][0]) {
+		return true;
+	}
+	return false;
+}
+
+bool magenta::__while(std::string s) {
+	if (s.substr(0, strlen(lex->abstract_logic[2][0])) == (std::string)lex->abstract_logic[2][0]) {
+		return true;
+	}
+	return false;
+}
+
+bool magenta::__ret(std::string s) {
+	if (s.substr(0, strlen(lex->abstract_logic[3][0])) == (std::string)lex->abstract_logic[3][0]) {
 		return true;
 	}
 	return false;
@@ -215,20 +242,29 @@ void analy_exp(char op[ig__][2], std::string op_[len_op], std::string str)
     return;
 }
 
-int getn_expression(std::string str_) {
+int magenta::getn_expression(std::string str_) {
+  int n_int; 
   std::string buf;
-  std::size_t found = str_.find("(");
+  try {
+  std::size_t found = str_.find(lex->char_ign[1][0]);
   str_ = str_.substr(found, str_.length()-found-1);
+  
   buf = str_;
   if (found==std::string::npos) {
    error_(buf.c_str(), "?", 0, SEMANTIC_WRITE_FUNC);
   }
 
   buf = "";
-  
-  std::remove_copy(str_.begin(), str_.end(), std::back_inserter(buf), ' ');
 
-  return atoi(buf.substr(1, buf.length()-2).c_str());
+  std::remove_copy(str_.begin(), str_.end(), std::back_inserter(buf), ' ');
+  n_int = to_int_exp_n(str_, buf.substr(1, buf.length()-2));
+  }
+  catch(std::exception  e) {
+  	error_(str_.c_str(), "maybe () ?", 0, SEMANTIC_EXPRESSION_CRITICAL_ERROR);
+  }
+  
+
+  return n_int;
 }
 
 bool magenta::var_decl(std::string s) {
@@ -245,7 +281,14 @@ bool magenta::var_decl(std::string s) {
 }
   
 
-std::string magenta::get_str_tok(int n) {
+std::string magenta::get_str_tok(std::string s_, int n) {
+	try {
+		exp_.at(n);
+	}
+	catch(std::exception  e) {
+		error_(s_.c_str(), "? maybe ()", 0, SEMANTIC_EXPRESSION_CRITICAL_ERROR);
+	}
+
 	return secure_string_format(exp_[n]);
 }
 
@@ -276,14 +319,16 @@ std::string secure_string_format(std::string s) {
   return s.substr(p[0], (p[1]-p[0])+1);
 }
 
-int get_n_variable_decl(std::string cond_ex[_cond_p], std::string s) {
+int magenta::get_n_variable_decl(std::string s) {
   std::string c;
-  std::string c_= cond_ex[3];
+  std::string c_= lex->cond_ex[3];
+  std::string s_;
   for (int _=0; _ <= s.length()-1; _++) {
     c = s.substr(_, 1);
     if (c == c_) {
-    	printf("%s\n", secure_string_format(s.substr(_+1, s.length()-(_+1))).c_str());
-     return atoi(secure_string_format(s.substr(_+1, s.length()-(_+1))).c_str());
+    	s_ = secure_string_format(s.substr(_+1, s.length()-(_+1)));
+        s_ = s_.substr(1, s_.length()-2);
+     return to_int_exp_n(s, s_);
     }
   }
   
@@ -296,32 +341,44 @@ void magenta::__analysis() {
 	int* t;
 	for (token::iterator token_ = token__.begin() ; token_ != token__.end(); ++token_) {
 		if (__func(*token_)) {
-			s = get_str_tok(getn_expression((*token_)));
+			s = get_str_tok((*token_), getn_expression((*token_)));
 			if (!__str(s, lex->char_ign)) {
 				analy_exp(lex->char_ign, lex->operators, s);
 	    }	
 	}
 	
 	if (__if(*token_)) {
-		s = get_str_tok(getn_expression((*token_)));
+		s = get_str_tok((*token_), getn_expression((*token_)));
 		t = analyse_cond(s, lex->cond_ex);
 		analy_exp(lex->char_ign, lex->operators, get_t(s, 1, t[0]));
 		analy_exp(lex->char_ign, lex->operators, get_t(s, t[1], (s.length()-t[1])-1));
 	}
 
 	if (call__func(*token_)) {
-		s = get_str_tok(getn_expression((*token_)));
+		s = get_str_tok((*token_), getn_expression((*token_)));
 		if (!__str(s, lex->char_ign)) {analy_exp(lex->char_ign, lex->operators, s);}
 	}
 
 	if (var_decl(*token_)) {
-		s = get_n_variable_decl(lex->cond_ex, (*token_));
-	//	if (!__str(s, lex->char_ign)) {	printf("%s\n", s.c_str()); analy_exp(lex->char_ign, lex->operators, s);}
+		s = get_str_tok((*token_), get_n_variable_decl((*token_)));
+		if (!__str(s, lex->char_ign)) {analy_exp(lex->char_ign, lex->operators, s);}
+	}
+	
+	if (__while(*token_)) {
+		s = get_str_tok((*token_), getn_expression((*token_)));
+		t = analyse_cond(s, lex->cond_ex);
+		analy_exp(lex->char_ign, lex->operators, get_t(s, 1, t[0]));
+		analy_exp(lex->char_ign, lex->operators, get_t(s, t[1], (s.length()-t[1])-1));
+	}
+	
+	if (__ret(*token_)) {
+		s = get_str_tok((*token_), getn_expression((*token_)));
+		printf("%s\n", s.c_str());
+		if (!__str(s, lex->char_ign)) {analy_exp(lex->char_ign, lex->operators, s);}
 	}
 	
 	
 }
-
 
 }
 

@@ -66,7 +66,7 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
     std::stringstream new_string;
     std::string c;
     int n__len_;
-    int q = 0;
+    int q = 1;
     std::string e;
     for (i; i <= str.length(); i++) {
         c = str.substr(i, 1);
