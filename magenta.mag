@@ -22,9 +22,9 @@ function x_(x) ret x
 function init()
 #x = 100
 if ((x+x)/2 >= 32/3+(2+34))
-func print("x is most bigger that 32")
+func print("func x function (a)")
 end
-#x = (12)
+#x = "func x function (a)"
 #x = fat(x)
 func print(x)
 func print("alou")
