@@ -10,6 +10,12 @@
 #ifndef MAGENTA_H
 #define MAGENTA_H
 
+struct struct_ep {
+  std::string s;
+  std::vector<std::vector<std::string> > n_;
+  bool t;
+};
+
 class magenta {
 public:
 magenta() {

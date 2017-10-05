@@ -22,7 +22,8 @@ SEMANTIC_OPERATOR_INCONSISTENT = 3,
 SEMANTIC_WRITE_FUNC = 4,
 SEMANTIC_WRITE_COND = 5,
 SEMANTIC_OPERATOR_COND_PRECEDENCE = 6,
-SEMANTIC_EXPRESSION_CRITICAL_ERROR = 7
+SEMANTIC_EXPRESSION_CRITICAL_ERROR = 7,
+SEMANTIC_EXPRESSION_USED_IN_FUNCTION = 8
 };
 
 struct st_ {
@@ -40,7 +41,7 @@ class lex_ {
 	lex_() {n__.push_back("undref");}
 	const char* abstract_logic[__abs][2] = {{"function", ") "}, {"if", " "}, {"while", " "}, {"ret", " "}, {"else", " "}, {"#", " "}, {"end", " "}, {"func", " "}}; //only one character [x] of abstract_logic[__abs][x]
     char char_ign[ig__][2] =  { {'\"', '\"'}, {'(', ')'}, {'[', ']'}}; // warning precedence order
-    std::string operators[len_op] = {"+", "-", "*", "/", "%", ","}; // operators list expect "," but this is interpreter like this
+    std::string operators[len_op] = {"+", "-", "*", "/", "^", ","}; // operators list expect "," but this is interpreter like this
     std::string cond_ex[_cond_p] = {">", "<", "!", "="}; // in the ordem of priority
 	void lex__(std::string x_);
 	std::string l__(std::string str, std::string sep, std::string sep_);
