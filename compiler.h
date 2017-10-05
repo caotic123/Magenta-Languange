@@ -1,0 +1,6 @@
+
+
+class magenta_compiler {
+	
+	
+};
