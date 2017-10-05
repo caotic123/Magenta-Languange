@@ -511,7 +511,7 @@ int get_pr_str(std::string s) {
   return strtol((s.substr(2, 1)+s.substr(_+1, (s.length()-(_+1))-1)).c_str(), NULL, 10);
 } 
 
-bool is_precedence_value(std::string s) // only expression value wich has precedence more 2+ 
+bool is_precedence_value(std::string s) // only expression value which has precedence more 2+ 
 {
   if (s.substr(1, 1) == "[" && s.substr((s.length()-1)-1, 1) == "]") {
     return true;
