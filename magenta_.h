@@ -6,21 +6,18 @@
 #include "module.h"
 #include "magenta_lex.h"
 #include "module_utility.h"
+#include "magenta_header.h"
+#include "compiler.h"
 
 #ifndef MAGENTA_H
 #define MAGENTA_H
-
-struct struct_ep {
-  std::string s;
-  std::vector<std::vector<std::string> > n_;
-  bool t;
-};
 
 class magenta {
 public:
 magenta() {
 lex = new lex_();
 module = new magneta_module();
+compiler = new magenta_compiler();
 }
 
 void __tok(std::string __o);
@@ -33,6 +30,7 @@ int get_n_variable_decl(std::string s);
 private:
 	lex_* lex;
 	magneta_module* module;
+	magenta_compiler* compiler;
 	token token__;
 	token exp_;
 	void analy__args(char* s);

@@ -47,6 +47,36 @@ int magneta_module::create_int_func(std::string func, args arg, blocks* b_)
     return q;
 }
 
+void magneta_module::insert__to_code(std::string& x_, std::string c_) {
+	x_ = x_ + "\n" + c_;
+	return;
+}
+
+std::string magneta_module::create_func(std::string func_, std::string type, std::vector<std::string> p__)
+{
+    __code x__;
+	x__.insert_t(2, "define", type.c_str()),
+	x__.insert("@");
+	x__.insert_t(1, func_.c_str());
+	x__.insert("(", true);
+	for (std::vector<std::string>::iterator i = p__.begin(); i != p__.end(); i++) {
+	x__.insert("i8* %");
+	x__.insert((*i));
+	x__.insert((i+1 == p__.end() ? "" : ", " ));
+	}
+	x__.insert(") ");
+
+    x__.insert_t(3, "ssp", "{", "\n");
+
+    return x__.string();
+}
+
+void magneta_module::end_func(std::string &x_)
+{
+	x_ = x_ + "}" + "\n";
+    return;
+}
+
 blocks* magneta_module::create_block(magneta_module* module, std::string name)
 {
     blocks* b_ = new blocks(module->q, name);
@@ -55,11 +85,15 @@ blocks* magneta_module::create_block(magneta_module* module, std::string name)
     return _blocks[module->q - 1];
 }
 
-void blocks::create_label(std::string label)
+void magneta_module::create_label(std::string& cod, std::string label)
 {
     __code x_;
-    x_.insert_t(2, label.c_str(), ":");
-    insert(x_.string());
+    x_.insert(label.c_str());
+    x_.insert(":");
+    x_.s_();
+    cod = cod + x_.string();
+    
+    return;
 }
 
 void blocks::create_integer_pointer_i32(const char* variable_name, int32_t value_)

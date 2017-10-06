@@ -32,6 +32,9 @@ void error(st_ st) {
   case SEMANTIC_EXPRESSION_USED_IN_FUNCTION:
     printf("Illegal expression: check if a expression has function value %d\n",
            st.l);
+  case SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR:
+    printf("Illegal function: check if a parameter function is correct %d\n",
+           st.l);
     break;
   default:
     printf("A unknow error ocurred\n");
@@ -296,10 +299,14 @@ std::vector<std::string> get_par_func(std::string s_, std::string op[len_op],
   std::string c_;
   std::string arg;
   std::vector<std::string> s__;
+  std::string p__;
+  p__ = char_ign[0][0];
+  int c__=0;
   int p = is__func_var(s_, op, char_ign) + 2;
   for (i = 0; i <= s_.length(); i++) {
     c_ = s_.substr(i, 1);
-    if (c_ == op[5]) {
+    c__ = (c_ == p__) ? ((c__==0) ? 1 : 0) : c__;
+    if (c_ == op[5] && c__ == 0) {
       arg = s_.substr(p, i - p);
       p = i + 1;
       s__.push_back(arg);
@@ -317,6 +324,20 @@ std::vector<std::string> get_par_func(std::string s_, std::string op[len_op],
   s__.push_back(arg);
   return s__;
 }
+
+bool analyse_ref_func(std::string va_, std::string op[len_op]) {
+	std::string c_;
+	for (int q=0; q<= va_.length()-1; q++) {
+		c_ = va_.substr(q, 1);
+		if (c_ == " " || is_operator(c_, op)) {
+			error_(va_.c_str(), "don't valid function parameter", 0, SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR);
+			return false;
+		}
+	}
+	
+	return true;
+}
+
 
 std::string analy_exp(char op[ig__][2], std::string op_[len_op],
                       std::string str, bool t=true) {
@@ -571,7 +592,6 @@ struct_ep c__m(struct_ep struct_s, std::string operators[len_op], char char_ign[
 
   s = s.substr(0, i)+"["+std::string(buffer)+"]"+s.substr(i+str_.length(), s.length()-(i+str_.length()));
   struct_s.s = s;
-  std::cout << struct_s.s << std::endl;
   
   return struct_s;
 }
@@ -579,7 +599,6 @@ struct_ep c__m(struct_ep struct_s, std::string operators[len_op], char char_ign[
 struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[ig__][2]) {
   struct_ep s_;
   s_.s = str;
-  std::cout << s_.s << std::endl;
   s_.t = true;
   while(s_.t) {
    s_ = c__m(s_, operators, char_ign);
@@ -587,15 +606,63 @@ struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[i
   
   for (std::vector<std::vector<std::string> >::iterator i = s_.n_.begin() ; i != s_.n_.end(); ++i) {
      int position = i - s_.n_.begin() ;
-     std::cout << "token " << position << " = ";
     for (std::vector<std::string>::iterator i_ = (*i).begin() ; i_ != (*i).end(); ++i_) {
-      std::cout << (*i_) << " ";
     }
-    std::cout << std::endl;
   }
 
 
   return s_;
+}
+
+std::string get_func_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
+  std::size_t p_ = s.find(abstract_logic[0][0]);
+  std::size_t _ = s.find(char_ign[1][0]);
+  if (p_ == std::string::npos || _ == std::string::npos) {
+  	error_(s.c_str(), "? function don't valid'", 0, SEMANTIC_FUNCTION_UNDEFINED);
+  }
+  
+  return s.substr(p_+9, _-(p_+9));
+}
+
+bool ref_empty(std::string str) {
+	return (str == "()" ? true : false); 
+}
+
+struct_ep create_ep_empty() {
+	struct_ep s_;
+	s_.t = false;
+	return s_;
+}
+
+std::vector<std::string> get_func_ref(std::string str, std::string operators[len_op], char char_ign[ig__][2]) {
+  std::string c,c__;
+  std::string arg;
+  std::vector<std::string> par__;
+  int p = 1;
+  int p_ = 0;
+  bool b;
+  c__ = char_ign[0][0];
+  for (int q=0; q <= str.length()-1; q++) {
+    c = str.substr(q, 1);
+    p_ = (c==c__) ? (p_==0 ? 1 : 0) : p_;
+    if (c == operators[5] && p_ == 0) {
+      arg = str.substr(p, q-p);
+      p = q+1;
+      par__.push_back(arg);
+      b = true;
+    }
+  }
+  
+  if (!b) {
+    arg = str.substr(1, str.length()-2);
+    par__.push_back(arg);
+    return par__;
+  }
+
+  arg = str.substr(p, (str.length()-p)-1);
+  par__.push_back(arg);
+
+return par__;
 }
 
 void magenta::__analysis() {
@@ -605,15 +672,25 @@ void magenta::__analysis() {
   std::vector<std::string> par__;
   struct_ep s_;
   std::string ___s, ___a;
+
   for (token::iterator token_ = token__.begin(); token_ != token__.end();
        ++token_) {
+    s_ = create_ep_empty();
     if (__func(*token_)) {
       s = secure_string_format(
           get_str_tok((*token_), getn_expression((*token_))));
-      if (!__str(s, lex->char_ign)) {
-       s = analy_exp(lex->char_ign, lex->operators, s, false);
-        s_ = r__str(s, lex->operators, lex->char_ign);
-      }
+          compiler->create_function(get_func_name((*token_), lex->abstract_logic, lex->char_ign));
+          compiler->create_label("entry");
+      if (!ref_empty(s)) {
+        par__ = get_func_ref(s, lex->operators, lex->char_ign);
+        for (std::vector<std::string>::iterator i_ = par__.begin();
+             i_ != par__.end(); i_++) {
+          s__par = secure_string_format((*i_));
+          if (!__str(s__par, lex->char_ign)) {analyse_ref_func(s__par, lex->operators);}
+          compiler->set_function_args(s__par);
+       }
+   }
+   
     }
 
     if (__if(*token_)) {
@@ -628,7 +705,7 @@ void magenta::__analysis() {
     if (call__func(*token_)) {
       s = secure_string_format(get_str_tok((*token_), getn_expression((*token_))));
       if (!__str(s, lex->char_ign)) {
-        par__ = get_par_func(s, lex->operators, lex->char_ign);
+        par__ = get_func_ref(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
           s__par = secure_string_format((*i_));
@@ -675,6 +752,7 @@ void magenta::__analysis() {
       }
     }
   }
+  compiler->compile();
 }
 
 void magenta::__token() {

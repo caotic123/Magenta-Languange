@@ -7,18 +7,10 @@
 #include <stdarg.h>
 #include <fstream>
 #include <iostream>
-
+#include "magenta_header.h"
 
 #ifndef MODULE_H
 #define MODULE_H
-
-enum type_{
-int8_type = 1,
-int16_type = 2,
-int32_type = 3,
-int64_type = 4,
-string_type = 5
-};
 
 struct arg_a {
 	type_ type___;
@@ -71,6 +63,7 @@ class __code {
 	void __end() {
 		code = "";
 	}
+	
 	void s_() {code = code + "\n";}
 	
 	std::string string() {
@@ -95,8 +88,7 @@ class blocks {
 	int get() {
 	 return __id;	
 	}
-	
-	void create_label(std::string label);
+
 	void create_integer_pointer_i32(const char* variable_name, int32_t value_);
 	std::string to_code();
 
@@ -123,6 +115,10 @@ class magneta_module {
 	blocks* create_block(magneta_module * module, std::string name);
 	std::string generate__function__explicit_code(std::string func);
 	std::string getFile__(std::string name);
+	void create_label(std::string& cod, std::string label);
+	std::string create_func(std::string func, std::string type, std::vector<std::string> p__);
+	void insert__to_code(std::string& x_, std::string c_);
+	void end_func(std::string& x_);
 	
 	private:
 	std::map<std::string, std::pair<struct func, std::list<int> > > ___funcs;
