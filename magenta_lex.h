@@ -25,7 +25,9 @@ SEMANTIC_OPERATOR_COND_PRECEDENCE = 6,
 SEMANTIC_EXPRESSION_CRITICAL_ERROR = 7,
 SEMANTIC_EXPRESSION_USED_IN_FUNCTION = 8,
 SEMANTIC_FUNCTION_UNDEFINED = 9,
-SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR = 9
+SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR = 10,
+SEMANTIC_VARIABLE_ERROR_NAME = 11,
+SEMANTIC_FUNC_ERROR_NAME = 12
 
 };
 
@@ -36,7 +38,6 @@ struct st_ {
 };
 
 char* c(char* y, int t, int a);
-std::string secure_string_format(std::string s);
 
 class lex_ {
 	
@@ -46,6 +47,9 @@ class lex_ {
     char char_ign[ig__][2] =  { {'\"', '\"'}, {'(', ')'}, {'[', ']'}}; // warning precedence order
     std::string operators[len_op] = {"+", "-", "*", "/", "^", ","}; // operators list expect "," but this is interpreter like this
     std::string cond_ex[_cond_p] = {">", "<", "!", "="}; // in the ordem of priority
+    char sym_[__symb][2] = {{0, 0}, {92, 122}, {65, 90}, {'+', 0}, {'-', 0}, {'/', 0}, {'*', 0}, {'%', 0}, {34, 35}, {60, 62}, 
+	{32, 0}, {91, 0}, {93, 0}, {44, 0}, {40, 41}, {48, 57}};
+	
 	void lex__(std::string x_);
 	std::string l__(std::string str, std::string sep, std::string sep_);
     st_ check__();
@@ -55,8 +59,6 @@ class lex_ {
     
 	private:
 	char* __input;
-	char sym_[__symb][2] = {{0, 0}, {92, 122}, {65, 90}, {'+', 0}, {'-', 0}, {'/', 0}, {'*', 0}, {'%', 0}, {34, 35}, {60, 62}, 
-	{32, 0}, {91, 0}, {93, 0}, {44, 0}, {40, 41}, {48, 57}};
 	token n__;
 	token token_lex; 
 };

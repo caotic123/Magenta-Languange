@@ -35,7 +35,14 @@ void error(st_ st) {
   case SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR:
     printf("Illegal function: check if a parameter function is correct %d\n",
            st.l);
+  case SEMANTIC_VARIABLE_ERROR_NAME:
+    printf("Illegal variable: check if name of variable is correct %d\n",
+           st.l);
     break;
+  case SEMANTIC_FUNC_ERROR_NAME:
+    printf("Illegal variable: check if name of function is correct %d\n",
+           st.l);
+    break;  
   default:
     printf("A unknow error ocurred\n");
   }
@@ -477,30 +484,6 @@ std::string get_t(std::string str, int p, int x) {
   return str.substr(p, (x == 0) ? (str.length() - x) : x);
 }
 
-std::string secure_string_format(std::string s) {
-  std::string c;
-  int p[2];
-  p[0] = 0;
-  p[1] = s.length();
-  bool _z = 1;
-  bool cond = false;
-
-  for (int __ = (!cond) ? 0 : s.length();
-       (!cond) ? (__ <= s.length() - 1) : (__ >= 0); (!cond) ? __++ : __--) {
-    c = s.substr(__, 1);
-    if (c != " ") {
-      p[(!cond) ? 0 : 1] = __;
-      if (cond) {
-        break;
-      }
-      __ = s.length();
-      cond = (cond) ? cond : true;
-    }
-  }
-
-  return s.substr(p[0], (p[1] - p[0]) + 1);
-}
-
 int magenta::get_n_variable_decl(std::string s) {
   std::string c;
   std::string c_ = lex->cond_ex[3];
@@ -603,15 +586,23 @@ struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[i
   while(s_.t) {
    s_ = c__m(s_, operators, char_ign);
   }
-  
-  for (std::vector<std::vector<std::string> >::iterator i = s_.n_.begin() ; i != s_.n_.end(); ++i) {
-     int position = i - s_.n_.begin() ;
-    for (std::vector<std::string>::iterator i_ = (*i).begin() ; i_ != (*i).end(); ++i_) {
-    }
-  }
-
 
   return s_;
+}
+
+bool is_correct_function_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
+	char f__ = s[0];
+	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {
+		error_(s.c_str(), "function name is not correct use", 0, SEMANTIC_FUNC_ERROR_NAME);
+	}
+
+	for(int q=0; q <= s.length()-1; q++) {
+		if (is_operator(s.substr(q, 1), operators)) {
+			error_(s.c_str(), "function name is not correct use", 0, SEMANTIC_FUNC_ERROR_NAME);
+		}
+	}
+
+  return true;
 }
 
 std::string get_func_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
@@ -624,8 +615,13 @@ std::string get_func_name(std::string s, const char* abstract_logic[__abs][2], c
   return s.substr(p_+9, _-(p_+9));
 }
 
-bool ref_empty(std::string str) {
-	return (str == "()" ? true : false); 
+bool ref_empty(std::string str, char char_ign[ig__][2]) {
+	std::string s_;
+	std::string _s;
+	s_ = char_ign[1][0];
+	_s = char_ign[1][1];
+
+	return (str == (s_+_s) ? true : false); 
 }
 
 struct_ep create_ep_empty() {
@@ -665,13 +661,42 @@ std::vector<std::string> get_func_ref(std::string str, std::string operators[len
 return par__;
 }
 
+bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
+	char f__ = s[0];
+	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {
+		error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
+	}
+	
+	for(int q=0; q <= s.length()-1; q++) {
+		if (is_operator(s.substr(q, 1), operators)) {
+			error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
+		}
+	}
+
+  return true;
+}
+
+std::string get_var_name(std::string s, std::string cond_ex[_cond_p], const char* abstract_logic[__abs][2], char sym_[__symb][2], std::string operators[len_op]) {
+  std::string c_;
+  std::size_t __ = s.find(abstract_logic[5][0]);
+  for(int _=__; _ <= s.length()-1; _++) {
+    c_ = s.substr(_, 1);
+      if (c_ == cond_ex[3]) {
+      	is_correct_var_name(secure_string_format(s.substr(1, _-1)), sym_, operators);
+      return secure_string_format(s.substr(1, _-1));  
+    }
+  }
+
+  error_(s.c_str(), "? variable has a correct name?", 0, SEMANTIC_VARIABLE_ERROR_NAME);
+}
+
 void magenta::__analysis() {
   std::string exp;
   std::string s, s__par;
   int *t;
-  std::vector<std::string> par__;
   struct_ep s_;
   std::string ___s, ___a;
+  std::vector<std::string> par__;
 
   for (token::iterator token_ = token__.begin(); token_ != token__.end();
        ++token_) {
@@ -679,15 +704,20 @@ void magenta::__analysis() {
     if (__func(*token_)) {
       s = secure_string_format(
           get_str_tok((*token_), getn_expression((*token_))));
+          is_correct_function_name(get_func_name(*token_, lex->abstract_logic, lex->char_ign), lex->sym_, lex->operators);          
           compiler->create_function(get_func_name((*token_), lex->abstract_logic, lex->char_ign));
           compiler->create_label("entry");
-      if (!ref_empty(s)) {
+      if (!ref_empty(s, lex->char_ign)) {
         par__ = get_func_ref(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
           s__par = secure_string_format((*i_));
-          if (!__str(s__par, lex->char_ign)) {analyse_ref_func(s__par, lex->operators);}
-          compiler->set_function_args(s__par);
+          if (__str(s__par, lex->char_ign)) {
+          error_((*token_).c_str(), "parameter don't suport string refs", 0, SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR);	
+		  }
+		  
+		   {analyse_ref_func(s__par, lex->operators);}
+          compiler->set_function_args(s__par, lex->char_ign);
        }
    }
    
@@ -717,7 +747,7 @@ void magenta::__analysis() {
 
     if (var_decl(*token_)) {
       s = secure_string_format(get_str_tok((*token_), get_n_variable_decl((*token_))));
-      
+
       if (is__func_var(s, lex->operators, lex->char_ign) != 0) {
         par__ = get_par_func(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
@@ -726,13 +756,19 @@ void magenta::__analysis() {
           analy_exp(lex->char_ign, lex->operators, s__par);
           s_ = r__str(s__par, lex->operators, lex->char_ign);
         }
-
+        
       } else {
         if (!__str(s, lex->char_ign)) {
-        s = analy_exp(lex->char_ign, lex->operators, s);
+        s = secure_string_format(analy_exp(lex->char_ign, lex->operators, s));
         s_ = r__str(s, lex->operators, lex->char_ign);
+        std::cout << s_.s << std::endl;
+        compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->char_ign, s_);
         }
-      }
+        else {
+      	// if str value
+		}
+    }
+    
     }
 
     if (__while(*token_)) {

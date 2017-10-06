@@ -4,6 +4,19 @@ magenta_compiler::magenta_compiler() {
 	module = new magneta_module;
 }
 
+std::string fix_arg(std::string str, char char_ign[ig__][2]) {
+	std::string s;
+	std::string s_;
+	s = char_ign[1][0];
+	s_ = char_ign[1][1];
+	
+	if (str.substr(0, 1) == s && str.substr(str.length()-1, 1) == s_) {
+		return str.substr(1, str.length()-2);
+	}
+
+	return str;
+}
+
 void magenta_compiler::create_function(std::string name) {
 	func_ f;
 	f.func_name = name;
@@ -18,20 +31,70 @@ void magenta_compiler::create_label(std::string name_l) {
 	func__->block_.push_back(label_);
 }
 
-void magenta_compiler::set_function_args(std::string arg_name) {
+bool __is_bool(std::string value) {
+	return (value == "true" || value == "false" ? 1 : 0);
+}
+
+std::string get_value(std::string s, char char_ign[ig__][2]) {
+  std::string c;
+  std::string s_;
+  std::size_t __ = s.find(char_ign[1][0]);
+  
+  s_ = char_ign[1][1];
+  for(int _=s.length()-1; _ >= 0; _--) {
+    c = s.substr(_, 1);
+    if (c == s_)
+    return s.substr(__+1, (_-__)-1);
+  }
+  
+  return s;
+}
+
+type_ getType(std::string ex_, char char_ign[ig__][2]) {
+	std::string value = secure_string_format(get_value(ex_, char_ign));
+	if (__is_bool(value)) {
+		return bool_type;
+	}
+	
+	return unknow_type;
+}
+
+void magenta_compiler::create_var(std::string name, char char_ign[ig__][2], struct_ep s_) {
 	func_* func__ = get_func();
-	func__->par__.push_back(arg_name);
+	command_ label_;
+	std::string value_ =  get_value(s_.s, char_ign);
+	std::cout << get_value(s_.s, char_ign) << std::endl;
+	
+	switch(getType(value_, char_ign)) {
+
+	case bool_type:
+		create_command(name, VARIABLE_DECLARATION_BOOL, value_, s_);
+		break;
+
+	default:
+		break;
+
+	};
+
+
+}
+
+void magenta_compiler::set_function_args(std::string arg_name, char char_ign[ig__][2]) {
+	func_* func__ = get_func();
+	func__->par__.push_back(fix_arg(arg_name, char_ign));
 }
 
 func_* magenta_compiler::get_func() {
 	return &func_s[func_s.size()-1];
 }
 
-void magenta_compiler::create_command(std::string name, type_command type, struct_ep s_) {
+void magenta_compiler::create_command(std::string name, type_command type, std::string value, struct_ep s_) {
 	command_ command;
 	command.command_name = name;
 	command.x_ = type;
 	command.s_ = s_;
+	command.value = value;
+
 	get_func()->block_.push_back(command);
 }
 
@@ -46,6 +109,9 @@ void magenta_compiler::compile() {
 		    c_ = (*block);
 	          if (c_.x_ == LABEL_NEW) {
 	          module->create_label(cod__, c_.command_name);
+	        }
+	          if (c_.x_ == VARIABLE_DECLARATION_BOOL) {
+	          module->create_variable_bool(cod__, c_.command_name, (c_.value == "true" ? true : false));
 	        }
        }
       

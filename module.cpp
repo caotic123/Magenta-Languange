@@ -110,6 +110,21 @@ void blocks::create_integer_pointer_i32(const char* variable_name, int32_t value
     insert(x_.string());
 }
 
+void magneta_module::create_variable_bool(std::string& cod__, std::string variable_name, bool t)
+{
+    __code x_;
+    x_.insert("%");
+    x_.insert_t(3, variable_name.c_str(), "=", "alloca i8");
+    x_.s_();
+    x_.insert_t(2, "store", "i8");
+    x_.insert((t == true ? "1" : "0"));
+    x_.insert(", ");
+    x_.insert_t(2, "i8*", ((std::string) "%" + variable_name).c_str());
+    x_.s_();
+    
+    cod__ = cod__ + x_.string();
+}
+
 std::string blocks::to_code()
 {
     __code x_;

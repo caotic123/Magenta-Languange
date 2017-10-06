@@ -119,6 +119,7 @@ class magneta_module {
 	std::string create_func(std::string func, std::string type, std::vector<std::string> p__);
 	void insert__to_code(std::string& x_, std::string c_);
 	void end_func(std::string& x_);
+	void create_variable_bool(std::string& cod__, std::string variable_name, bool t);
 	
 	private:
 	std::map<std::string, std::pair<struct func, std::list<int> > > ___funcs;
