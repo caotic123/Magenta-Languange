@@ -1,65 +1,5 @@
 #include "magenta_.h"
 
-void error(st_ st) {
-  switch (st.error) {
-  case LEXICAL_CHARACTER_DONT_FOUND:
-    printf("Illegal character: used in line %d\n", st.l);
-    break;
-  case SEMANTIC_CHARACTER_ILLEGAL:
-    printf("Illegal expression: used illegal combination of characters in %d\n",
-           st.l);
-    break;
-  case SEMANTIC_OPERATOR_INCONSISTENT:
-    printf("Illegal expression: the use of the operator in this way is illegal "
-           "%d\n",
-           st.l);
-    break;
-  case SEMANTIC_WRITE_FUNC:
-    printf(
-        "Illegal function: the use of the function in this way is illegal %d\n",
-        st.l);
-    break;
-  case SEMANTIC_WRITE_COND:
-    printf("Illegal condition: the use of the condition in this way is illegal "
-           "%d\n",
-           st.l);
-    break;
-  case SEMANTIC_OPERATOR_COND_PRECEDENCE:
-    printf("Illegal condtion: check condition precedence %d\n", st.l);
-  case SEMANTIC_EXPRESSION_CRITICAL_ERROR:
-    printf("Illegal expression: check expression (?) %d\n", st.l);
-    break;
-  case SEMANTIC_EXPRESSION_USED_IN_FUNCTION:
-    printf("Illegal expression: check if a expression has function value %d\n",
-           st.l);
-  case SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR:
-    printf("Illegal function: check if a parameter function is correct %d\n",
-           st.l);
-  case SEMANTIC_VARIABLE_ERROR_NAME:
-    printf("Illegal variable: check if name of variable is correct %d\n",
-           st.l);
-    break;
-  case SEMANTIC_FUNC_ERROR_NAME:
-    printf("Illegal variable: check if name of function is correct %d\n",
-           st.l);
-    break;  
-  default:
-    printf("A unknow error ocurred\n");
-  }
-
-  system("pause");
-  exit(0);
-}
-
-void error_(const char *s, const char *ex_, int i, error_id error__) {
-  st_ st;
-  st.error = error__;
-  st.l = i;
-  st._ = true;
-  printf("%s Incorret use of \"%s\"\n", s, ex_);
-  error(st);
-}
-
 int to_int_exp_n(std::string s_, std::string s) {
   int n;
   n = strtol(s.c_str(), NULL, 10);
@@ -704,7 +644,7 @@ void magenta::__analysis() {
     if (__func(*token_)) {
       s = secure_string_format(
           get_str_tok((*token_), getn_expression((*token_))));
-          is_correct_function_name(get_func_name(*token_, lex->abstract_logic, lex->char_ign), lex->sym_, lex->operators);          
+         is_correct_function_name(get_func_name(*token_, lex->abstract_logic, lex->char_ign), lex->sym_, lex->operators);          
           compiler->create_function(get_func_name((*token_), lex->abstract_logic, lex->char_ign));
           compiler->create_label("entry");
       if (!ref_empty(s, lex->char_ign)) {
@@ -761,7 +701,6 @@ void magenta::__analysis() {
         if (!__str(s, lex->char_ign)) {
         s = secure_string_format(analy_exp(lex->char_ign, lex->operators, s));
         s_ = r__str(s, lex->operators, lex->char_ign);
-        std::cout << s_.s << std::endl;
         compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->char_ign, s_);
         }
         else {

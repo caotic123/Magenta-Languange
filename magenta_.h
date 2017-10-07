@@ -3,10 +3,9 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <iterator>
+#include "magenta_header.h"
 #include "module.h"
 #include "magenta_lex.h"
-#include "module_utility.h"
-#include "magenta_header.h"
 #include "compiler.h"
 
 #ifndef MAGENTA_H

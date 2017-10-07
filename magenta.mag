@@ -1,4 +1,4 @@
-function fat((n), (x))
+function fat((x), (y))
 #a = (n-1)
 while((n) >= (0))
 #a = (a-1)
@@ -19,7 +19,8 @@ end
 ret (b)
 
 function x_(x) ret (x)
-function init()
+
+function main()
 #x = (100)
 #bool = (true)
 #a = ((2+3)*(2*4))
@@ -30,3 +31,6 @@ end
 #x = (fat((n), (k)))
 func print(())
 func print(("alou"))
+
+function main1()
+ret ("a")

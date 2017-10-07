@@ -17,8 +17,9 @@ struct command_ {
 struct func_ {
 	type_func type;
 	std::string func_name;
-	 std::vector<std::string> par__;
+	std::vector<std::string> par__;
 	std::vector<command_> block_;
+	int* q;
 };
 
 typedef std::vector<func_> ___funcs;
@@ -39,6 +40,8 @@ private:
 magneta_module* module;
 std::string __cod_e;
 ___funcs func_s;
+std::map<std::string, func_*> func_map;
+std::map<std::string, command_*> var_map;
 };
 
 #endif

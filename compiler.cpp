@@ -19,8 +19,16 @@ std::string fix_arg(std::string str, char char_ign[ig__][2]) {
 
 void magenta_compiler::create_function(std::string name) {
 	func_ f;
+    std::map<std::string, func_*>::iterator func__i = func_map.find(name);
+    if (func__i != func_map.end()) {
+    	error_(name.c_str(), "redeclaration of function", 0, SEMANTIC_FUNC_ERROR_NAME);
+	}
+
 	f.func_name = name;
+	f.q = new int;
+	(*f.q) = 0;
 	func_s.push_back(f);
+	func_map[name] = &func_s[func_s.size()-1];
 }
 
 void magenta_compiler::create_label(std::string name_l) {
@@ -47,11 +55,11 @@ std::string get_value(std::string s, char char_ign[ig__][2]) {
     return s.substr(__+1, (_-__)-1);
   }
   
-  return s;
+  return secure_string_format(s);
 }
 
 type_ getType(std::string ex_, char char_ign[ig__][2]) {
-	std::string value = secure_string_format(get_value(ex_, char_ign));
+	std::string value = get_value(ex_, char_ign);
 	if (__is_bool(value)) {
 		return bool_type;
 	}
@@ -63,7 +71,6 @@ void magenta_compiler::create_var(std::string name, char char_ign[ig__][2], stru
 	func_* func__ = get_func();
 	command_ label_;
 	std::string value_ =  get_value(s_.s, char_ign);
-	std::cout << get_value(s_.s, char_ign) << std::endl;
 	
 	switch(getType(value_, char_ign)) {
 
@@ -111,7 +118,7 @@ void magenta_compiler::compile() {
 	          module->create_label(cod__, c_.command_name);
 	        }
 	          if (c_.x_ == VARIABLE_DECLARATION_BOOL) {
-	          module->create_variable_bool(cod__, c_.command_name, (c_.value == "true" ? true : false));
+	          module->create_variable_bool(cod__, (*i_).q, c_.command_name, (c_.value == "true" ? true : false));
 	        }
        }
       

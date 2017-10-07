@@ -2,6 +2,7 @@
 #include <vector>
 #include <string.h>
 #include <sstream>
+#include "magenta_header.h"
 
 #define __symb 16
 #define __abs 8
@@ -13,29 +14,6 @@
 #define MAGENTA_LEX_H
 
 typedef std::vector<std::string> token;
-
-enum error_id {
-INIT_ID = 0,
-LEXICAL_CHARACTER_DONT_FOUND = 1,
-SEMANTIC_CHARACTER_ILLEGAL = 2,
-SEMANTIC_OPERATOR_INCONSISTENT = 3,
-SEMANTIC_WRITE_FUNC = 4,
-SEMANTIC_WRITE_COND = 5,
-SEMANTIC_OPERATOR_COND_PRECEDENCE = 6,
-SEMANTIC_EXPRESSION_CRITICAL_ERROR = 7,
-SEMANTIC_EXPRESSION_USED_IN_FUNCTION = 8,
-SEMANTIC_FUNCTION_UNDEFINED = 9,
-SEMANTIC_FUNCTION_PARAMENTER_CRITICAL_ERROR = 10,
-SEMANTIC_VARIABLE_ERROR_NAME = 11,
-SEMANTIC_FUNC_ERROR_NAME = 12
-
-};
-
-struct st_ {
-	bool _;
-	error_id error;
-	int l;
-};
 
 char* c(char* y, int t, int a);
 
