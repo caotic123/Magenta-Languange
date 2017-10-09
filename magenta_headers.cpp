@@ -84,3 +84,40 @@ void error_(const char *s, const char *ex_, int i, error_id error__) {
   printf("%s Incorrect use of \"%s\"\n", s, ex_);
   error(st);
 }
+
+bool is_operator(std::string c, std::string op_[len_op]) {
+  bool x = false;
+  for (int i = 0; i <= len_op; i++) {
+    x = (op_[i] == c) ? true : x;
+  }
+
+  return x;
+}
+
+char* int_to_string(int n) {
+	char* buffer = (char*)malloc(sizeof(char)*100);
+	sprintf(buffer, "%d", n);
+	return buffer;
+}
+
+bool is_precedence_value(std::string s) // only expression value which has precedence more 2+ 
+{
+  if (s.substr(1, 1) == "[" && s.substr((s.length()-1)-1, 1) == "]") {
+    return true;
+  }
+  return false;
+}
+
+bool is_prec_value(std::string s)
+{
+  if (s.substr(0, 1) == "[" && s.substr((s.length()-1), 1) == "]") {
+    return true;
+  }
+  return false;
+}
+
+int get_pr_str(std::string s) {
+  std::size_t _ = s.find("]");
+  return strtol((s.substr(2, 1)+s.substr(_+1, (s.length()-(_+1))-1)).c_str(), NULL, 10);
+}
+

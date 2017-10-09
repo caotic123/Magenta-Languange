@@ -18,12 +18,15 @@ while((y) <= (x))
 end
 ret (b)
 
-function x_(x) ret (x)
+function x_(x)
+#a = ((2+2*x)+(2+3)+(2*3+2))
+ret (a)
 
 function main()
 #x = (100)
 #bool = (true)
-#a = ((2+3)*(2*4))
+#bool = (false)
+#a = ((2+3+5)*(2*4))
 if ( ((x+x)/2) >= (32/3+(2+34)) )
 func print("bom")
 end

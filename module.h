@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <fstream>
 #include <iostream>
+#include "magenta_header.h"
 
 #ifndef MODULE_H
 #define MODULE_H
@@ -78,10 +79,9 @@ public:
     void insert__to_code(std::string& x_, std::string c_);
     void end_func(std::string& x_);
     void create_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
-
-private:
-    int q;
-    int q__;
+    void change_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
+    void add_value(std::string& cod__, std::string x, std::string y, int* q);
+    void mul_value(std::string& cod__, std::string x, std::string y, int* q);
 };
 
 #endif

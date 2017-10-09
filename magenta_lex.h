@@ -4,12 +4,6 @@
 #include <sstream>
 #include "magenta_header.h"
 
-#define __symb 16
-#define __abs 8
-#define ig__ 3 
-#define len_op 6
-#define _cond_p 4
-
 #ifndef MAGENTA_LEX_H
 #define MAGENTA_LEX_H
 

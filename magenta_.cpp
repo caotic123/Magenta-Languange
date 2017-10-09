@@ -56,15 +56,6 @@ bool magenta::__ret(std::string s) {
   return false;
 }
 
-bool is_operator(std::string c, std::string op_[len_op]) {
-  bool x = false;
-  for (int i = 0; i <= len_op; i++) {
-    x = (op_[i] == c) ? true : x;
-  }
-
-  return x;
-}
-
 bool __str(std::string expression, char char_ign[ig__][2]) {
   int p = 0;
   std::string s;
@@ -449,20 +440,6 @@ int get__c(std::string s, int x, std::string _op) {
   return 0;
 }
 
-
-int get_pr_str(std::string s) {
-  std::size_t _ = s.find("]");
-  return strtol((s.substr(2, 1)+s.substr(_+1, (s.length()-(_+1))-1)).c_str(), NULL, 10);
-} 
-
-bool is_precedence_value(std::string s) // only expression value which has precedence more 2+ 
-{
-  if (s.substr(1, 1) == "[" && s.substr((s.length()-1)-1, 1) == "]") {
-    return true;
-  }
-  return false;
-}
-
 std::vector<std::string> token_exp(std::string s, std::string op_[len_op]) {
   int p = 1;
   std::string c,s_;
@@ -526,6 +503,8 @@ struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[i
   while(s_.t) {
    s_ = c__m(s_, operators, char_ign);
   }
+  
+  s_.n_.push_back(token_exp(s_.s, operators));
 
   return s_;
 }
@@ -701,7 +680,7 @@ void magenta::__analysis() {
         if (!__str(s, lex->char_ign)) {
         s = secure_string_format(analy_exp(lex->char_ign, lex->operators, s));
         s_ = r__str(s, lex->operators, lex->char_ign);
-        compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->char_ign, s_);
+        compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->operators, lex->char_ign, s_);
         }
         else {
       	// if str value

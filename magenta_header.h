@@ -1,6 +1,12 @@
 #include <vector>
 #include <string>
 
+#define __symb 16
+#define __abs 8
+#define ig__ 3 
+#define len_op 6
+#define _cond_p 4
+
 #ifndef MAGENTA_HEADER_H
 #define MAGENTA_HEADER_H
 
@@ -28,7 +34,10 @@ enum type_command {
 	LOOP_WHILE = 4,
 	RET_VALUE = 5,
 	LABEL_NEW = 6,
-	LABEL_GOTO  = 7
+	LABEL_GOTO  = 7,
+    VARIABLE_CHANGE_BOOL = 8,
+    OPERATION_ADD_VALUE = 9,
+    OPERATION_MUL_VALUE = 10 
 };
 
 struct struct_ep {
@@ -64,4 +73,9 @@ struct st_ {
 std::string secure_string_format(std::string s);
 void error(st_ st);
 void error_(const char *s, const char *ex_, int i, error_id error__);
+bool is_operator(std::string c, std::string op_[len_op]);
+char* int_to_string(int n);
+int get_pr_str(std::string s);
+bool is_prec_value(std::string s);
+bool is_precedence_value(std::string s);
 #endif
