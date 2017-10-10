@@ -120,15 +120,15 @@ void magneta_module::change_variable_bool(std::string& cod__, int* q_, std::stri
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::add_value(std::string& cod__, std::string x, std::string y, int* q)
+void magneta_module::add_value(std::string& cod__, std::string x, std::string y, int* q, int* n)
 {
     __code x_;
     std::string __add;
     char* s_ = int_to_string((*q));
     char* _ = int_to_string(((*q)-1));
-        std::cout << x << "-" << is_prec_value(x) << std::endl;
-    //x = (is_prec_value(x)) ? ("%" + std::string(int_to_string(((*q)-1)-get_pr_str(x)))) : x;
-   // y = (is_prec_value(y)) ? ("%" + std::string(int_to_string(((*q)-1)-get_pr_str(y)))) : y;
+    	          	std::cout << "value " << (is_prec_value(y) ? get_pr_str(y) : -1) << std::endl;
+    x = (is_prec_value(x)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(x) ))) : x;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
     __add = x;
     x_.insert("%");
     if (__add == "%auto") {
@@ -152,14 +152,15 @@ void magneta_module::add_value(std::string& cod__, std::string x, std::string y,
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::mul_value(std::string& cod__, std::string x, std::string y, int* q)
+void magneta_module::mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n)
 {
     __code x_;
     std::string __add = x;
     char* s_ = int_to_string((*q));
     char* _ = int_to_string(((*q)-1));
-  //  x = (is_prec_value(x)) ? ("%" + std::string(int_to_string(((*q)-1)-get_pr_str(x)))) : x;
-    //y = (is_prec_value(y)) ? ("%" + std::string(int_to_string(((*q)-1)-get_pr_str(y)))) : y;
+
+    x = (is_prec_value(x)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(x)))) : x;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
 
     x_.insert("%");
     if (__add == "%auto") {

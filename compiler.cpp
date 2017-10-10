@@ -28,6 +28,7 @@ void magenta_compiler::create_function(std::string name) {
 
 	f.func_name = name;
 	f.q = new int;
+	f.n = new int;
 	(*f.q) = 0;
 	func_s.push_back(f);
 	func_map[name] = &func_s[func_s.size()-1];
@@ -85,6 +86,7 @@ void magenta_compiler::load_expression(struct_ep s_, std::string operators[len_o
 	std::string token;
 	std::string p;
 	std::vector<std::string> token__back;
+	create_expression();
 	for (std::vector<std::vector<std::string> >::iterator i = s_.n_.begin(); i != s_.n_.end(); i++) {
 		p = ((*i)[0]);
 		for (std::vector<std::string>::iterator __i = (*i).begin(); __i != (*i).end(); __i++) {	
@@ -149,6 +151,14 @@ func_* magenta_compiler::get_func() {
 	return &func_s[func_s.size()-1];
 }
 
+void magenta_compiler::create_expression() {
+	command_ command;
+	command.command_name = "new exp";
+	command.x_ = NEW_EXPRESSION;
+
+	get_func()->block_.push_back(command);
+}
+
 command_* magenta_compiler::create_command(std::string name, type_command type, std::string value, struct_ep s_) {
 	command_ command;
 	command.command_name = name;
@@ -181,10 +191,13 @@ void magenta_compiler::compile() {
 	          module->change_variable_bool(cod__, (*i_).q, c_.command_name, (c_.value == "true" ? true : false));
 	        }
 	          if (c_.x_ == OPERATION_ADD_VALUE) {
-	          module->add_value(cod__, c_.command_name, c_.value, (*i_).q);
+	          module->add_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n);
 	        }
 	          if (c_.x_ == OPERATION_MUL_VALUE) {
-	          module->mul_value(cod__, c_.command_name, c_.value, (*i_).q);
+	          module->mul_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n);
+	        }
+	          if (c_.x_ == NEW_EXPRESSION) {
+	          	*(*i_).n = *(*i_).q;
 	        }
        }
       

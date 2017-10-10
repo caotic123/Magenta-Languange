@@ -121,3 +121,6 @@ int get_pr_str(std::string s) {
   return strtol((s.substr(2, 1)+s.substr(_+1, (s.length()-(_+1))-1)).c_str(), NULL, 10);
 }
 
+int get_pr_str_value(std::string s) {
+  return strtol(s.substr(1, (s.length()-2)).c_str(), NULL, 10);
+}

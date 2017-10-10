@@ -37,7 +37,8 @@ enum type_command {
 	LABEL_GOTO  = 7,
     VARIABLE_CHANGE_BOOL = 8,
     OPERATION_ADD_VALUE = 9,
-    OPERATION_MUL_VALUE = 10 
+    OPERATION_MUL_VALUE = 10,
+    NEW_EXPRESSION = 11 
 };
 
 struct struct_ep {
@@ -78,4 +79,5 @@ char* int_to_string(int n);
 int get_pr_str(std::string s);
 bool is_prec_value(std::string s);
 bool is_precedence_value(std::string s);
+int get_pr_str_value(std::string s);
 #endif

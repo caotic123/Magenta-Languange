@@ -19,7 +19,7 @@ end
 ret (b)
 
 function x_(x)
-#a = ((2+2*x)+(2+3)+(2*3+2))
+#a = ((2+2*4)+(2+3)+(2*3+2))
 ret (a)
 
 function main()

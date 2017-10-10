@@ -80,8 +80,8 @@ public:
     void end_func(std::string& x_);
     void create_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
     void change_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
-    void add_value(std::string& cod__, std::string x, std::string y, int* q);
-    void mul_value(std::string& cod__, std::string x, std::string y, int* q);
+    void add_value(std::string& cod__, std::string x, std::string y, int* q, int* n);
+    void mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n);
 };
 
 #endif

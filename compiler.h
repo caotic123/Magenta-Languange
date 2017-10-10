@@ -21,6 +21,7 @@ struct func_ {
 	std::vector<command_> block_;
 	std::map<std::string, command_*> var_map;
 	int* q;
+	int* n;
 };
 
 typedef std::vector<func_> ___funcs;
@@ -37,7 +38,8 @@ void create_label(std::string name_l);
 void create_var(std::string name, std::string operators[len_op], char char_ign[ig__][2], struct_ep s_);
 void load_expression(struct_ep s_, std::string operators[len_op]);
 void create_add_operation(std::string x, std::string y, struct_ep s_);
-void create_mul_operation(std::string x, std::string y, struct_ep s_); 
+void create_mul_operation(std::string x, std::string y, struct_ep s_);
+void create_expression();
 void compile();
 
 private:
