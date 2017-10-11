@@ -92,8 +92,8 @@ std::string __aloc(__code& x_, int* n_, std::string type_) {
 	return std::string(n);
 }
 
-void __store(__code& x_, std::string n, std::string value_, char* type_) {
-    x_.insert_t(2, "store", type_);
+void __store(__code& x_, std::string n, std::string value_, std::string type_) {
+    x_.insert_t(2, "store", type_.c_str());
     x_.insert(value_);
     x_.insert(", ");
     x_.insert_t(2,  (std::string(type_) + "*").c_str(), ((std::string) "%" + n).c_str());

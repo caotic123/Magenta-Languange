@@ -281,6 +281,9 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == CREATE_VARIABLE_EXPRESSION) {
 	          module->create_variable_expression_i32(cod__, c_.command_name, (*i_).q);
 	        }
+	          if (c_.x_ == CHANGE_VARIABLE_EXPRESSION) {
+	          module->change_variable_expression_i32(cod__, c_.command_name, (*i_).q);
+	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;
 	        }

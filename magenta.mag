@@ -1,7 +1,8 @@
 function expr_(x)
-#a = (1234)
-#t = (a)
-#a = (t)
+#a = (2+40/2)
+#b = (2)
+#b = ((2+a)/(a-3))
+
 ret (0)
 
 function fat((x), (y))
