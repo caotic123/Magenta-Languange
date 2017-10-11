@@ -70,9 +70,9 @@ void magneta_module::create_label(std::string& cod, std::string label)
     return;
 }
 
-std::string __bit_cast(__code& x_, std::string variable_name, std::string n_, std::string type_) {
+std::string __bit_cast(__code& x_, std::string variable_name, std::string n, std::string type_) {
    x_.insert("%" + variable_name);
-   x_.insert_t(6, "=", "bitcast", (type_ + "*").c_str(), ("%"+n_).c_str(), "to", "i8*");
+   x_.insert_t(6, "=", "bitcast", (type_ + "*").c_str(), ("%"+n).c_str(), "to", "i8*");
    x_.s_();
    return variable_name;
 }
@@ -84,19 +84,31 @@ std::string return__bit_cast(__code& x_, std::string variable_name, std::string 
    return variable_name;
 }
 
-std::string __aloc(__code& x_, int* n_, std::string type_) {
-    char* n =  int_to_string((*n_));
+std::string __aloc(__code& x_, int* n__, std::string type_) {
+    std::string n =  int_to_string((*n__));
     x_.insert("%");
-    x_.insert_t(4, n, "=", "alloca", type_.c_str());
+    x_.insert_t(4, n.c_str(), "=", "alloca", type_.c_str());
     x_.s_();
+    
 	return std::string(n);
 }
 
-void __store(__code& x_, std::string n, std::string value_, std::string type_) {
+void __get_ptr(__code& x_, std::string n_, std::string vector_type, std::string var, std::string element) {
+	x_.insert_t(4, n_.c_str(), "=", "getelementptr inbounds", vector_type.c_str());
+	x_.insert(", ", true);
+	x_.insert_t(2, (vector_type+"*").c_str(), var.c_str());
+	x_.insert(", ", true);
+	x_.insert("i64 0");
+	x_.insert(", ");
+	x_.insert(("i64 " + element).c_str());
+	x_.s_();
+}
+
+void __store(__code& x_, std::string n, std::string value__, std::string type_) {
     x_.insert_t(2, "store", type_.c_str());
-    x_.insert(value_);
+    x_.insert(value__);
     x_.insert(", ");
-    x_.insert_t(2,  (std::string(type_) + "*").c_str(), ((std::string) "%" + n).c_str());
+    x_.insert_t(2, (type_ + "*").c_str(), ("%" + n).c_str());
     x_.s_();
 }
 
@@ -107,6 +119,29 @@ void magneta_module::create_variable_bool(std::string& cod__, int* q_, std::stri
     (*q_)++;
     __store(x_, n, (t ? "1" : "0"), (char*)"i1");
     __bit_cast(x_, variable_name, n, "i1");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::create_variable_str(std::string& cod__, std::string name, std::string str__, int* q_)
+{
+    __code x_;
+    std::string n__;
+    int len_ = str__.length()-1;
+    std::string len = int_to_string(str__.length());
+    std::string type__ = ("[" + len + " x " + "i8" + "]");
+    std::string n = __aloc(x_, q_,  type__);
+    (*q_)++;
+    for (int i=0; i <= len_-2; i++) {
+    n__ = (int_to_string(*q_));
+    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i)); 
+    __store(x_, n__, int_to_string((int)str__[i+1]), (char*)"i8");
+    (*q_)++;
+    }
+    n__ = (int_to_string(*q_));
+    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(len_)); 
+    __store(x_, n__, int_to_string(0), (char*)"i8");
+    (*q_++);
+
     cod__ = cod__ + x_.string();
 }
 
@@ -121,7 +156,7 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
 void magneta_module::create_variable_expression_i32(std::string& cod__, std::string var_, int* q_)
 {
     __code x_;
-    char* s_ = (char*)("%" + std::string(int_to_string((*q_)-1))).c_str();
+    std::string s_ = ("%" + std::string(int_to_string((*q_)-1)));
     std::string __n = __aloc(x_, q_, "i32");
     (*q_)++;
     __store(x_, __n, s_, (char*)"i32");
@@ -313,7 +348,6 @@ void magneta_module::mul_value(std::string& cod__, std::string x, std::string y,
 	
     if (__add == "%auto") {
       __add = ("%" + std::string(_));
-      std::cout << __add << std::endl;
 	}
 	
 	__add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(__add)))) : __add;

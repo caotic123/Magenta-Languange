@@ -83,6 +83,7 @@ public:
     void create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
     void change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* __e);
     void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);
+    void create_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);
     void change_variable_expression_i32(std::string& cod__, std::string var, int *q);
     void create_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
     void change_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);

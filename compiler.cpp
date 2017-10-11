@@ -209,6 +209,13 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
 
 }
 
+void magenta_compiler::create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]) {
+struct_ep s_;
+s_.t = true;
+
+create_command(name, DECLARATION_STRING_VAR, str__, s_);	
+}
+
 void magenta_compiler::set_function_args(std::string arg_name, char char_ign[ig__][2]) {
 	func_* func__ = get_func();
 	func__->par__.push_back(fix_arg(arg_name, char_ign));
@@ -283,6 +290,9 @@ void magenta_compiler::compile() {
 	        }
 	          if (c_.x_ == CHANGE_VARIABLE_EXPRESSION) {
 	          module->change_variable_expression_i32(cod__, c_.command_name, (*i_).q);
+	        }
+	          if (c_.x_ == DECLARATION_STRING_VAR) {
+	          module->create_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
 	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;

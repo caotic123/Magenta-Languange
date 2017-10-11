@@ -1,8 +1,6 @@
 function expr_(x)
-#a = (2+40/2)
-#b = (2)
-#b = ((2+a)/(a-3))
-
+#var = "ola"
+#t = "sim"
 ret (0)
 
 function fat((x), (y))
@@ -39,7 +37,7 @@ function main()
 if ( ((x+x)/2) >= (32/3+(2+34)) )
 func print("bom")
 end
-#x = ("Hello World")
+#x = "Hello World"
 #x = (fat((n), (k)))
 func print(())
 func print(("alou"))

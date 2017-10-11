@@ -48,6 +48,7 @@ enum type_command {
     CHANGE_VARIABLE_EXPRESSION = 18,
     VARIABLE_DECLARATION_I32 = 19,
     VARIABLE_CHANGE_I32 = 20,
+    DECLARATION_STRING_VAR = 21,
     
 };
 
@@ -90,5 +91,6 @@ int get_pr_str(std::string s);
 bool is_prec_value(std::string s);
 bool is_precedence_value(std::string s);
 int get_pr_str_value(std::string s);
+bool __str(std::string expression, char char_ign[ig__][2]);
 bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]);
 #endif

@@ -126,6 +126,29 @@ int get_pr_str_value(std::string s) {
   return strtol(s.substr(1, (s.length()-2)).c_str(), NULL, 10);
 }
 
+bool __str(std::string expression, char char_ign[ig__][2]) {
+  int p = 0;
+  std::string s;
+  s = char_ign[1][0];
+
+  if (expression.substr(0, 1) == s) {
+    expression = expression.substr(1, expression.length() - 2);
+  }
+
+  for (int i = 0; i <= expression.length() - 1; i++) {
+    if (expression.substr(i, 1) == "\"") {
+      p++;
+    }
+    if ((p >= 2 || p == 0) && expression.substr(i, 1) != "\"" &&
+        expression.substr(i, 1) != " ") {
+      p = false;
+      break;
+    }
+  }
+
+  return p;
+}
+
 bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
 	char f__ = s[0];
 	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {

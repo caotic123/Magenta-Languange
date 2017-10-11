@@ -37,6 +37,7 @@ command_* create_command(std::string name, type_command type, std::string value,
 void set_function_args(std::string arg_name, char char_ign[ig__][2]);
 void create_label(std::string name_l);
 void create_var(std::string name, std::string operators[len_op], char char_ign[ig__][2], struct_ep s_);
+void create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]);
 bool var_e(std::string name);
 void load_expression(struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]);
 type_ getType(std::string ex_, struct_ep s_, char char_ign[ig__][2]);

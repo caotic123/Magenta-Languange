@@ -56,29 +56,6 @@ bool magenta::__ret(std::string s) {
   return false;
 }
 
-bool __str(std::string expression, char char_ign[ig__][2]) {
-  int p = 0;
-  std::string s;
-  s = char_ign[1][0];
-
-  if (expression.substr(0, 1) == s) {
-    expression = expression.substr(1, expression.length() - 2);
-  }
-
-  for (int i = 0; i <= expression.length() - 1; i++) {
-    if (expression.substr(i, 1) == "\"") {
-      p++;
-    }
-    if ((p >= 2 || p == 0) && expression.substr(i, 1) != "\"" &&
-        expression.substr(i, 1) != " ") {
-      p = false;
-      break;
-    }
-  }
-
-  return p;
-}
-
 bool is_sep(char char_ign[ig__][2], std::string c) {
   bool x = false;
   std::string s, s_;
@@ -416,8 +393,10 @@ std::string get_t(std::string str, int p, int x) {
 }
 
 int magenta::get_n_variable_decl(std::string s) {
+  
   std::string c;
   std::string c_ = lex->cond_ex[3];
+  std::string c__;
   std::string s_;
   for (int _ = 0; _ <= s.length() - 1; _++) {
     c = s.substr(_, 1);
@@ -652,7 +631,6 @@ void magenta::__analysis() {
 
     if (var_decl(*token_)) {
       s = secure_string_format(get_str_tok((*token_), get_n_variable_decl((*token_))));
-
       if (is__func_var(s, lex->operators, lex->char_ign) != 0) {
         par__ = get_par_func(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
@@ -668,11 +646,11 @@ void magenta::__analysis() {
         s_ = r__str(s, lex->operators, lex->char_ign);
         compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->operators, lex->char_ign, s_);
         }
-        else {
-      	// if str value
+        else { // str value
+        
+        compiler->create_variable_string(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), s, lex->char_ign);
 		}
     }
-    
     }
 
     if (__while(*token_)) {
