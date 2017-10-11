@@ -17,7 +17,8 @@ int16_type = 2,
 int32_type = 3,
 int64_type = 4,
 string_type = 5,
-bool_type = 6
+bool_type = 6,
+int32_expression = 7
 };
 
 enum type_func {
@@ -38,7 +39,16 @@ enum type_command {
     VARIABLE_CHANGE_BOOL = 8,
     OPERATION_ADD_VALUE = 9,
     OPERATION_MUL_VALUE = 10,
-    NEW_EXPRESSION = 11 
+    OPERATION_DIV_VALUE = 11,
+    OPERATION_SUB_VALUE = 12,
+    OPERATION_EX_VALUE = 13,
+    NEW_EXPRESSION = 15,
+    LOAD_VALUE_BITCAST = 16,
+    CREATE_VARIABLE_EXPRESSION = 17,
+    CHANGE_VARIABLE_EXPRESSION = 18,
+    VARIABLE_DECLARATION_I32 = 19,
+    VARIABLE_CHANGE_I32 = 20,
+    
 };
 
 struct struct_ep {
@@ -80,4 +90,5 @@ int get_pr_str(std::string s);
 bool is_prec_value(std::string s);
 bool is_precedence_value(std::string s);
 int get_pr_str_value(std::string s);
+bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]);
 #endif

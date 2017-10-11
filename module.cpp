@@ -79,20 +79,20 @@ std::string __bit_cast(__code& x_, std::string variable_name, std::string n_, st
 
 std::string return__bit_cast(__code& x_, std::string variable_name, std::string n_, std::string type_) {
    x_.insert("%" + variable_name);
-   x_.insert_t(6, "=", "bitcast", "i8*", ("%"+n_).c_str(), "to", (type_ + "*").c_str());
+   x_.insert_t(6, " =", "bitcast", "i8*", ("%"+n_).c_str(), "to", (type_ + "*").c_str());
    x_.s_();
    return variable_name;
 }
 
-char* __aloc(__code& x_, int* n_, const char* type_) {
+std::string __aloc(__code& x_, int* n_, std::string type_) {
     char* n =  int_to_string((*n_));
     x_.insert("%");
-    x_.insert_t(4, n, "=", "alloca", type_);
+    x_.insert_t(4, n, "=", "alloca", type_.c_str());
     x_.s_();
-	return n;
+	return std::string(n);
 }
 
-void __store(__code& x_, std::string n, std::string value_, const char* type_) {
+void __store(__code& x_, std::string n, std::string value_, char* type_) {
     x_.insert_t(2, "store", type_);
     x_.insert(value_);
     x_.insert(", ");
@@ -103,10 +103,79 @@ void __store(__code& x_, std::string n, std::string value_, const char* type_) {
 void magneta_module::create_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t)
 {
     __code x_;
-    char* n = __aloc(x_, q_, (const char*)"i1");
+    std::string n = __aloc(x_, q_, "i1");
     (*q_)++;
-    __store(x_, n, (t ? "1" : "0"), "i1");
+    __store(x_, n, (t ? "1" : "0"), (char*)"i1");
     __bit_cast(x_, variable_name, n, "i1");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::load_value(__code& x, std::string name, std::string v, std::string type_) {
+	x.insert_t(2, ("%"+name).c_str(), "=");
+	x.insert_t(2, "load", type_.c_str());
+    x.insert(", ", true);
+    x.insert_t(2, (type_+"*").c_str(), ("%" + v).c_str());
+    x.s_();
+}
+
+void magneta_module::create_variable_expression_i32(std::string& cod__, std::string var_, int* q_)
+{
+    __code x_;
+    char* s_ = (char*)("%" + std::string(int_to_string((*q_)-1))).c_str();
+    std::string __n = __aloc(x_, q_, "i32");
+    (*q_)++;
+    __store(x_, __n, s_, (char*)"i32");
+    __bit_cast(x_, var_, __n, "i32");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int*e)
+{
+    __code x_;
+    if (var.substr(0, 1) == "%") {
+      var = ("%" + var.substr(1, var.length()-1) + int_to_string(*e));
+	}
+	
+    std::string __n = __aloc(x_, q_, "i32");
+    (*q_)++;
+    (*e) = (*q_);
+    __store(x_, __n, var, (char*)"i32");
+    __bit_cast(x_, name, __n, "i32");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* __e)
+{
+    __code x_;
+    if (var.substr(0, 1) == "%") {
+      var = ("%" + var.substr(1, var.length()-1) + int_to_string(*__e));
+	}
+	
+    return__bit_cast(x_, int_to_string(*q_), name, "i32");
+    __store(x_, int_to_string(*q_), var, (char*)"i32");
+    (*q_)++;
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::load_int_value(std::string& cod__, int* __e, std::string name, std::string v_)
+{
+    __code x_;
+    char* n = int_to_string((*__e));
+    std::string _ = ("bit_" + name + std::string(n));
+    std::string __ = (name + std::string(n));
+    return__bit_cast(x_, _, v_, "i32");
+    load_value(x_, __, _, "i32");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::change_variable_expression_i32(std::string& cod__, std::string var, int *q)
+{
+    __code x_;
+    char* value___ = (char*)("%" + std::string(int_to_string(((*q)-1)))).c_str();
+    char* s_ = int_to_string((*q));
+    return__bit_cast(x_, s_, var, (char*)"i32");
+    __store(x_, s_, value___, (char*)"i32");
+    (*q)++;
     cod__ = cod__ + x_.string();
 }
 
@@ -115,31 +184,33 @@ void magneta_module::change_variable_bool(std::string& cod__, int* q_, std::stri
     __code x_;
     char* s_ = int_to_string((*q_));
     return__bit_cast(x_, s_, variable_name, "i1");
-    __store(x_, s_, (t ? "1" : "0"), "i1");
+    __store(x_, s_, (t ? "1" : "0"), (char*)"i1");
     (*q_)++;
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::add_value(std::string& cod__, std::string x, std::string y, int* q, int* n)
+void magneta_module::add_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e)
 {
     __code x_;
     std::string __add;
     char* s_ = int_to_string((*q));
     char* _ = int_to_string(((*q)-1));
-    	          	std::cout << "value " << (is_prec_value(y) ? get_pr_str(y) : -1) << std::endl;
-    x = (is_prec_value(x)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(x) ))) : x;
-    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
     __add = x;
     x_.insert("%");
-    if (__add == "%auto") {
-      __add = ("%" + std::string(_));
-      std::cout << __add << std::endl;
+
+    if (__add.substr(0, 1) == "%" && __add != "%auto") {
+      __add = ("%" + __add.substr(1, __add.length()-1) + int_to_string(*__e));
 	}
 	
-	if (is_precedence_value(x)) {
-      __add = ("%" + std::string(_));
-      std::cout << __add << std::endl;
+	if (y.substr(0, 1) == "%") {
+      y = ("%" + y.substr(1, y.length()-1) + int_to_string(*__e));
 	}
+	
+    if (__add == "%auto") {
+      __add = ("%" + std::string(_));
+	}
+	__add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(__add)))) : __add;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");
@@ -148,25 +219,105 @@ void magneta_module::add_value(std::string& cod__, std::string x, std::string y,
     x_.insert(", ", true);
     x_.insert(y);
     (*q)++;
+    (*__e) = (*q);
     x_.s_();
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n)
+void magneta_module::sub_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e)
+{
+    __code x_;
+    std::string __add;
+    char* s_ = int_to_string((*q));
+    char* _ = int_to_string(((*q)-1));
+    __add = x;
+    x_.insert("%");
+
+    if (__add.substr(0, 1) == "%" && __add != "%auto") {
+      __add = ("%" + __add.substr(1, __add.length()-1) + int_to_string(*__e));
+	}
+	
+	if (y.substr(0, 1) == "%") {
+      y = ("%" + y.substr(1, y.length()-1) + int_to_string(*__e));
+	}
+	
+    if (__add == "%auto") {
+      __add = ("%" + std::string(_));
+	}
+	__add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(__add)))) : __add;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
+
+    x_.insert(s_);
+    x_.insert_t(1, " =");
+    
+    x_.insert_t(3, "sub", "i32", __add.c_str());
+    x_.insert(", ", true);
+    x_.insert(y);
+    (*q)++;
+    (*__e) = (*q);
+    x_.s_();
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::div_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e)
+{
+    __code x_;
+    std::string __add;
+    char* s_ = int_to_string((*q));
+    char* _ = int_to_string(((*q)-1));
+    __add = x;
+    x_.insert("%");
+
+    if (__add.substr(0, 1) == "%" && __add != "%auto") {
+      __add = ("%" + __add.substr(1, __add.length()-1) + int_to_string(*__e));
+	}
+	
+	if (y.substr(0, 1) == "%") {
+      y = ("%" + y.substr(1, y.length()-1) + int_to_string(*__e));
+	}
+	
+    if (__add == "%auto") {
+      __add = ("%" + std::string(_));
+	}
+	__add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(__add)))) : __add;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
+
+    x_.insert(s_);
+    x_.insert_t(1, " =");
+    
+    x_.insert_t(3, "udiv", "i32", __add.c_str());
+    x_.insert(", ", true);
+    x_.insert(y);
+    (*q)++;
+    (*__e) = (*q);
+    x_.s_();
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e)
 {
     __code x_;
     std::string __add = x;
     char* s_ = int_to_string((*q));
     char* _ = int_to_string(((*q)-1));
 
-    x = (is_prec_value(x)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(x)))) : x;
-    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
-
     x_.insert("%");
+    
+    if (__add.substr(0, 1) == "%" && __add != "%auto") {
+      __add = ("%" + __add.substr(1, __add.length()-1) + int_to_string(*__e));
+	}
+	
+	if (y.substr(0, 1) == "%") {
+      y = ("%" + y.substr(1, y.length()-1) + int_to_string(*__e));
+	}
+	
     if (__add == "%auto") {
       __add = ("%" + std::string(_));
       std::cout << __add << std::endl;
 	}
+	
+	__add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(__add)))) : __add;
+    y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n)+get_pr_str_value(y)))) : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");
@@ -175,6 +326,7 @@ void magneta_module::mul_value(std::string& cod__, std::string x, std::string y,
     x_.insert(", ", true);
     x_.insert(y);
     (*q)++;
+    (*__e) = (*q);
     x_.s_();
     cod__ = cod__ + x_.string();
 }

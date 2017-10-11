@@ -28,8 +28,11 @@ void magenta_compiler::create_function(std::string name) {
 
 	f.func_name = name;
 	f.q = new int;
-	f.n = new int;
 	(*f.q) = 0;
+	f.n = new int;
+	(*f.n) = 0;
+	f.__e = new int;
+	(*f.__e) = 0;
 	func_s.push_back(f);
 	func_map[name] = &func_s[func_s.size()-1];
 }
@@ -61,11 +64,21 @@ std::string get_value(std::string s, char char_ign[ig__][2]) {
   return secure_string_format(s);
 }
 
-type_ getType(std::string ex_, char char_ign[ig__][2]) {
+type_ magenta_compiler::getType(std::string ex_, struct_ep s_, char char_ign[ig__][2]) {
+	func_* f = get_func();
 	std::string value = get_value(ex_, char_ign);
 	if (__is_bool(value)) {
 		return bool_type;
 	}
+	if (s_.n_.size() > 1 || s_.n_[0].size() > 1) {
+		return int32_expression;
+	}
+	
+	if (value == "0" || strtol(value.c_str(), NULL, 10) != 0 || var_e(value)) {
+		return int32_type;
+    }
+    
+    //case don't be nothing of the condition
 	
 	return unknow_type;
 }
@@ -76,13 +89,44 @@ create_command(x, OPERATION_ADD_VALUE, y, s_);
 return;
 }
 
+void magenta_compiler::create_sub_operation(std::string x, std::string y, struct_ep s_) { //return variable reference operation
+func_* f__ = get_func();
+create_command(x, OPERATION_SUB_VALUE, y, s_);
+return;
+}
+
+void magenta_compiler::create_div_operation(std::string x, std::string y, struct_ep s_) { //return variable reference operation
+func_* f__ = get_func();
+create_command(x, OPERATION_DIV_VALUE, y, s_);
+return;
+}
+
 void magenta_compiler::create_mul_operation(std::string x, std::string y, struct_ep s_) { //return variable reference operation
 func_* f__ = get_func();
 create_command(x, OPERATION_MUL_VALUE, y, s_);
 return;
 }
 
-void magenta_compiler::load_expression(struct_ep s_, std::string operators[len_op]) {
+std::string magenta_compiler::is_value(std::string v_, std::string operators[len_op], char char_ign[ig__][2]) {
+	struct_ep s_; //empyth 
+	s_.t = true;
+	func_* f = get_func();
+	v_ = secure_string_format(v_);
+
+    //  std::map<std::string, command_*>::iterator var__ = f->var_map.find(v_);
+    //  if (var__ == f->var_map.end()) {
+    //  error_
+	//  }
+	
+	if (v_ != "0" && v_ != "%auto" && !is_prec_value(v_) && strtol(v_.c_str(), NULL, 10) == 0) {
+		create_command("load value", LOAD_VALUE_BITCAST, v_, s_);
+		return "%" + v_;
+	}
+
+	return v_;
+}
+
+void magenta_compiler::load_expression(struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]) {
 	std::string token;
 	std::string p;
 	std::vector<std::string> token__back;
@@ -92,48 +136,71 @@ void magenta_compiler::load_expression(struct_ep s_, std::string operators[len_o
 		for (std::vector<std::string>::iterator __i = (*i).begin(); __i != (*i).end(); __i++) {	
 		token = (*__i);
 		if (token == operators[0]) {
-			std::cout << p << token << *(__i+1) << std::endl;
-			create_add_operation(p, *(__i+1), s_);
+			create_add_operation(is_value(p, operators, char_ign) , is_value(*(__i+1), operators, char_ign), s_);
+			p = ("%" + std::string("auto"));
+		}
+		if (token == operators[1]) {
+			create_sub_operation(is_value(p, operators, char_ign), is_value(*(__i+1), operators, char_ign), s_);
 			p = ("%" + std::string("auto"));
 		}
 		if (token == operators[2]) {
-			std::cout << p << token << *(__i+1) << std::endl;
-			create_mul_operation(p, *(__i+1), s_);
+			create_mul_operation(is_value(p, operators, char_ign), is_value(*(__i+1), operators, char_ign), s_);
+			p = ("%" + std::string("auto"));
+		}
+		if (token == operators[3]) {
+			create_div_operation(is_value(p, operators, char_ign), is_value(*(__i+1), operators, char_ign), s_);
 			p = ("%" + std::string("auto"));
 		}
 	}
+   }
+
+}
+
+bool magenta_compiler::var_e(std::string name) {
+	func_* func__ = get_func();
+	std::map<std::string, command_*>::iterator var__i = func__->var_map.find(name);
+    if (var__i != (func__->var_map.end())) {
+    	return true;
     }
-    std::cout << s_.s << std::endl;
+
+    return false;
 }
 
 void magenta_compiler::create_var(std::string name, std::string operators[len_op], char char_ign[ig__][2], struct_ep s_) {
 	func_* func__ = get_func();
 	command_ label_;
-	std::string value_ =  get_value(s_.s, char_ign);
-	
-    if (s_.n_.size() > 1 || s_.n_[0].size() > 1) {
-    	load_expression(s_, operators);	
-	}
-    
-    
-	std::map<std::string, command_*>::iterator var__i = func__->var_map.find(name);
-    if (var__i != (func__->var_map.end())) {
+	std::string value_ = get_value(s_.s, char_ign);
 
-    	switch(getType(value_, char_ign)) {
+        if (var_e(name)) {
+    	switch(getType(value_, s_, char_ign)) {
     		case bool_type:
     	      create_command(name, VARIABLE_CHANGE_BOOL, value_, s_);
     	      return;
+    	    case int32_expression:
+    	    	load_expression(s_, operators, char_ign);
+    	    	create_command(name, CHANGE_VARIABLE_EXPRESSION, "exp", s_);
+    	    	return;
+    	    case int32_type:
+    	    	create_command(name, VARIABLE_CHANGE_I32, is_value(value_, operators, char_ign), s_);
+    	    	return;
     	    default:
     	    	break;
     };
 
 	}
 	
-	switch(getType(value_, char_ign)) {
+	switch(getType(value_, s_, char_ign)) {
 
 	case bool_type:
 		func__->var_map[name] = create_command(name, VARIABLE_DECLARATION_BOOL, value_, s_);
 		break;
+	case int32_type:
+		func__->var_map[name] = create_command(name, VARIABLE_DECLARATION_I32, is_value(value_, operators, char_ign), s_);
+		break;
+    case int32_expression:
+    	load_expression(s_, operators, char_ign);
+    	func__->var_map[name] = create_command(name, CREATE_VARIABLE_EXPRESSION, "exp", s_);
+    	break;
 
 	default:
 		break;
@@ -187,14 +254,32 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == VARIABLE_DECLARATION_BOOL) {
 	          module->create_variable_bool(cod__, (*i_).q, c_.command_name, (c_.value == "true" ? true : false));
 	        }
+	          if (c_.x_ == VARIABLE_DECLARATION_I32) {
+	          module->create_variable_int32(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
+	        }
+	          if (c_.x_ == VARIABLE_CHANGE_I32) {
+	          module->change_variable_int32(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
+	        }
 	          if (c_.x_ == VARIABLE_CHANGE_BOOL) {
 	          module->change_variable_bool(cod__, (*i_).q, c_.command_name, (c_.value == "true" ? true : false));
 	        }
 	          if (c_.x_ == OPERATION_ADD_VALUE) {
-	          module->add_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n);
+	          module->add_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n, (*i_).__e);
+	        }
+	          if (c_.x_ == OPERATION_SUB_VALUE) {
+	          module->sub_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n, (*i_).__e);
+	        }
+	          if (c_.x_ == OPERATION_DIV_VALUE) {
+	          module->div_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n, (*i_).__e);
 	        }
 	          if (c_.x_ == OPERATION_MUL_VALUE) {
-	          module->mul_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n);
+	          module->mul_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n, (*i_).__e);
+	        }
+	          if (c_.x_ == LOAD_VALUE_BITCAST) {
+	          module->load_int_value(cod__, (*i_).__e, c_.value, c_.value);
+	        }
+	          if (c_.x_ == CREATE_VARIABLE_EXPRESSION) {
+	          module->create_variable_expression_i32(cod__, c_.command_name, (*i_).q);
 	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;

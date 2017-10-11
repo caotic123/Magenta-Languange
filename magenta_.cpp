@@ -503,7 +503,7 @@ struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[i
   while(s_.t) {
    s_ = c__m(s_, operators, char_ign);
   }
-  
+ 
   s_.n_.push_back(token_exp(s_.s, operators));
 
   return s_;
@@ -580,20 +580,6 @@ std::vector<std::string> get_func_ref(std::string str, std::string operators[len
 return par__;
 }
 
-bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
-	char f__ = s[0];
-	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {
-		error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
-	}
-	
-	for(int q=0; q <= s.length()-1; q++) {
-		if (is_operator(s.substr(q, 1), operators)) {
-			error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
-		}
-	}
-
-  return true;
-}
 
 std::string get_var_name(std::string s, std::string cond_ex[_cond_p], const char* abstract_logic[__abs][2], char sym_[__symb][2], std::string operators[len_op]) {
   std::string c_;

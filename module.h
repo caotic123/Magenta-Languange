@@ -78,10 +78,18 @@ public:
     std::string create_func(std::string func, std::string type, std::vector<std::string> p__);
     void insert__to_code(std::string& x_, std::string c_);
     void end_func(std::string& x_);
+    void load_value(__code& x, std::string name, std::string v, std::string type_);
+    void load_int_value(std::string& cod__, int* __e, std::string name, std::string v_);
+    void create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
+    void change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* __e);
+    void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);
+    void change_variable_expression_i32(std::string& cod__, std::string var, int *q);
     void create_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
     void change_variable_bool(std::string& cod__, int* q_, std::string variable_name, bool t);
-    void add_value(std::string& cod__, std::string x, std::string y, int* q, int* n);
-    void mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n);
+    void add_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e);
+    void sub_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e);
+    void div_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e);
+    void mul_value(std::string& cod__, std::string x, std::string y, int* q, int* n, int* __e);
 };
 
 #endif

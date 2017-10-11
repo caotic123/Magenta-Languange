@@ -87,7 +87,7 @@ void error_(const char *s, const char *ex_, int i, error_id error__) {
 
 bool is_operator(std::string c, std::string op_[len_op]) {
   bool x = false;
-  for (int i = 0; i <= len_op; i++) {
+  for (int i = 0; i <= len_op-1; i++) {
     x = (op_[i] == c) ? true : x;
   }
 
@@ -102,7 +102,8 @@ char* int_to_string(int n) {
 
 bool is_precedence_value(std::string s) // only expression value which has precedence more 2+ 
 {
-  if (s.substr(1, 1) == "[" && s.substr((s.length()-1)-1, 1) == "]") {
+  std::size_t _ = s.find("]");
+  if (s.substr(1, 1) == "[" && s.substr((s.length()-1)-1, 1) == "]" && _ == s.length()-2 ) {
     return true;
   }
   return false;
@@ -123,4 +124,19 @@ int get_pr_str(std::string s) {
 
 int get_pr_str_value(std::string s) {
   return strtol(s.substr(1, (s.length()-2)).c_str(), NULL, 10);
+}
+
+bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
+	char f__ = s[0];
+	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {
+		error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
+	}
+	
+	for(int q=0; q <= s.length()-1; q++) {
+		if (is_operator(s.substr(q, 1), operators)) {
+			error_(s.c_str(), "variable name is not correct use", 0, SEMANTIC_VARIABLE_ERROR_NAME);
+		}
+	}
+
+  return true;
 }

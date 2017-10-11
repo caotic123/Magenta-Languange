@@ -1,3 +1,9 @@
+function expr_(x)
+#a = (1234)
+#t = (a)
+#a = (t)
+ret (0)
+
 function fat((x), (y))
 #a = (n-1)
 while((n) >= (0))
@@ -19,14 +25,16 @@ end
 ret (b)
 
 function x_(x)
-#a = ((2+2*4)+(2+3)+(2*3+2))
+#a = (x +(2+3)+(2*3+2))
+#x = (a+bc)
+#b = (2+3*5)
 ret (a)
 
 function main()
 #x = (100)
 #bool = (true)
 #bool = (false)
-#a = ((2+3+5)*(2*4))
+#a = ((2+3+5)/(2*4))
 if ( ((x+x)/2) >= (32/3+(2+34)) )
 func print("bom")
 end
