@@ -67,6 +67,14 @@ void error(st_ st) {
     printf("Illegal function: check if name of function is correct %d\n",
            st.l);
     break;
+  case COMPILER_VARIABLE_DONT_FOUND:
+    printf("VARIABLE: check if variable was declared and check your name %d\n",
+           st.l);
+    break;
+  case COMPILER_VARIABLE_TYPE_ERROR:
+    printf("VARIABLE: check type of variable and check name of variable %d\n",
+           st.l);
+    break;
 
   default:
     printf("A unknow error ocurred\n");

@@ -340,6 +340,29 @@ std::string analy_exp(char op[ig__][2], std::string op_[len_op],
   return str;
 }
 
+int magenta::getn_string(std::string str_) {
+  int n_int;
+  std::string buf;
+  try {
+    std::size_t found = str_.find(lex->char_ign[0][0]);
+    str_ = str_.substr(found+1, str_.length() - (found+1) - 1);
+
+    buf = str_;
+    if (found == std::string::npos) {
+      error_(buf.c_str(), "?", 0, SEMANTIC_WRITE_FUNC);
+    }
+
+    buf = "";
+
+    std::remove_copy(str_.begin(), str_.end(), std::back_inserter(buf), ' ');
+    n_int = to_int_exp_n(str_, buf);
+  } catch (std::exception e) {
+    error_(str_.c_str(), "maybe \"\" ?", 0, SEMANTIC_EXPRESSION_CRITICAL_ERROR);
+  }
+
+  return n_int;
+}
+
 int magenta::getn_expression(std::string str_) {
   int n_int;
   std::string buf;
@@ -396,7 +419,6 @@ int magenta::get_n_variable_decl(std::string s) {
   
   std::string c;
   std::string c_ = lex->cond_ex[3];
-  std::string c__;
   std::string s_;
   for (int _ = 0; _ <= s.length() - 1; _++) {
     c = s.substr(_, 1);
@@ -503,6 +525,16 @@ bool is_correct_function_name(std::string s, char sym_[__symb][2], std::string o
   return true;
 }
 
+std::string get_func_call_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
+  std::size_t p_ = s.find(abstract_logic[7][0]);
+  std::size_t _ = s.find(char_ign[1][0]);
+  if (p_ == std::string::npos || _ == std::string::npos) {
+  	error_(s.c_str(), "? function don't valid'", 0, SEMANTIC_FUNCTION_UNDEFINED);
+  }
+  
+  return s.substr(p_+5, _-(p_+5));
+}
+
 std::string get_func_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
   std::size_t p_ = s.find(abstract_logic[0][0]);
   std::size_t _ = s.find(char_ign[1][0]);
@@ -525,6 +557,13 @@ bool ref_empty(std::string str, char char_ign[ig__][2]) {
 struct_ep create_ep_empty() {
 	struct_ep s_;
 	s_.t = false;
+	return s_;
+}
+
+struct_ep create_ep(std::string s) {
+	struct_ep s_;
+	s_.s = s;
+	s_.t = true;
 	return s_;
 }
 
@@ -581,7 +620,7 @@ void magenta::__analysis() {
   struct_ep s_;
   std::string ___s, ___a;
   std::vector<std::string> par__;
-
+  std::vector<struct_ep> ep__;
   for (token::iterator token_ = token__.begin(); token_ != token__.end();
        ++token_) {
     s_ = create_ep_empty();
@@ -618,15 +657,23 @@ void magenta::__analysis() {
 
     if (call__func(*token_)) {
       s = secure_string_format(get_str_tok((*token_), getn_expression((*token_))));
-      if (!__str(s, lex->char_ign)) {
         par__ = get_func_ref(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
+           if (__str((*i_), lex->char_ign)) {
+           	s__par = secure_string_format((*i_));
+           	s__par = get_str_tok((*token_), getn_string(s__par));
+           	ep__.push_back(create_ep(s__par));
+           }
+           else {
           s__par = secure_string_format((*i_));
           s__par = analy_exp(lex->char_ign, lex->operators, s__par);
           s_ = r__str(s__par, lex->operators, lex->char_ign);
+          ep__.push_back(s_);
         }
-      }
+    }
+    compiler->create_call_func(get_func_call_name((*token_), lex->abstract_logic, lex->char_ign), ep__, lex->operators, lex->char_ign);
+    ep__.clear();
     }
 
     if (var_decl(*token_)) {

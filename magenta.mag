@@ -1,9 +1,10 @@
 function expr_(x)
-#var = "ola"
-#t = "sim"
+#x = "ola"
+#x = "sls"
 ret (0)
 
 function fat((x), (y))
+#n = (2)
 #a = (n-1)
 while((n) >= (0))
 #a = (a-1)
@@ -23,9 +24,9 @@ while((y) <= (x))
 end
 ret (b)
 
-function x_(x)
-#a = (x +(2+3)+(2*3+2))
-#x = (a+bc)
+function x_(n)
+#ab = (323)
+#a = (ab+(2+3)+(2*3+2))
 #b = (2+3*5)
 ret (a)
 
@@ -35,12 +36,8 @@ function main()
 #bool = (false)
 #a = ((2+3+5)/(2*4))
 if ( ((x+x)/2) >= (32/3+(2+34)) )
-func print("bom")
 end
-#x = "Hello World"
-#x = (fat((n), (k)))
-func print(())
-func print(("alou"))
+ret (0)
 
 function main1()
 ret ("a")

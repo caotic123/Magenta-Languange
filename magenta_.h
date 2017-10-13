@@ -25,6 +25,7 @@ void __analysis();
 std::string get_str_tok(std::string s_, int n);
 int getn_expression(std::string str_);
 int get_n_variable_decl(std::string s);
+int getn_string(std::string str_);
 
 private:
 	lex_* lex;
