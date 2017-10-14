@@ -535,6 +535,11 @@ std::string get_func_call_name(std::string s, const char* abstract_logic[__abs][
   return s.substr(p_+5, _-(p_+5));
 }
 
+std::string get_func_var_call_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
+  std::size_t _ = s.find(char_ign[1][0]);
+  return s.substr(0, _);
+}
+
 std::string get_func_name(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2] ) {
   std::size_t p_ = s.find(abstract_logic[0][0]);
   std::size_t _ = s.find(char_ign[1][0]);
@@ -613,6 +618,22 @@ std::string get_var_name(std::string s, std::string cond_ex[_cond_p], const char
   error_(s.c_str(), "? variable has a correct name?", 0, SEMANTIC_VARIABLE_ERROR_NAME);
 }
 
+std::string get_func_par(std::string func__, char char_ign[ig__][2]) {
+  std::string c;
+  std::string s_;
+  s_ = char_ign[1][1];
+  size_t p = func__.find(char_ign[1][0]);
+  int p_ = func__.length()-1;
+  for (int i=func__.length()-1; i >= 0; i--) {
+    c = func__.substr(i, 1);
+    if (c == s_) {
+      p_ = i;
+    }
+  }
+
+  return func__.substr(p, p-p_); 
+}
+
 void magenta::__analysis() {
   std::string exp;
   std::string s, s__par;
@@ -621,6 +642,7 @@ void magenta::__analysis() {
   std::string ___s, ___a;
   std::vector<std::string> par__;
   std::vector<struct_ep> ep__;
+  std::string name_var_func;
   for (token::iterator token_ = token__.begin(); token_ != token__.end();
        ++token_) {
     s_ = create_ep_empty();
@@ -672,29 +694,42 @@ void magenta::__analysis() {
           ep__.push_back(s_);
         }
     }
-    compiler->create_call_func(get_func_call_name((*token_), lex->abstract_logic, lex->char_ign), ep__, lex->operators, lex->char_ign);
+    compiler->create_call_func(secure_string_format(get_func_call_name((*token_), lex->abstract_logic, lex->char_ign)), "%auto", ep__, lex->operators, lex->char_ign);
     ep__.clear();
     }
 
     if (var_decl(*token_)) {
       s = secure_string_format(get_str_tok((*token_), get_n_variable_decl((*token_))));
       if (is__func_var(s, lex->operators, lex->char_ign) != 0) {
-        par__ = get_par_func(s, lex->operators, lex->char_ign);
+      	name_var_func = get_func_var_call_name(secure_string_format(s.substr(1, s.length()-2)), lex->abstract_logic, lex->char_ign);
+      	s = secure_string_format(get_func_par(s.substr(1, s.length()-2), lex->char_ign));
+        par__ = get_func_ref(s, lex->operators, lex->char_ign);
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
+
+        if (__str((*i_), lex->char_ign)) {
+           	s__par = secure_string_format((*i_));
+           	s__par = get_str_tok((*token_), getn_string(s__par));
+           	ep__.push_back(create_ep(s__par));
+       }
+       else {
           s__par = secure_string_format((*i_));
           analy_exp(lex->char_ign, lex->operators, s__par);
           s_ = r__str(s__par, lex->operators, lex->char_ign);
+          ep__.push_back(s_);
+      }
         }
-        
-      } else {
+       compiler->create_var_call_func(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), secure_string_format(name_var_func), ep__, lex->operators, lex->char_ign);  
+       ep__.clear();;
+      } 
+	  
+	  else {
         if (!__str(s, lex->char_ign)) {
         s = secure_string_format(analy_exp(lex->char_ign, lex->operators, s));
         s_ = r__str(s, lex->operators, lex->char_ign);
         compiler->create_var(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), lex->operators, lex->char_ign, s_);
         }
         else { // str value
-        
         compiler->create_variable_string(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), s, lex->char_ign);
 		}
     }

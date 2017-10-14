@@ -22,7 +22,7 @@ struct func_ {
 	std::string func_name;
 	std::vector<std::string> par__;
 	std::vector<command_> block_;
-	std::map<std::string, command_> var_map;
+	std::map<std::string, command_> var_map; // it's a backup of first declaration of variable
 	int* q;
 	int* n;
 	int* __e;
@@ -44,7 +44,8 @@ void create_var(std::string name, std::string operators[len_op], char char_ign[i
 void create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]);
 bool var_e(std::string name);
 void load_expression(struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]);
-void create_call_func(std::string name, std::vector<struct_ep>, std::string operators[len_op], char char_ign[ig__][2]);
+void create_call_func(std::string name, std::string value, std::vector<struct_ep>, std::string operators[len_op], char char_ign[ig__][2]);
+void create_var_call_func(std::string name, std::string func_name, std::vector<struct_ep> s_, std::string operators[len_op], char char_ign[ig__][2]);
 type_ getType(std::string ex_, struct_ep s_, char char_ign[ig__][2]);
 void create_add_operation(std::string x, std::string y, struct_ep s_);
 void create_sub_operation(std::string x, std::string y, struct_ep s_);

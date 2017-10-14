@@ -50,7 +50,9 @@ enum type_command {
     VARIABLE_DECLARATION_I32 = 20,
     VARIABLE_CHANGE_I32 = 21,
     DECLARATION_STRING_VAR = 22,
-    CHANGE_STRING_VAR = 23
+    CHANGE_STRING_VAR = 23,
+    CREATE_I8_VAR = 24,
+    UNKNOW_TYPE_TO_POINTER = 25
 };
 
 struct struct_ep {

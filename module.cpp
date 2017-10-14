@@ -93,6 +93,14 @@ std::string __aloc(__code& x_, int* n__, std::string type_) {
 	return std::string(n);
 }
 
+std::string __aloc_n(__code& x_, std::string n__, std::string type_) {
+    x_.insert("%");
+    x_.insert_t(4, n__.c_str(), "=", "alloca", type_.c_str());
+    x_.s_();
+    
+	return std::string(n__);
+}
+
 std::string __aloc_str(__code& x_, std::string n, std::string type_) {
     x_.insert("%");
     x_.insert_t(4, n.c_str(), "=", "alloca", type_.c_str());
@@ -118,6 +126,26 @@ void __store(__code& x_, std::string n, std::string value__, std::string type_) 
     x_.insert(", ");
     x_.insert_t(2, (type_ + "*").c_str(), ("%" + n).c_str());
     x_.s_();
+}
+
+void __store_i8(__code& x_, std::string n, std::string value__) {
+    x_.insert_t(2, "store", "i8*");
+    x_.insert(value__);
+    x_.insert(", ");
+    x_.insert_t(2, "i8*", ("%" + n).c_str());
+    x_.s_();
+}
+
+void magneta_module::create_unknowtype_var(std::string& cod__, std::string name, std::string ref, int* q) {
+	__code x_;
+	std::string __n_ = int_to_string((*q)-1);
+	if (name != "%auto") {
+		__n_ = ref;
+	}
+	
+	std::string n__ = __aloc(x_, q, "i8");
+	__store_i8(x_, n__, "%" + __n_);
+	cod__ = cod__ + x_.string();
 }
 
 void magneta_module::create_variable_bool(std::string& cod__, int* q_, int* __e, std::string variable_name, bool t)
@@ -192,6 +220,15 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
     x.s_();
 }
 
+void magneta_module::pointer_to_point(std::string& cod, std::string name, std::string v, int* q) {
+	__code x_;
+	std::string n_ = __aloc(x_, q, "i8*");
+	__store(x_, n_.c_str(), ("%" + v).c_str(), "i8*");
+    load_value(x_, name, n_, "i8*");
+    (*q)++;
+	cod = cod + x_.string();
+}
+
 void magneta_module::create_variable_expression_i32(std::string& cod__, std::string var_, int* q_)
 {
     __code x_;
@@ -253,10 +290,14 @@ void magneta_module::load_bool_value(std::string& cod__, int* __e, std::string n
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, int* q) {
+void magneta_module::create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q) {
 	__code x_;
-	char* s_ = int_to_string((*q));
-	x_.insert_t(5, ("%" + std::string(s_)).c_str(), "=", "call", "i8*", ("@" + func_name).c_str());
+	std::string s_ = v_; 
+	if (v_ == "%auto") {
+		s_ = int_to_string((*q));
+	}
+	
+	x_.insert_t(5, ("%" + s_).c_str(), "=", "call", "i8*", ("@" + func_name).c_str());
 	x_.insert("(", true);
 	
 	for (std::vector<std::string>::iterator i = par__.begin(); i != par__.end(); i++) {
@@ -266,7 +307,11 @@ void magneta_module::create_call_func(std::string& cod__, std::string func_name,
 	}
 	x_.insert(")");
 	x_.s_();
-	(*q)++;
+	
+	if (v_ == "%auto") {
+		(*q)++;
+	}
+
 	cod__ = cod__ + x_.string();
 }
 

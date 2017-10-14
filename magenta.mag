@@ -1,6 +1,12 @@
+function print(n)
+func puts((n))
+#a = (n)
+ret(0)
+
 function expr_(x)
-#x = "ola"
-#x = "sls"
+#a = (print("ola"))
+#n = (a)
+func print("ola")
 ret (0)
 
 function fat((x), (y))

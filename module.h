@@ -80,9 +80,11 @@ public:
     void end_func(std::string& x_);
     void load_value(__code& x, std::string name, std::string v, std::string type_);
     void load_int_value(std::string& cod__, int* __e, std::string name, std::string v_);
+    void create_unknowtype_var(std::string& cod__, std::string name, std::string ref, int* q);
     void create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
     void change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
-    void create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, int* q);
+    void create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q);
+    void pointer_to_point(std::string& cod, std::string name, std::string v, int* q);
     void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);
     void create_variable_str(std::string& cod__, std::string name, std::string str__, int* q);
     void change_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);

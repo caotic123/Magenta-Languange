@@ -129,7 +129,8 @@ std::string magenta_compiler::is_value(std::string v_, type_ type, std::string o
 
 	type_cmp = f->var_map[v_].type;
 	
-	if (type != type_cmp) {
+	if (type_cmp != unknow_type && type != type_cmp) {
+		std::cout << type << " " << type_cmp << std::endl;
 		error_(v_.c_str(), "variable types don't correspond", 0, COMPILER_VARIABLE_TYPE_ERROR);
 	}
 
@@ -190,26 +191,49 @@ bool magenta_compiler::var_e(std::string name) {
     return false;
 }
 
-void magenta_compiler::create_call_func(std::string name, std::vector<struct_ep> s_, std::string operators[len_op], char char_ign[ig__][2]) {
+void magenta_compiler::create_var_call_func(std::string name, std::string func_name, std::vector<struct_ep> s_, std::string operators[len_op], char char_ign[ig__][2]) 
+{
+	func_* f = get_func();
+	std::string name_ = (func_name + int_to_string(*f->par__arg_int));
+	
+	create_call_func(func_name, name, s_, operators, char_ign);
+}
+
+void magenta_compiler::create_call_func(std::string name, std::string value, std::vector<struct_ep> s_, std::string operators[len_op], char char_ign[ig__][2]) {
   func_* f = get_func();
   std::vector<std::string> par__;
+  std::string var_;
   command_ command;
+  command_ var__f;
   command.command_name = name;
   command.x_ = CALL_FUNC;
-  command.value = "call func";
+  var__f.command_name = value;
+  var__f.value = name;
+  var__f.type = unknow_type;
+  if (value != "call func") {
+  	f->var_map[value] = var__f; // variables which recevied function values are untypeds
+  }
+  command.value = value;
+  
   command.len = new int;
   for (std::vector<struct_ep>::iterator i_ = s_.begin(); i_ != s_.end(); i_++) {
-  	   if (__str((*i_).s, char_ign)) {
+       if ((var_e(fix_arg(get_value((*i_).s, char_ign), char_ign))) && f->var_map[fix_arg(get_value((*i_).s, char_ign), char_ign)].type == unknow_type) { // maybe be a paramater or other but don't be considered a typed value
+       par__.push_back(fix_arg(get_value((*i_).s, char_ign), char_ign));
+       } else {
+  	   if (__str((*i_).s, char_ign) || (var_e(get_value((*i_).s, char_ign)) && f->var_map[get_value((*i_).s, char_ign)].type == string_type)) {
   	   	create_variable_string("par__" + std::string(int_to_string(*f->par__arg_int)), (*i_).s, char_ign);
   	   }
   	   else {
        create_var("par__" + std::string(int_to_string(*f->par__arg_int)), operators, char_ign,  (*i_));
        }
   	   par__.push_back("par__" + std::string(int_to_string(*f->par__arg_int)));
+    }
        (*f->par__arg_int)++;
   }
+  
   command.__par = par__;
   f->block_.push_back(command);
+  par__.clear();
   
 }
 
@@ -217,24 +241,28 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
 	func_* func__ = get_func();
 	command_ label_;
 	std::string value_ = get_value(s_.s, char_ign);
-
-        if (var_e(name)) {
-    	switch(getType(value_, s_, char_ign)) {
-    		case bool_type:
+                                                                                    //ifs of captures types of declared variables, yes the order of conditionals is very important
+        if (var_e(name) && func__->var_map[name].type == bool_type) {
     	      create_command(name, VARIABLE_CHANGE_BOOL, value_, s_, bool_type);
     	      return;
-    	    case int32_expression:
+        }
+        
+        if (var_e(name) && getType(value_, s_, char_ign) == int32_expression) {
     	    	load_expression(s_, operators, char_ign);
     	    	create_command(name, CHANGE_VARIABLE_EXPRESSION, "exp", s_, int32_type);
     	    	return;
-    	    case int32_type:
+       }
+       
+       if (var_e(value_) && func__->var_map[value_].type == unknow_type) { // yes of value reference
+       	        create_command(name, UNKNOW_TYPE_TO_POINTER, value_, s_, unknow_type);
+       	        return;
+	   }
+	    
+    	if (var_e(name) && getType(value_, s_, char_ign) == int32_type) {
     	    	create_command(name, VARIABLE_CHANGE_I32, is_value(value_, int32_type, operators, char_ign), s_, int32_type);
     	    	return;
-    	    default:
-    	    	break;
-    };
+        }
 
-	}
 	
 	switch(getType(value_, s_, char_ign)) {
 
@@ -271,6 +299,11 @@ func__->var_map[name] = create_command(name, DECLARATION_STRING_VAR, str__, s_, 
 
 void magenta_compiler::set_function_args(std::string arg_name, char char_ign[ig__][2]) {
 	func_* func__ = get_func();
+	command_ command;
+	command.command_name = "args";
+	command.value = "arg__";
+	command.type = unknow_type;
+	func__->var_map[fix_arg(arg_name, char_ign)] = command;
 	func__->par__.push_back(fix_arg(arg_name, char_ign));
 }
 
@@ -314,6 +347,9 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == LABEL_NEW) {
 	          module->create_label(cod__, c_.command_name);
 	        }
+	          if (c_.x_ == CREATE_I8_VAR) {
+	          module->create_unknowtype_var(cod__, c_.command_name, c_.value, (*i_).q);
+	        }
 	          if (c_.x_ == VARIABLE_DECLARATION_BOOL) {
 	          module->create_variable_bool(cod__, (*i_).q, (*i_).__e, c_.command_name, (c_.value == "true" ? true : false));
 	        }
@@ -356,9 +392,11 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == CHANGE_STRING_VAR) {
 	          module->change_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
 	        }
-	        
 	          if (c_.x_ == CALL_FUNC) {
-	          module->create_call_func(cod__, c_.command_name, c_.__par, (*i_).q);
+	          module->create_call_func(cod__, c_.command_name, c_.__par, c_.value, (*i_).q);
+	        }
+	          if (c_.x_ == UNKNOW_TYPE_TO_POINTER) {
+	          module->pointer_to_point(cod__, c_.command_name, c_.value, (*i_).q);
 	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;
