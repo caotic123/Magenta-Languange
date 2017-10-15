@@ -56,6 +56,13 @@ bool magenta::__ret(std::string s) {
   return false;
 }
 
+bool magenta::__end(std::string s) {
+  if (s.substr(0, strlen(lex->abstract_logic[6][0])) == (std::string)lex->abstract_logic[6][0] && secure_string_format(s).length() == strlen(lex->abstract_logic[6][0])) {
+    return true;
+  }
+  return false;
+}
+
 bool is_sep(char char_ign[ig__][2], std::string c) {
   bool x = false;
   std::string s, s_;
@@ -638,7 +645,7 @@ void magenta::__analysis() {
   std::string exp;
   std::string s, s__par;
   int *t;
-  struct_ep s_;
+  struct_ep s_, s__;
   std::string ___s, ___a;
   std::vector<std::string> par__;
   std::vector<struct_ep> ep__;
@@ -674,7 +681,9 @@ void magenta::__analysis() {
       ___s = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, 1, t[0])));
       s_ = r__str(___s, lex->operators, lex->char_ign);
       ___a = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, t[1], (s.length() - t[1]) - 1)));
-      s_ = r__str(___a, lex->operators, lex->char_ign);
+      s__ = r__str(___a, lex->operators, lex->char_ign);
+      
+      compiler->create_condition(s_, s__, "==", lex->operators, lex->char_ign);
     }
 
     if (call__func(*token_)) {
@@ -720,7 +729,7 @@ void magenta::__analysis() {
       }
         }
        compiler->create_var_call_func(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), secure_string_format(name_var_func), ep__, lex->operators, lex->char_ign);  
-       ep__.clear();;
+       ep__.clear();
       } 
 	  
 	  else {
@@ -751,6 +760,11 @@ void magenta::__analysis() {
        s_ = r__str(s, lex->operators, lex->char_ign);
       }
     }
+
+    if (__end(*token_)) {
+    	compiler->end_selection_();
+	}
+    
   }
   compiler->compile();
 }

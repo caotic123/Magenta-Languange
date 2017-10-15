@@ -27,6 +27,9 @@ struct func_ {
 	int* n;
 	int* __e;
 	int* par__arg_int;
+	int* f_cond_;
+	int* __l;
+	std::vector<int> stack;
 };
 
 typedef std::vector<func_> ___funcs;
@@ -42,6 +45,7 @@ void set_function_args(std::string arg_name, char char_ign[ig__][2]);
 void create_label(std::string name_l);
 void create_var(std::string name, std::string operators[len_op], char char_ign[ig__][2], struct_ep s_);
 void create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]);
+void create_condition(struct_ep c_, struct_ep s_, std::string opt, std::string operators[len_op], char char_ign[ig__][2]);
 bool var_e(std::string name);
 void load_expression(struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]);
 void create_call_func(std::string name, std::string value, std::vector<struct_ep>, std::string operators[len_op], char char_ign[ig__][2]);
@@ -53,6 +57,7 @@ void create_div_operation(std::string x, std::string y, struct_ep s_);
 void create_mul_operation(std::string x, std::string y, struct_ep s_);
 void create_expression();
 std::string is_value(std::string v_, type_ type, std::string operators[len_op], char char_ign[ig__][2]);
+void end_selection_();
 void compile();
 
 private:

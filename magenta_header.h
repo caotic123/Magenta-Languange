@@ -52,7 +52,8 @@ enum type_command {
     DECLARATION_STRING_VAR = 22,
     CHANGE_STRING_VAR = 23,
     CREATE_I8_VAR = 24,
-    UNKNOW_TYPE_TO_POINTER = 25
+    UNKNOW_TYPE_TO_POINTER = 25,
+    END_SELECTION = 26
 };
 
 struct struct_ep {

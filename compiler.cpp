@@ -35,6 +35,10 @@ void magenta_compiler::create_function(std::string name) {
 	(*f.__e) = 0;
 	f.par__arg_int = new int;
 	(*f.par__arg_int) = 0;
+	f.f_cond_ = new int;
+	(*f.f_cond_) = 0;
+	f.__l = new int;
+	(*f.__l) = 0;
 	func_s.push_back(f);
 	func_map[name] = &func_s[func_s.size()-1];
 }
@@ -221,7 +225,9 @@ void magenta_compiler::create_call_func(std::string name, std::string value, std
        par__.push_back(fix_arg(get_value((*i_).s, char_ign), char_ign));
        } else {
   	   if (__str((*i_).s, char_ign) || (var_e(get_value((*i_).s, char_ign)) && f->var_map[get_value((*i_).s, char_ign)].type == string_type)) {
-  	   	create_variable_string("par__" + std::string(int_to_string(*f->par__arg_int)), (*i_).s, char_ign);
+  	   	if (var_e(get_value((*i_).s, char_ign)) && f->var_map[get_value((*i_).s, char_ign)].type == string_type) {
+  	   	create_command("par__" + std::string(int_to_string(*f->par__arg_int)), UNKNOW_TYPE_TO_POINTER, get_value((*i_).s, char_ign), (*i_), unknow_type);
+  	    } else {create_variable_string("par__" + std::string(int_to_string(*f->par__arg_int)), (*i_).s, char_ign);}
   	   }
   	   else {
        create_var("par__" + std::string(int_to_string(*f->par__arg_int)), operators, char_ign,  (*i_));
@@ -282,6 +288,31 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
 
 	};
 
+}
+
+void magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string opt, std::string operators[len_op], char char_ign[ig__][2]) {
+	func_* f = get_func();
+	command_ command;
+	command.command_name = "conditional";
+	command.value = opt;
+	command.x_ = IF_COND;
+	std::vector<std::string> cond__;
+	
+	std::string cond_var_name = ("if_" + std::string(int_to_string((*f->f_cond_))));
+	std::string cond_var_name_ = ("if2_" + std::string(int_to_string((*f->f_cond_))));
+	cond__.push_back(cond_var_name);
+	cond__.push_back(cond_var_name_);
+	command.__par = cond__;
+	create_var(cond_var_name, operators, char_ign, c_);
+	create_var(cond_var_name_, operators, char_ign, s_);
+	command.type = f->var_map[cond_var_name].type; // the type of values which compared is defined by the first value compared
+	f->block_.push_back(command);
+	(*f->f_cond_)++;
+}
+
+void magenta_compiler::end_selection_() {
+	struct_ep s_;
+	create_command("end", END_SELECTION, "__end", s_, unknow_type);
 }
 
 void magenta_compiler::create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]) {
@@ -346,6 +377,12 @@ void magenta_compiler::compile() {
 
 	          if (c_.x_ == LABEL_NEW) {
 	          module->create_label(cod__, c_.command_name);
+	        }
+	          if (c_.x_ == END_SELECTION) {
+	          module->end_selection(cod__, (*i_).__l, (*i_).stack);
+	        }
+	          if (c_.x_ == IF_COND) {
+	          module->create_if_condition(cod__, c_.type, c_.value, c_.__par, (*i_).q, (*i_).__e, (*i_).__l, (*i_).stack);
 	        }
 	          if (c_.x_ == CREATE_I8_VAR) {
 	          module->create_unknowtype_var(cod__, c_.command_name, c_.value, (*i_).q);

@@ -1,6 +1,19 @@
 function print(n)
-func puts((n))
-#a = (n)
+#x = (0)
+if ((2) == (3))
+
+if ((1) == (1))
+#x = (112)
+end
+
+#x = (114)
+if ((3) == (412)) 
+#x = (12)
+end
+#x = (118)
+end
+
+#x = (4)
 ret(0)
 
 function expr_(x)
@@ -15,7 +28,6 @@ function fat((x), (y))
 while((n) >= (0))
 #a = (a-1)
 #n = (n*a)
-end
 ret (n)
 
 function fib(x)
@@ -27,7 +39,6 @@ while((y) <= (x))
 #_ = (a+b)
 #a = (b)
 #b = (_)
-end
 ret (b)
 
 function x_(n)
@@ -41,8 +52,6 @@ function main()
 #bool = (true)
 #bool = (false)
 #a = ((2+3+5)/(2*4))
-if ( ((x+x)/2) >= (32/3+(2+34)) )
-end
 ret (0)
 
 function main1()

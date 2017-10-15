@@ -42,6 +42,7 @@ private:
 	bool var_decl(std::string s);
 	bool __while(std::string s);
 	bool __ret(std::string s);
+	bool __end(std::string s);
 };
 
 #endif

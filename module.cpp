@@ -55,18 +55,22 @@ std::string magneta_module::create_func(std::string func_, std::string type, std
 
 void magneta_module::end_func(std::string &x_)
 {
-	x_ = x_ + "}" + "\n";
+	x_ =  x_ + "\n" + "}" + "\n";
     return;
+}
+
+void create_lab(__code &x_, std::string label_name) {
+	x_.s_();
+    x_.insert(label_name.c_str());
+    x_.insert(":");
+    x_.s_();
 }
 
 void magneta_module::create_label(std::string& cod, std::string label)
 {
     __code x_;
-    x_.insert(label.c_str());
-    x_.insert(":");
-    x_.s_();
+    create_lab(x_, label);
     cod = cod + x_.string();
-    
     return;
 }
 
@@ -220,6 +224,70 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
     x.s_();
 }
 
+void create_continue_label(__code& x_, int* q, int * __l, std::vector<int>& __stack) {
+	std::string label;
+	std::string _n = int_to_string(*q);
+	std::string n_ = int_to_string(*__l);
+	std::string n__ = int_to_string((*__l)+1);
+	x_.insert_t(3, "br", "i1", ("%" + _n).c_str());
+	x_.insert(", ", true);
+	x_.insert(("label %label_." + n_).c_str());
+	x_.insert(", ");
+	x_.insert(("label %label_." +  n__).c_str());
+	x_.s_();
+	create_lab(x_, "label_." + n_);
+	(*__l)++;
+	(*q)++;
+	std::cout << "add" << std::endl;
+	__stack.push_back((*__l));
+}
+
+std::string magneta_module::cond__if(__code& x, std::string cond_1, std::string cond_2, std::string type, std::string op, int* q, int* __e) {
+	std::string n;
+	std::string vr = "";
+	std::string _n;
+	std::string __n;
+    if (type == "i32") {
+    _n = load_int_value(vr, __e, cond_1, cond_1);
+    __n = load_int_value(vr, __e, cond_2, cond_2);
+    }
+
+    x.insert(vr);
+	n = int_to_string(*q);
+	x.insert("%");
+	x.insert_t(6, n.c_str(), "=", "icmp", op.c_str(), type.c_str(), ("%" + _n).c_str());
+	x.insert(", ", true);
+	x.insert(("%" + __n).c_str());
+	x.s_();
+	(*__e) = (*q); // its not necessary but...
+	return n;
+}
+
+void magneta_module::end_selection(std::string& cod__, int* __l, std::vector<int>& __stack) {
+	__code x_;
+	x_.insert_t(3, "br", "label", ((std::string)"%" + (std::string)"label_." + std::string(int_to_string((*__l)-1))).c_str());
+	x_.s_();
+    create_lab(x_, "label_." + std::string(int_to_string(*(__stack.end()-1)))); // the last selection opened	
+    __stack.erase(__stack.end()-1);
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<int> &__stack) {
+	__code x_;
+	std::string operator_;
+	std::string type__;
+	if (op == "==") {
+		operator_ = "eq";
+	}
+	if (type == int32_type) {
+		type__ = "i32";
+	}
+	std::string n = cond__if(x_, __cond[0], __cond[1], type__, operator_, q, __e);
+	create_continue_label(x_, q, __l, __stack);
+	(*__l)++;
+	cod__ = cod__ + x_.string();
+}
+
 void magneta_module::pointer_to_point(std::string& cod, std::string name, std::string v, int* q) {
 	__code x_;
 	std::string n_ = __aloc(x_, q, "i8*");
@@ -268,7 +336,7 @@ void magneta_module::change_variable_int32(std::string& cod__, std::string name,
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::load_int_value(std::string& cod__, int* __e, std::string name, std::string v_)
+std::string magneta_module::load_int_value(std::string& cod__, int* __e, std::string name, std::string v_)
 {
     __code x_;
     char* n = int_to_string((*__e));
@@ -277,9 +345,10 @@ void magneta_module::load_int_value(std::string& cod__, int* __e, std::string na
     return__bit_cast(x_, _, v_, "i32");
     load_value(x_, __, _, "i32");
     cod__ = cod__ + x_.string();
+    return __;
 }
 
-void magneta_module::load_bool_value(std::string& cod__, int* __e, std::string name, std::string v_)
+std::string magneta_module::load_bool_value(std::string& cod__, int* __e, std::string name, std::string v_)
 {
     __code x_;
     char* n = int_to_string((*__e));
@@ -288,6 +357,7 @@ void magneta_module::load_bool_value(std::string& cod__, int* __e, std::string n
     return__bit_cast(x_, _, v_, "i1");
     load_value(x_, __, _, "i1");
     cod__ = cod__ + x_.string();
+    return __;
 }
 
 void magneta_module::create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q) {
