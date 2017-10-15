@@ -29,7 +29,7 @@ struct func_ {
 	int* par__arg_int;
 	int* f_cond_;
 	int* __l;
-	std::vector<int> stack;
+	std::vector<std::pair<int, int> > stack;
 };
 
 typedef std::vector<func_> ___funcs;

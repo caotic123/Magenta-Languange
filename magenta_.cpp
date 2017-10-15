@@ -517,6 +517,28 @@ struct_ep r__str(std::string str, std::string operators[len_op], char char_ign[i
   return s_;
 }
 
+bool is_cond(std::string s, std::string cond_ex[_cond_p]) {
+  for (int i=0; i <= _cond_p-1; i++) {
+    if (s == cond_ex[i]) {return true;}
+  }
+  return false;
+}
+
+std::string get_cond_oper(std::string s, std::string cond_ex[_cond_p]) {
+  std::string c;
+  std::string r__;
+  for (int i=0; i <= s.length()-1; i++) {
+    c = s.substr(i, 1);
+    if (is_cond(c, cond_ex)) {
+     r__ = (is_cond(s.substr(i+1, 1), cond_ex) ? s.substr(i, 2) : s.substr(i, 1));
+     return r__;
+    }
+  }
+  
+  error_(s.c_str(), "? if definition is incorrect", 0, INIT_ID); // really we not know this error is this, but if the magenta programmer....
+  return "";
+}
+
 bool is_correct_function_name(std::string s, char sym_[__symb][2], std::string operators[len_op]) {
 	char f__ = s[0];
 	if ( !(((f__ >= sym_[1][0] &&  f__ <= sym_[1][1]) || (f__ >= sym_[2][0] &&  f__ <= sym_[2][1])) && !is_operator(s.substr(0, 1), operators) && f__ != 93 && f__ != 94 )) {
@@ -683,7 +705,7 @@ void magenta::__analysis() {
       ___a = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, t[1], (s.length() - t[1]) - 1)));
       s__ = r__str(___a, lex->operators, lex->char_ign);
       
-      compiler->create_condition(s_, s__, "==", lex->operators, lex->char_ign);
+      compiler->create_condition(s_, s__, get_cond_oper(s, lex->cond_ex), lex->operators, lex->char_ign);
     }
 
     if (call__func(*token_)) {
