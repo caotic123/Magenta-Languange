@@ -226,11 +226,10 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
 
 void create_continue_label(__code& x_, int* q, int * __l, std::vector<std::pair<int, int > >& __stack) {
 	std::string label;
-	std::string _n = int_to_string(*q);
+	std::string _n = int_to_string((*q)-1);
 	std::string n_ = int_to_string(*__l);
 	std::string n__ = int_to_string((*__l)+1);
 	std::pair<int, int> x__n;
-	std::get<0>(x__n) = (*__l);
 	std::get<1>(x__n) = (*__l)+1;
 	x_.insert_t(3, "br", "i1", ("%" + _n).c_str());
 	x_.insert(", ", true);
@@ -240,8 +239,6 @@ void create_continue_label(__code& x_, int* q, int * __l, std::vector<std::pair<
 	x_.s_();
 	create_lab(x_, "label_." + n_);
 	(*__l)++;
-	(*q)++;
-	std::cout << "add" << std::endl;
 	__stack.push_back(x__n);
 }
 
@@ -250,23 +247,13 @@ std::string magneta_module::cond__if(__code& x, std::string cond_1, std::string 
 	std::string vr = "";
 	std::string _n;
 	std::string __n;
-    if (type == "i32") {
-    _n = load_int_value(vr, __e, cond_1, cond_1);
-    __n = load_int_value(vr, __e, cond_2, cond_2);
-    }
-
-    if (type == "i1") {
-    _n = load_bool_value(vr, __e, cond_1, cond_1);
-    __n = load_bool_value(vr, __e, cond_2, cond_2);
-    }
-
-    x.insert(vr);
 	n = int_to_string(*q);
 	x.insert("%");
-	x.insert_t(6, n.c_str(), "=", "icmp", op.c_str(), type.c_str(), ("%" + _n).c_str());
+	x.insert_t(6, n.c_str(), "=", "icmp", op.c_str(), type.c_str(), ("%" + cond_1).c_str());
 	x.insert(", ", true);
-	x.insert(("%" + __n).c_str());
+	x.insert(("%" + cond_2).c_str());
 	x.s_();
+	(*q)++;
 	(*__e) = (*q); // its not necessary but...
 	return n;
 }
@@ -279,6 +266,31 @@ void magneta_module::end_selection(std::string& cod__, int* __l, std::vector<std
     create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened	
     __stack.erase(__stack.end()-1);
     cod__ = cod__ + x_.string();
+}
+
+void magneta_module::while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int > >& __stack) {
+	__code x_;
+	std::pair <int, int> x__ = *(__stack.end()-1);
+	x_.insert_t(2, "br i1",  ("%" + std::string(int_to_string((std::get<0>(x__))))).c_str());
+	x_.insert(", ", true);
+	x_.insert("label %label_." +  std::string(int_to_string((*__l)-1)));
+	x_.insert(", ");
+	x_.insert(("label %label_." + std::string(int_to_string((std::get<1>(x__))))).c_str());
+	x_.s_();
+    create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened	
+    __stack.erase(__stack.end()-1);
+    cod__ = cod__ + x_.string();
+}
+
+std::string re_load(__code& x, int* q, std::string bit_name, std::string type_) {
+	std::string _ = std::string(int_to_string(*q));
+	x.insert_t(2, ("%" +_).c_str(), "=");
+	x.insert_t(2, "load", type_.c_str());
+    x.insert(", ", true);
+    x.insert_t(2, (type_+"*").c_str(), ("%" +  ("bit_" + bit_name)).c_str());
+    (*q)++;
+    x.s_();
+    return _;
 }
 
 void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int > >& __stack) {
@@ -295,7 +307,7 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
 		operator_ = "sgt";
     }
 	if (op == "<") {
-		operator_ = "stl";
+		operator_ = "slt";
     }
 	if (op == ">=") {
 		operator_ = "sge";
@@ -314,7 +326,9 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
 	
 	std::string n = cond__if(x_, __cond[0], __cond[1], type__, operator_, q, __e);
 	create_continue_label(x_, q, __l, __stack);
-	(*__l)++;
+
+	cond__if(x_, re_load(x_, q, __cond[0], type__), re_load(x_, q, __cond[1], type__), type__, operator_, q, __e); //second condition to eventual loop
+	std::get<0>(*(__stack.end()-1)) = (*q)-1;
 	cod__ = cod__ + x_.string();
 }
 
@@ -378,12 +392,36 @@ std::string magneta_module::load_int_value(std::string& cod__, int* __e, std::st
     return __;
 }
 
+std::string magneta_module::load_int_value_cond(std::string& cod__, int* __e, std::string name, std::string v_)
+{
+    __code x_;
+    char* n = int_to_string((*__e));
+    std::string _ = ("bit_" + name);
+    std::string __ = name ;
+    return__bit_cast(x_, _, v_, "i32");
+    load_value(x_, __, _, "i32");
+    cod__ = cod__ + x_.string();
+    return __;
+}
+
 std::string magneta_module::load_bool_value(std::string& cod__, int* __e, std::string name, std::string v_)
 {
     __code x_;
     char* n = int_to_string((*__e));
     std::string _ = ("bit_" + name + std::string(n));
     std::string __ = (name + std::string(n));
+    return__bit_cast(x_, _, v_, "i1");
+    load_value(x_, __, _, "i1");
+    cod__ = cod__ + x_.string();
+    return __;
+}
+
+std::string magneta_module::load_bool_value_cond(std::string& cod__, int* __e, std::string name, std::string v_)
+{
+    __code x_;
+    char* n = int_to_string((*__e));
+    std::string _ = ("bit_" + name);
+    std::string __ = name;
     return__bit_cast(x_, _, v_, "i1");
     load_value(x_, __, _, "i1");
     cod__ = cod__ + x_.string();

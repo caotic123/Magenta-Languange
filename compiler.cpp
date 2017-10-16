@@ -221,20 +221,19 @@ void magenta_compiler::create_call_func(std::string name, std::string value, std
   
   command.len = new int;
   for (std::vector<struct_ep>::iterator i_ = s_.begin(); i_ != s_.end(); i_++) {
-       if ((var_e(fix_arg(get_value((*i_).s, char_ign), char_ign))) && f->var_map[fix_arg(get_value((*i_).s, char_ign), char_ign)].type == unknow_type) { // maybe be a paramater or other but don't be considered a typed value
+       if ((var_e(fix_arg(get_value((*i_).s, char_ign), char_ign)))) { // maybe be a paramater or other but don't be considered a typed value
        par__.push_back(fix_arg(get_value((*i_).s, char_ign), char_ign));
-       } else {
-  	   if (__str((*i_).s, char_ign) || (var_e(get_value((*i_).s, char_ign)) && f->var_map[get_value((*i_).s, char_ign)].type == string_type)) {
-  	   	if (var_e(get_value((*i_).s, char_ign)) && f->var_map[get_value((*i_).s, char_ign)].type == string_type) {
-  	   	create_command("par__" + std::string(int_to_string(*f->par__arg_int)), UNKNOW_TYPE_TO_POINTER, get_value((*i_).s, char_ign), (*i_), unknow_type);
-  	    } else {create_variable_string("par__" + std::string(int_to_string(*f->par__arg_int)), (*i_).s, char_ign);}
+       } 
+	   else {
+  	   if (__str((*i_).s, char_ign)) {
+  	   	create_variable_string("par__" + std::string(int_to_string(*f->par__arg_int)), (*i_).s, char_ign);
   	   }
   	   else {
        create_var("par__" + std::string(int_to_string(*f->par__arg_int)), operators, char_ign,  (*i_));
        }
   	   par__.push_back("par__" + std::string(int_to_string(*f->par__arg_int)));
-    }
        (*f->par__arg_int)++;
+   }
   }
   
   command.__par = par__;
@@ -290,29 +289,72 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
 
 }
 
-void magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string opt, std::string operators[len_op], char char_ign[ig__][2]) {
+std::string bool_to_i1_value(std::string bool_str) {
+	return (bool_str == "true") ? "1" : (bool_str == "false") ? "0" : "(?)";
+} 
+
+
+bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string opt, std::string operators[len_op], char char_ign[ig__][2]) {
 	func_* f = get_func();
 	command_ command;
 	command.command_name = "conditional";
 	command.value = opt;
 	command.x_ = IF_COND;
 	std::vector<std::string> cond__;
+ 	
+	if (var_e(get_value(c_.s, char_ign))) {
+		if (f->var_map[get_value(c_.s, char_ign)].type == int32_type) {
+			create_command("if1_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BITCAST_COND, get_value(c_.s, char_ign), c_, unknow_type);
+			command.type = int32_type; 
+		}
+		
+		if (f->var_map[get_value(c_.s, char_ign)].type == bool_type) {
+			create_command("if1_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BOOL_COND, get_value(c_.s, char_ign), c_, unknow_type);
+			command.type = bool_type;
+		}
+		
+		cond__.push_back("if1_" + std::string(int_to_string((*f->f_cond_))));
+	}
+
+	if (var_e(get_value(s_.s, char_ign))) {
+		if (f->var_map[get_value(s_.s, char_ign)].type == int32_type) {
+			create_command("if2_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BITCAST_COND, get_value(s_.s, char_ign), s_, unknow_type);
+		}
+
+		if (f->var_map[get_value(c_.s, char_ign)].type == bool_type) {
+			create_command("if2_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BOOL_COND, get_value(c_.s, char_ign), c_, unknow_type);
+			command.type = bool_type;
+		}
+		
+		cond__.push_back("if2_" + std::string(int_to_string((*f->f_cond_))));
+	}
 	
-	std::string cond_var_name = ("if_" + std::string(int_to_string((*f->f_cond_))));
-	std::string cond_var_name_ = ("if2_" + std::string(int_to_string((*f->f_cond_))));
-	cond__.push_back(cond_var_name);
-	cond__.push_back(cond_var_name_);
-	command.__par = cond__;
-	create_var(cond_var_name, operators, char_ign, c_);
-	create_var(cond_var_name_, operators, char_ign, s_);
-	command.type = f->var_map[cond_var_name].type; // the type of values which compared is defined by the first value compared
+	if (__is_bool(get_value(c_.s, char_ign))) {
+		cond__.push_back(bool_to_i1_value(get_value(c_.s, char_ign)));
+	}
+
+	if (__is_bool(get_value(s_.s, char_ign))) {
+		cond__.push_back(bool_to_i1_value(get_value(s_.s, char_ign)));
+	}
+	
+	if (cond__.size() < 2) {
+		return false;
+	}
+	
+	command.__par = cond__;// the type of values which compared is defined by the first value compared
 	f->block_.push_back(command);
 	(*f->f_cond_)++;
+	return true;
 }
 
 void magenta_compiler::end_selection_() {
 	struct_ep s_;
 	create_command("end", END_SELECTION, "__end", s_, unknow_type);
+}
+
+void magenta_compiler::end_while_selection_() {
+	struct_ep s_; //empyth struct_ep
+	create_command("end_while", END_SELECTION_WHILE, "while__end", s_, unknow_type);
 }
 
 void magenta_compiler::create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]) {
@@ -381,6 +423,9 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == END_SELECTION) {
 	          module->end_selection(cod__, (*i_).__l, (*i_).stack);
 	        }
+	          if (c_.x_ == END_SELECTION_WHILE) {
+	          module->while_selection(cod__, (*i_).__l, (*i_).stack);
+	        }
 	          if (c_.x_ == IF_COND) {
 	          module->create_if_condition(cod__, c_.type, c_.value, c_.__par, (*i_).q, (*i_).__e, (*i_).__l, (*i_).stack);
 	        }
@@ -434,6 +479,12 @@ void magenta_compiler::compile() {
 	        }
 	          if (c_.x_ == UNKNOW_TYPE_TO_POINTER) {
 	          module->pointer_to_point(cod__, c_.command_name, c_.value, (*i_).q);
+	        }
+	          if (c_.x_ == LOAD_VALUE_BITCAST_COND) {
+	          module->load_int_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);
+	        }
+	          if (c_.x_ == LOAD_VALUE_BOOL_COND) {
+	          module->load_bool_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);
 	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;

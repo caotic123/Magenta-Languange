@@ -75,6 +75,14 @@ void error(st_ st) {
     printf("VARIABLE: check type of variable and check name of variable %d\n",
            st.l);
     break;
+  case COMPILER_CONDITION_VARIABLE_DONT_FOUND:
+    printf("CONDITION: check values the condition",
+           st.l);
+    break;
+   case ABSTRACT_COMMAND_DONT_FOUND:
+    printf("LINE: CRITICAL ERROR COMMAND DON'T EXIST CHECK IF THE COMMAND NAME IS CORRECT",
+           st.l);
+    break;   
 
   default:
     printf("A unknow error ocurred\n");
@@ -171,3 +179,4 @@ bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operat
 
   return true;
 }
+

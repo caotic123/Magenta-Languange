@@ -665,6 +665,7 @@ std::string get_func_par(std::string func__, char char_ign[ig__][2]) {
 
 void magenta::__analysis() {
   std::string exp;
+  bool c_secure;
   std::string s, s__par;
   int *t;
   struct_ep s_, s__;
@@ -694,7 +695,7 @@ void magenta::__analysis() {
           compiler->set_function_args(s__par, lex->char_ign);
        }
    }
-   
+   c_secure = true;
     }
 
     if (__if(*token_)) {
@@ -705,7 +706,10 @@ void magenta::__analysis() {
       ___a = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, t[1], (s.length() - t[1]) - 1)));
       s__ = r__str(___a, lex->operators, lex->char_ign);
       
-      compiler->create_condition(s_, s__, get_cond_oper(s, lex->cond_ex), lex->operators, lex->char_ign);
+     if (!compiler->create_condition(s_, s__, get_cond_oper(s, lex->cond_ex), lex->operators, lex->char_ign)) {
+       error_(s.c_str(), "error in conditional check if parameters conditions is variables", 0, COMPILER_CONDITION_VARIABLE_DONT_FOUND);	
+	 }
+	 c_secure = true;
     }
 
     if (call__func(*token_)) {
@@ -727,6 +731,7 @@ void magenta::__analysis() {
     }
     compiler->create_call_func(secure_string_format(get_func_call_name((*token_), lex->abstract_logic, lex->char_ign)), "%auto", ep__, lex->operators, lex->char_ign);
     ep__.clear();
+    c_secure = true;
     }
 
     if (var_decl(*token_)) {
@@ -764,15 +769,12 @@ void magenta::__analysis() {
         compiler->create_variable_string(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), s, lex->char_ign);
 		}
     }
+    c_secure = true;
     }
 
     if (__while(*token_)) {
-      s = get_str_tok((*token_), getn_expression((*token_)));
-      t = analyse_cond(s, lex->cond_ex);
-      ___s  = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, 1, t[0])));
-      s_ = r__str(___s, lex->operators, lex->char_ign);
-      ___a = analy_exp(lex->char_ign, lex->operators, secure_string_format(get_t(s, t[1], (s.length() - t[1]) - 1)));
-       s_ = r__str(___a, lex->operators, lex->char_ign);
+    	compiler->end_while_selection_();
+    	c_secure = true;
     }
 
     if (__ret(*token_)) {
@@ -781,13 +783,20 @@ void magenta::__analysis() {
        s = analy_exp(lex->char_ign, lex->operators, s);
        s_ = r__str(s, lex->operators, lex->char_ign);
       }
+      c_secure = true;
     }
 
     if (__end(*token_)) {
     	compiler->end_selection_();
+    	c_secure = true;
 	}
-    
+	
+	if (!c_secure) {
+		error_((*token_).c_str(), "abstract command don't exist", 0, ABSTRACT_COMMAND_DONT_FOUND);
+	}
+	c_secure = false;
   }
+
   compiler->compile();
 }
 
