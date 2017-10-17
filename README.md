@@ -47,7 +47,7 @@ Logo...:
 function main()
 (...)code(...)
 ```
-Todos os valores de magenta são referenciados e não existe valores constantes, por isso deve se tomar cuidado com possiveis redeclarações de variabeis fora do espoco de funções.
+Todos os valores de magenta são referenciados e não existe valores constantes, por isso deve se tomar cuidado com possiveis redeclarações de variaveis fora do espoco de funções.
 Exemplo:
 ```
 function main()
