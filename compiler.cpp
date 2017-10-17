@@ -429,13 +429,13 @@ command_ magenta_compiler::create_command(std::string name, type_command type, s
 
 void magenta_compiler::magenta_run(std::string code) {
 std::string compiler_depedence = get__file("llvm/basic_depende.ll");
-std::cout << compiler_depedence << std::endl;
 std::ofstream outfile ("llvm/compile.ll");
 outfile << compiler_depedence << std::endl;
 outfile << code << std::endl;
 outfile.close();
-system((std::string("clang ") + std::string("llvm/compile.ll")).c_str());
-system("a");
+system((std::string("clang -Wno-everything ") + std::string("llvm/compile.ll") + " -o "  + " magenta.exe").c_str());
+system("magenta");
+
 }
 
 void magenta_compiler::compile() {

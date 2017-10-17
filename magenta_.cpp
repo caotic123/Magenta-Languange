@@ -715,6 +715,7 @@ void magenta::__analysis() {
     if (call__func(*token_)) {
       s = secure_string_format(get_str_tok((*token_), getn_expression((*token_))));
         par__ = get_func_ref(s, lex->operators, lex->char_ign);
+        if (!ref_empty(s, lex->char_ign)) {
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
            if (__str((*i_), lex->char_ign)) {
@@ -728,6 +729,7 @@ void magenta::__analysis() {
           s_ = r__str(s__par, lex->operators, lex->char_ign);
           ep__.push_back(s_);
         }
+      }
     }
     compiler->create_call_func(secure_string_format(get_func_call_name((*token_), lex->abstract_logic, lex->char_ign)), "%auto", ep__, lex->operators, lex->char_ign);
     ep__.clear();
@@ -740,6 +742,7 @@ void magenta::__analysis() {
       	name_var_func = get_func_var_call_name(secure_string_format(s.substr(1, s.length()-2)), lex->abstract_logic, lex->char_ign);
       	s = secure_string_format(get_func_par(s.substr(1, s.length()-2), lex->char_ign));
         par__ = get_func_ref(s, lex->operators, lex->char_ign);
+        if (!ref_empty(s, lex->char_ign)) {
         for (std::vector<std::string>::iterator i_ = par__.begin();
              i_ != par__.end(); i_++) {
 
@@ -754,7 +757,8 @@ void magenta::__analysis() {
           s_ = r__str(s__par, lex->operators, lex->char_ign);
           ep__.push_back(s_);
       }
-        }
+   }
+  }
        compiler->create_var_call_func(get_var_name((*token_), lex->cond_ex, lex->abstract_logic, lex->sym_, lex->operators), secure_string_format(name_var_func), ep__, lex->operators, lex->char_ign);  
        ep__.clear();
       } 
