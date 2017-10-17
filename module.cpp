@@ -5,31 +5,6 @@ magneta_module::magneta_module()
 
 }
 
-std::string magneta_module::getFile__(std::string name)
-{
-    int length;
-    std::string buffer;
-    std::string _cs;
-    std::ifstream __f;
-    __f.open(name + ".mag");
-    if (!__f) {
-        std::cout << "ERROR DON'T LOAD FILE CODE\n";
-        system("pause");
-        exit(EXIT_FAILURE);
-    }
-
-    if (__f.is_open()) {
-        while (!__f.eof()) {
-            getline(__f, buffer);
-            _cs = _cs + buffer + " ";
-        }
-    }
-    
-    std::replace( _cs.begin(), _cs.end(), '\n', ' ');
-
-    return _cs;
-}
-
 void magneta_module::insert__to_code(std::string& x_, std::string c_) {
 	x_ = x_ + "\n" + c_;
 	return;
@@ -184,12 +159,13 @@ void magneta_module::change_variable_str(std::string& cod__, std::string name, s
 {
     __code x_;
     std::string n__;
+    int i;
     int len_ = (str__.length())-1;
     std::string len = int_to_string(str__.length());
     std::string type__ = ("[" + len + " x " + "i8" + "]");
     std::string n =  name + "_stored_str";
 
-    for (int i=0; i <= len_-2; i++) {
+    for (i=0; i <= len_-2; i++) {
     n__ = (int_to_string(*q_));
     __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i)); 
     __store(x_, n__, int_to_string((int)str__[i+1]), (char*)"i8");
@@ -197,7 +173,7 @@ void magneta_module::change_variable_str(std::string& cod__, std::string name, s
     }
 
     n__ = (int_to_string(*q_));
-    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(len_)); 
+    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i)); 
     __store(x_, n__, int_to_string(0), (char*)"i8");
     (*q_)++;
 
@@ -209,13 +185,14 @@ void magneta_module::create_variable_str(std::string& cod__, std::string name, s
     __code x_;
     std::string n__;
     int len_ = str__.length()-1;
-    std::string len = int_to_string(str__.length());
+    int i;
+    std::string len = int_to_string(str__.length()+1);
     std::string type__ = ("[" + len + " x " + "i8" + "]");
     std::string n = __aloc_str(x_, name + "_stored_str",  type__);
     __get_ptr(x_, ("%" + name), type__, ("%" + n).c_str(), int_to_string(0)); 
     __store(x_, name, int_to_string((int)str__[1]), (char*)"i8");
     
-    for (int i=1; i <= len_-2; i++) {
+    for (i=1; i <= len_-2; i++) {
     n__ = (int_to_string(*q_));
     __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i)); 
     __store(x_, n__, int_to_string((int)str__[i+1]), (char*)"i8");
@@ -223,8 +200,8 @@ void magneta_module::create_variable_str(std::string& cod__, std::string name, s
     }
 
     n__ = (int_to_string(*q_));
-    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(len_)); 
-    __store(x_, n__, int_to_string(0), (char*)"i8");
+    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i)); 
+    __store(x_, n__, "0", (char*)"i8");
     (*q_)++;
 
     cod__ = cod__ + x_.string();

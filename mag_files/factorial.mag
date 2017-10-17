@@ -1,0 +1,13 @@
+function factorial(a)
+#x = (a-1)
+#nil = (1)
+if ((x) > (nil))
+#a = (a*x)
+#x = (x-1)
+while
+ret (a)
+
+function main()
+#limit = (get_scanf_int_insecure())
+#y = (factorial((limit)))
+func print_n((y))

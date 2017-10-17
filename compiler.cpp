@@ -427,18 +427,7 @@ command_ magenta_compiler::create_command(std::string name, type_command type, s
 	return get_func()->block_[get_func()->block_.size()-1];
 }
 
-void magenta_compiler::magenta_run(std::string code) {
-std::string compiler_depedence = get__file("llvm/basic_depende.ll");
-std::ofstream outfile ("llvm/compile.ll");
-outfile << compiler_depedence << std::endl;
-outfile << code << std::endl;
-outfile.close();
-system((std::string("clang -Wno-everything ") + std::string("llvm/compile.ll") + " -o "  + " magenta.exe").c_str());
-system("magenta");
-
-}
-
-void magenta_compiler::compile() {
+void magenta_compiler::compile(std::string name__) {
 	std::string cod__;
 	std::string c__;
 	command_ c_;
@@ -530,5 +519,5 @@ void magenta_compiler::compile() {
     module->end_func(cod__, (*i_).func_name == "main" ? true : false);
    }
    
-    magenta_run(cod__);
+    magenta_run(name__, cod__);
 }

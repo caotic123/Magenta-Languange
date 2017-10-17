@@ -112,6 +112,8 @@ int get_pr_str_value(std::string s);
 bool __str(std::string expression, char char_ign[ig__][2]);
 bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]);
 std::string get__file(std::string name);
+std::string getFile__(std::string name);
+void magenta_run(std::string name, std::string code);
 //bool is__buffer(std::string str);
 //int get__buffer(std::string str);
 #endif

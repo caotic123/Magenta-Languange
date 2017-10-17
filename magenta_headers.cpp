@@ -202,3 +202,41 @@ std::string get__file(std::string name)
 
     return _cs;
 }
+
+std::string getFile__(std::string name) // load only .mag files
+{
+    int length;
+    std::string buffer;
+    std::string _cs;
+    std::ifstream __f;
+    __f.open("mag_files/" + name + ".mag");
+    if (!__f) {
+        std::cout << "ERROR DON'T LOAD FILE CODE\n";
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    if (__f.is_open()) {
+        while (!__f.eof()) {
+            getline(__f, buffer);
+            _cs = _cs + buffer + " ";
+        }
+    }
+    
+    std::replace( _cs.begin(), _cs.end(), '\n', ' ');
+
+    return _cs;
+}
+
+void magenta_run(std::string name, std::string code) {
+std::string compiler_depedence = get__file("llvm/basic_depende.ll");
+std::ofstream outfile ("llvm/compile.ll");
+outfile << compiler_depedence << std::endl;
+outfile << code << std::endl;
+outfile.close();
+#if _WIN32
+name = (name + ".exe");
+#endif
+system((std::string("clang -Wno-everything -O3 ") + std::string("llvm/compile.ll") + " -o "  + name).c_str());
+system(name.c_str());
+}

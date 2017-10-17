@@ -60,8 +60,7 @@ void create_mul_operation(std::string x, std::string y, struct_ep s_);
 void create_expression();
 std::string is_value(std::string v_, type_ type, std::string operators[len_op], char char_ign[ig__][2]);
 void end_selection_();
-void compile();
-void magenta_run(std::string code);
+void compile(std::string name__);
 
 private:
 magneta_module* module;

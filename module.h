@@ -74,7 +74,6 @@ private:
 class magneta_module {
 public:
     magneta_module();
-    std::string getFile__(std::string name);
     void create_label(std::string& cod, std::string label);
     std::string create_func(std::string func, std::string type, std::vector<std::string> p__);
     void insert__to_code(std::string& x_, std::string c_);

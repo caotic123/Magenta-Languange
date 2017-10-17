@@ -10,8 +10,9 @@ int to_int_exp_n(std::string s_, std::string s) {
 }
 
 void magenta::load__file(std::string name) {
-  code__ = module->getFile__(name);
+  code__ = getFile__(name);
   __token();
+  compiler->compile(name);
 }
 
 bool magenta::__func(std::string s) {
@@ -803,7 +804,6 @@ void magenta::__analysis() {
 	c_secure = false;
   }
 
-  compiler->compile();
 }
 
 void magenta::__token() {
