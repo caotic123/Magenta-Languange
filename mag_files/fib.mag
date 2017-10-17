@@ -13,7 +13,7 @@ while
 ret (b)
 
 function main()
-func print("Enter a limit of Fibbonaci Sequence")
+func print("Enter limit of Fibbonaci Sequence")
 #fib_limit = (get_scanf_int_insecure())
 #x = (fib((fib_limit)))
 func print_n((x))
