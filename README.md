@@ -41,7 +41,7 @@ Output:
 
 # Magenta estrutura
 
-O primeiro metedo a ser chamado em magenta é a função main onde o codigo principal será carregada primeiramente.
+O primeiro metodo a ser chamado em magenta é a função main onde o codigo principal será carregado primeiramente.
 Logo...:
 ```
 function main()
@@ -92,4 +92,4 @@ while
 You don't need any lib for compilation, but magenta requires CLANG for run.
 Clang(uses Pre-Built Binaries) is available in:
 (http://releases.llvm.org/download.html)
-In windows case add path variable environment in O.S.
+If the OS is windows add path variable environment in O.S.
