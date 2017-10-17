@@ -7,16 +7,17 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
-	char x_[80];
-	std::string cod;
-	magenta* magenta_l = new magenta();
+int main(int argc, char** argv)
+{
+    char x_[80];
+    std::string cod;
+    magenta* magenta_l = new magenta();
 
-	printf("Magenta Languange Compiler\nWrite file to compiler\n");
-	scanf("%79s", x_);
-	magenta_l->load__file(x_);
-	
-	system("pause");
-	
-	return 0;
+    printf("Magenta Languange Compiler\nWrite file to compiler\n");
+    scanf("%79s", x_);
+    magenta_l->load__file(x_);
+
+    system("pause");
+
+    return 0;
 }

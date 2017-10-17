@@ -153,17 +153,17 @@ st_ lex_::check__()
             if (strcmp(c(__, q, strlen(abstract_logic[_][0])), abstract_logic[_][0]) == 0) {
                 int q = next_abs(abstract_logic, __, _);
                 if (q <= 0) {
-                	    token_lex.push_back(c(__, q, strlen(__)-q)); // last token
+                    token_lex.push_back(c(__, q, strlen(__) - q)); // last token
                     return st;
                 }
-        
+
                 token_lex.push_back(c(__, 0, q));
                 __ = c(__, next_abs(abstract_logic, __, _), strlen(__) - q);
                 check_b = true;
                 break;
             }
         }
-        
+
         if (!check_b) {
             printf("Compilation interrupted\n");
             if (strlen(__) - 10 > 9) {

@@ -87,7 +87,7 @@ public:
     void create_unknowtype_var(std::string& cod__, std::string name, std::string ref, int* q);
     void create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
     void change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
-    void while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int > >& __stack);
+    void while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >& __stack);
     void create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q);
     void pointer_to_point(std::string& cod, std::string name, std::string v, int* q);
     void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);
@@ -96,7 +96,7 @@ public:
     std::string load_bool_value_cond(std::string& cod__, int* __e, std::string name, std::string v_);
     void change_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);
     std::string load_int_value_cond(std::string& cod__, int* __e, std::string name, std::string v_);
-    void change_variable_expression_i32(std::string& cod__, std::string var, int *q, int* __e);
+    void change_variable_expression_i32(std::string& cod__, std::string var, int* q, int* __e);
     void create_variable_bool(std::string& cod__, int* q_, int* ___e, std::string variable_name, bool t);
     void change_variable_bool(std::string& cod__, int* q_, int* ___e, std::string variable_name, bool t);
     std::string load_bool_value(std::string& cod__, int* __e, std::string name, std::string v_);
