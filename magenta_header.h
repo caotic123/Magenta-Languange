@@ -1,5 +1,9 @@
 #include <vector>
 #include <string>
+#include <stdarg.h>
+#include <algorithm>
+#include <fstream>
+#include <iostream>
 
 #define __symb 16
 #define __abs 8
@@ -56,7 +60,8 @@ enum type_command {
     END_SELECTION = 26,
     LOAD_VALUE_BITCAST_COND = 27,
     LOAD_VALUE_BOOL_COND = 28,
-    END_SELECTION_WHILE = 29
+    END_SELECTION_WHILE = 29,
+    ALLOC_STR = 30
 };
 
 
@@ -83,7 +88,8 @@ SEMANTIC_FUNC_ERROR_NAME = 12,
 COMPILER_VARIABLE_DONT_FOUND = 13,
 COMPILER_VARIABLE_TYPE_ERROR = 14,
 COMPILER_CONDITION_VARIABLE_DONT_FOUND = 15,
-ABSTRACT_COMMAND_DONT_FOUND = 16
+ABSTRACT_COMMAND_DONT_FOUND = 16,
+ALLOC_STR_FAIL = 17
 
 };
 
@@ -105,6 +111,7 @@ bool is_precedence_value(std::string s);
 int get_pr_str_value(std::string s);
 bool __str(std::string expression, char char_ign[ig__][2]);
 bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operators[len_op]);
+std::string get__file(std::string name);
 //bool is__buffer(std::string str);
 //int get__buffer(std::string str);
 #endif

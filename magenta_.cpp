@@ -783,6 +783,8 @@ void magenta::__analysis() {
        s = analy_exp(lex->char_ign, lex->operators, s);
        s_ = r__str(s, lex->operators, lex->char_ign);
       }
+    
+      compiler->create_ret(s, s_, lex->operators, lex->char_ign);
       c_secure = true;
     }
 

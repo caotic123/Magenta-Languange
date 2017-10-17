@@ -180,3 +180,25 @@ bool is_correct_var_name(std::string s, char sym_[__symb][2], std::string operat
   return true;
 }
 
+std::string get__file(std::string name)
+{
+    int length;
+    std::string buffer;
+    std::string _cs;
+    std::ifstream __f;
+    __f.open(name);
+    if (!__f) {
+        std::cout << "ERROR DON'T LOAD FILE CODE\n";
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    if (__f.is_open()) {
+        while (!__f.eof()) {
+            getline(__f, buffer);
+            _cs = _cs + buffer + "\n";
+        }
+    }
+
+    return _cs;
+}

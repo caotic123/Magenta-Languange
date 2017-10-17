@@ -24,6 +24,8 @@ std::string magneta_module::getFile__(std::string name)
             _cs = _cs + buffer + " ";
         }
     }
+    
+    std::replace( _cs.begin(), _cs.end(), '\n', ' ');
 
     return _cs;
 }
@@ -53,8 +55,13 @@ std::string magneta_module::create_func(std::string func_, std::string type, std
     return x__.string();
 }
 
-void magneta_module::end_func(std::string &x_)
+void magneta_module::end_func(std::string &x_, bool is_main)
 {
+	__code x;
+	if (is_main) {
+	x.insert_t(3, "ret", "i32", "1");
+    }
+	x_ = x_ + x.string();
 	x_ =  x_ + "\n" + "}" + "\n";
     return;
 }
@@ -163,6 +170,13 @@ void magneta_module::create_variable_bool(std::string& cod__, int* q_, int* __e,
     (*q_)++;
     __store(x_, n, (t ? "1" : "0"), (char*)"i1");
     __bit_cast(x_, variable_name, n, "i1");
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::alloc_variable_str(std::string& cod__, std::string name, std::string len, int* q_) {
+	__code x_;
+    std::string n =__aloc_str(x_, name + "_stored_str",  ("[" + len + " x " + "i8" + "]"));
+    __get_ptr(x_, ("%" + name), ("[" + len + " x " + "i8" + "]"), ("%" + n).c_str(), int_to_string(0));
     cod__ = cod__ + x_.string();
 }
 
@@ -291,6 +305,12 @@ std::string re_load(__code& x, int* q, std::string bit_name, std::string type_) 
     (*q)++;
     x.s_();
     return _;
+}
+
+void magneta_module::create_return_function(std::string& cod__, std::string v_) {
+	__code x_;
+	x_.insert_t(3, "ret", "i8*", ("%" + v_).c_str());
+	cod__ = cod__ + x_.string();
 }
 
 void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int > >& __stack) {

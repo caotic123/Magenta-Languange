@@ -1,53 +1,28 @@
-function print(n)
-func print("ola")
-ret(0)
-
-ssss
-
-function at()
-#x = (11)
-#a = (1)
-if ((x) > (a))
-#x = (x-1)
-while
-ret (0)
-
-function fib()
-#n = (10)
+function fib(limit)
+#n = (limit)
 #z = (1)
 #x = (1)
 #y = (1)
 #b = (0)
-if ((z) <  (n))
+if ((z) < (n))
 #b = (x+y)
 #x = (y)
 #y = (b)
 #z = (z+1)
-func print_n((b))
 while
-ret (0)
+ret (b)
 
-function fat()
-#n = (6)
-#x = (n-1)
-#a = (1)
-if ((x) > (a))
-#n = (n*x)
-#x = (x-1)
-while
-ret (0)
+function hello_world()
+ret (1)
 
-function expr_(x)
-ret (0)
+function test_return()
+ret (12)
 
-function x_(n)
-#ab = (323)
-#a = (ab+(2+3)+(2*3+2))
-#b = (2+3*5)
-ret (a)
+function str_()
+#string = (str((100)))
+ret (0)
 
 function main()
-ret (0)
-
-function main1()
-ret ("a")
+func print("Fibbonaci Sequence")
+#x = (fib((10)))
+func print_n((x))

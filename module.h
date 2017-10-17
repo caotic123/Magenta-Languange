@@ -5,6 +5,7 @@
 #include <list>
 #include <utility>
 #include <stdarg.h>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include "magenta_header.h"
@@ -77,7 +78,8 @@ public:
     void create_label(std::string& cod, std::string label);
     std::string create_func(std::string func, std::string type, std::vector<std::string> p__);
     void insert__to_code(std::string& x_, std::string c_);
-    void end_func(std::string& x_);
+    void end_func(std::string& x_, bool is_main);
+    void create_return_function(std::string& cod__, std::string v_);
     void end_selection(std::string& cod, int* __l, std::vector<std::pair<int, int> >& __stack);
     std::string cond__if(__code& x, std::string cond_1, std::string cond_2, std::string type, std::string op, int* q, int* __e);
     void create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >& __stack);
@@ -90,6 +92,7 @@ public:
     void create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q);
     void pointer_to_point(std::string& cod, std::string name, std::string v, int* q);
     void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);
+    void alloc_variable_str(std::string& cod__, std::string name, std::string len, int* q_);
     void create_variable_str(std::string& cod__, std::string name, std::string str__, int* q);
     std::string load_bool_value_cond(std::string& cod__, int* __e, std::string name, std::string v_);
     void change_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);

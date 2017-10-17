@@ -200,6 +200,15 @@ void magenta_compiler::create_var_call_func(std::string name, std::string func_n
 	func_* f = get_func();
 	std::string name_ = (func_name + int_to_string(*f->par__arg_int));
 	
+	if (func_name == "str") {
+		if (s_.size() < 1 || strtol(get_value(s_[0].s, char_ign).c_str(), NULL, 10) == 0) {
+			error_(name.c_str(), "alloc fail check paramaters", 0, ALLOC_STR_FAIL);
+		}
+	
+		create_command(name, ALLOC_STR, get_value(s_[0].s, char_ign), s_[0], string_type);
+		return;
+	}
+	
 	create_call_func(func_name, name, s_, operators, char_ign);
 }
 
@@ -218,8 +227,8 @@ void magenta_compiler::create_call_func(std::string name, std::string value, std
   	f->var_map[value] = var__f; // variables which recevied function values are untypeds
   }
   command.value = value;
-  
   command.len = new int;
+  
   for (std::vector<struct_ep>::iterator i_ = s_.begin(); i_ != s_.end(); i_++) {
        if ((var_e(fix_arg(get_value((*i_).s, char_ign), char_ign)))) { // maybe be a paramater or other but don't be considered a typed value
        par__.push_back(fix_arg(get_value((*i_).s, char_ign), char_ign));
@@ -258,10 +267,10 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
     	    	return;
        }
        
-       if (var_e(value_) && func__->var_map[value_].type == unknow_type) { // yes of value reference
-       	        create_command(name, UNKNOW_TYPE_TO_POINTER, value_, s_, unknow_type);
-       	        return;
-	   }
+     //  if (var_e(value_) && func__->var_map[value_].type == unknow_type) { // yes of value reference 
+       //	        func__->var_map[name] = create_command(name, UNKNOW_TYPE_TO_POINTER, value_, s_, unknow_type);
+       	//        return;//
+	   //} // removed 
 	    
     	if (var_e(name) && getType(value_, s_, char_ign) == int32_type) {
     	    	create_command(name, VARIABLE_CHANGE_I32, is_value(value_, int32_type, operators, char_ign), s_, int32_type);
@@ -294,6 +303,26 @@ std::string bool_to_i1_value(std::string bool_str) {
 } 
 
 
+bool magenta_compiler::create_ret(std::string v_, struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]) {
+	func_* f = get_func();
+	std::string ref;
+	if (var_e(get_value(s_.s, char_ign))) {
+		create_command("ret", RET_VALUE, get_value(s_.s, char_ign), s_, unknow_type);
+		return true;
+	}
+
+	if (__str(v_, char_ign)) {
+  	   	create_variable_string("ret__", v_, char_ign);
+  	   	create_command("ret__str", RET_VALUE, "ret__", s_, unknow_type);
+  	   	return true;
+  	}
+
+  	create_var("ret__", operators, char_ign,  s_);
+	create_command("ret__", RET_VALUE, "ret__", s_, unknow_type);
+
+  return true;
+}
+
 bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string opt, std::string operators[len_op], char char_ign[ig__][2]) {
 	func_* f = get_func();
 	command_ command;
@@ -322,19 +351,11 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
 		}
 
 		if (f->var_map[get_value(c_.s, char_ign)].type == bool_type) {
-			create_command("if2_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BOOL_COND, get_value(c_.s, char_ign), c_, unknow_type);
+			create_command("if2_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BOOL_COND, get_value(s_.s, char_ign), c_, unknow_type);
 			command.type = bool_type;
 		}
 		
 		cond__.push_back("if2_" + std::string(int_to_string((*f->f_cond_))));
-	}
-	
-	if (__is_bool(get_value(c_.s, char_ign))) {
-		cond__.push_back(bool_to_i1_value(get_value(c_.s, char_ign)));
-	}
-
-	if (__is_bool(get_value(s_.s, char_ign))) {
-		cond__.push_back(bool_to_i1_value(get_value(s_.s, char_ign)));
 	}
 	
 	if (cond__.size() < 2) {
@@ -406,17 +427,26 @@ command_ magenta_compiler::create_command(std::string name, type_command type, s
 	return get_func()->block_[get_func()->block_.size()-1];
 }
 
+void magenta_compiler::magenta_run(std::string code) {
+std::string compiler_depedence = get__file("llvm/basic_depende.ll");
+std::cout << compiler_depedence << std::endl;
+std::ofstream outfile ("llvm/compile.ll");
+outfile << compiler_depedence << std::endl;
+outfile << code << std::endl;
+outfile.close();
+system((std::string("clang ") + std::string("llvm/compile.ll")).c_str());
+system("a");
+}
 
 void magenta_compiler::compile() {
 	std::string cod__;
 	std::string c__;
 	command_ c_;
 	for(___funcs::iterator i_ = func_s.begin(); i_ != func_s.end(); i_++) {
-		c__ = module->create_func((*i_).func_name, "i32", ((*i_).par__));
+		c__ = module->create_func((*i_).func_name, (*i_).func_name == "main" ? "i32" : "i8*", ((*i_).par__));
 	    module->insert__to_code(cod__, c__);
 	    	for(std::vector<command_>::iterator block = (*i_).block_.begin(); block != (*i_).block_.end(); block++) {	
 		    c_ = (*block);
-
 	          if (c_.x_ == LABEL_NEW) {
 	          module->create_label(cod__, c_.command_name);
 	        }
@@ -486,13 +516,19 @@ void magenta_compiler::compile() {
 	          if (c_.x_ == LOAD_VALUE_BOOL_COND) {
 	          module->load_bool_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);
 	        }
+	          if (c_.x_ == ALLOC_STR) {
+	          module->alloc_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
+	        }
+	          if (c_.x_ == RET_VALUE) {
+	          module->create_return_function(cod__, c_.value);
+	        }
 	          if (c_.x_ == NEW_EXPRESSION) {
 	          	*(*i_).n = *(*i_).q;
 	        }
        }
       
-    module->end_func(cod__);
+    module->end_func(cod__, (*i_).func_name == "main" ? true : false);
    }
-
-	std::cout << cod__ << std::endl;
+   
+    magenta_run(cod__);
 }

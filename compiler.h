@@ -43,6 +43,7 @@ func_* get_func();
 command_ create_command(std::string name, type_command type, std::string value, struct_ep s_, type_ __type);
 void set_function_args(std::string arg_name, char char_ign[ig__][2]);
 void create_label(std::string name_l);
+bool create_ret(std::string v_, struct_ep s_, std::string operators[len_op], char char_ign[ig__][2]);
 void create_var(std::string name, std::string operators[len_op], char char_ign[ig__][2], struct_ep s_);
 void create_variable_string(std::string name,  std::string str__, char char_ign[ig__][2]);
 void end_while_selection_();
@@ -60,6 +61,7 @@ void create_expression();
 std::string is_value(std::string v_, type_ type, std::string operators[len_op], char char_ign[ig__][2]);
 void end_selection_();
 void compile();
+void magenta_run(std::string code);
 
 private:
 magneta_module* module;
