@@ -1,5 +1,4 @@
 # Magenta-Languange
-=====
 
 Magenta é uma linguagem fracamente e estaticamente tipada que compila para LLVM Assembly Language ela ultiliza CLANG C e tem suporte a funções de C.
 
