@@ -89,6 +89,9 @@ if (...loop_condition...)
 while
 ```
 
+Simple examples:
+https://github.com/caotic123/Magenta-Languange/tree/master/mag_files
+
 # Building 
 You don't need any lib for compilation, but magenta requires CLANG for run.
 Clang(uses Pre-Built Binaries) is available in:
