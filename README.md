@@ -69,7 +69,7 @@ Tipos:
 #integer = (123)
 #str = "string"
 ```
-Valores booleanos(true and false) e numeros devem ser colocados entre paretenses sempre.
+Valores booleanos(true and false) e inteiros devem ser colocados entre paretenses sempre.
 
 Isto é:
 ```
