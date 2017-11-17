@@ -5,7 +5,6 @@
 //lib used for basic lib magente compiler
 //this code is a just the version not compiled
 //you don't need this version this code for compiler magenta but you can compile newlib if you want to
-
 void* mod(void* n, void* y) {
    if (*(int*)n == 0 || *(int*)y == 0) {
 	   int* ret = malloc(sizeof(int));
@@ -43,10 +42,8 @@ void* get_scanf_int_insecure() {
 	return (void*)int_;
 }
 
-
 //functions of magenta vectors
-//this function just me remeber He-Man: "HEYEAYEA"
-
+//theys functions just me remeber He-Man: "HEYEAYEA"
 void* mag_alloc(void* len) {
 	void** m = malloc(*(int*)len*sizeof(void*));
 	return (void*)m;
