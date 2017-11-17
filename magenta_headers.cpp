@@ -227,7 +227,7 @@ std::string getFile__(std::string name) // load only .mag files
     if (__f.is_open()) {
         while (!__f.eof()) {
             getline(__f, buffer);
-            _cs = _cs + buffer + " ";
+            _cs = _cs + secure_string_format(buffer) + " ";
         }
     }
 
