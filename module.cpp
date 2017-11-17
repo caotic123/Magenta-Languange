@@ -346,7 +346,7 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
     create_continue_label(x_, q, __l, __stack);
     cond__if(x_, re_load(x_, q, __cond[0], type__), re_load(x_, q, __cond[1], type__), type__, operator_, q, __e); //second condition to eventual loop
     std::get<0>(*(__stack->end() - 1)) = (*q) - 1;
-    (*__l) = std::get<1>(*(__stack->end()-1)) + 1; // GOD WRITES STRAIGHT WITH CROOKED LINES
+    (*__l) = std::get<1>(*(__stack->end()-1)) + 1; // GOD WROTES STRAIGHT WITH CROOKED LINES
     cod__ = cod__ + x_.string();
 }
 
