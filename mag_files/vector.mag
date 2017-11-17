@@ -8,9 +8,9 @@ function prime(n)
   #p = (false)
   if ((t) > (s))
     #v = (mod((y), (t)))
-      if ((nil) == (v))
-        #q = (q+1)
-      end
+    if ((nil) == (v))
+      #q = (q+1)
+    end
     #t = (t-1)
   while
   if ((q) == (pr))
