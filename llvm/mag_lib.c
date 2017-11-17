@@ -43,7 +43,7 @@ void* get_scanf_int_insecure() {
 }
 
 //functions of magenta vectors
-//theys functions just me remeber He-Man: "HEYEAYEA"
+//these functions just me do remeber He-Man: "HEYEAYEA"
 void* mag_alloc(void* len) {
 	void** m = malloc(*(int*)len*sizeof(void*));
 	return (void*)m;
