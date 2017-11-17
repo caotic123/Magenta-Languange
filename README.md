@@ -69,7 +69,7 @@ Tipos:
 #integer = (123)
 #str = "string"
 ```
-Valores booleanos(true and false) e numeros devem ser colocados entre paretenses sempre.
+Valores booleanos(true and false) e inteiros devem ser colocados entre paretenses sempre.
 
 Isto é:
 ```
@@ -88,6 +88,9 @@ if (...loop_condition...)
 (...do..)
 while
 ```
+
+Simple examples:
+https://github.com/caotic123/Magenta-Languange/tree/master/mag_files
 
 # Building 
 You don't need any lib for compilation, but magenta requires CLANG for run.
