@@ -29,7 +29,7 @@ struct func_ {
     int* par__arg_int;
     int* f_cond_;
     int* __l;
-    std::vector<std::pair<int, int> > stack; // stack also saves the first position command of block
+    std::vector<std::pair<int, int> > *stack; // stack also saves the first position command of block
 };
 
 typedef std::vector<func_> ___funcs;

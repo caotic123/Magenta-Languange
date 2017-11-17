@@ -227,23 +227,22 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
     x.s_();
 }
 
-void create_continue_label(__code& x_, int* q, int* __l, std::vector<std::pair<int, int> >& __stack)
+void create_continue_label(__code& x_, int* q, int* __l, std::vector<std::pair<int, int> >* __stack)
 {
     std::string label;
     std::string _n = int_to_string((*q) - 1);
-    std::string n_ = int_to_string(*__l);
-    std::string n__ = int_to_string((*__l) + 1);
-    std::pair<int, int> x__n;
-    std::get<1>(x__n) = (*__l) + 1;
+    std::string n_ = int_to_string((*__l));;
+    std::string n__ = int_to_string(std::get<1>(*(__stack->end()-1)));
+    
     x_.insert_t(3, "br", "i1", ("%" + _n).c_str());
     x_.insert(", ", true);
     x_.insert(("label %label_." + n_).c_str());
     x_.insert(", ");
-    x_.insert(("label %label_." + n__).c_str());
+    x_.insert("label %label_." + n__);
     x_.s_();
     create_lab(x_, "label_." + n_);
     (*__l)++;
-    __stack.push_back(x__n);
+   
 }
 
 std::string magneta_module::cond__if(__code& x, std::string cond_1, std::string cond_2, std::string type, std::string op, int* q, int* __e)
@@ -263,29 +262,29 @@ std::string magneta_module::cond__if(__code& x, std::string cond_1, std::string 
     return n;
 }
 
-void magneta_module::end_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >& __stack)
+void magneta_module::end_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >* __stack) // if you understood this please contact me
 {
     __code x_;
-    std::pair<int, int> x__ = *(__stack.end() - 1);
+    std::pair<int, int> x__ = *(__stack->end() - 1);
     x_.insert_t(3, "br", "label", ((std::string) "%" + (std::string) "label_." + int_to_string(std::get<1>(x__))).c_str());
     x_.s_();
-    create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened
-    __stack.erase(__stack.end() - 1);
+    create_lab(x_, "label_." + std::string(int_to_string(std::get<1>((*(__stack->end()-1)))))); // the last selection opened
+    __stack->pop_back();
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >& __stack)
+void magneta_module::while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >* __stack)
 {
     __code x_;
-    std::pair<int, int> x__ = *(__stack.end() - 1);
+    std::pair<int, int> x__ = *(__stack->end() - 1);
     x_.insert_t(2, "br i1", ("%" + std::string(int_to_string((std::get<0>(x__))))).c_str());
     x_.insert(", ", true);
-    x_.insert("label %label_." + std::string(int_to_string((*__l) - 1)));
+    x_.insert("label %label_." + std::string(int_to_string((std::get<1>(x__)-1))));
     x_.insert(", ");
-    x_.insert(("label %label_." + std::string(int_to_string((std::get<1>(x__))))).c_str());
+	x_.insert(("label %label_." + std::string(int_to_string(std::get<1>(x__)))).c_str());
     x_.s_();
     create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened
-    __stack.erase(__stack.end() - 1);
+    __stack->pop_back();
     cod__ = cod__ + x_.string();
 }
 
@@ -308,8 +307,8 @@ void magneta_module::create_return_function(std::string& cod__, std::string v_)
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >& __stack)
-{
+void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >* __stack)
+{ // (THIS FUNCTION IS JUST.... SO....) GOD WRITES STRAIGHT WITH CROOKED LINES
     __code x_;
     std::string operator_;
     std::string type__;
@@ -339,12 +338,16 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
     if (type == bool_type) {
         type__ = "i1";
     }
+    
+    std::pair<int, int> x__n;
+    std::get<1>(x__n) = (*__l) + 1;
+	 __stack->push_back(x__n);
 
     std::string n = cond__if(x_, __cond[0], __cond[1], type__, operator_, q, __e);
     create_continue_label(x_, q, __l, __stack);
-
     cond__if(x_, re_load(x_, q, __cond[0], type__), re_load(x_, q, __cond[1], type__), type__, operator_, q, __e); //second condition to eventual loop
-    std::get<0>(*(__stack.end() - 1)) = (*q) - 1;
+    std::get<0>(*(__stack->end() - 1)) = (*q) - 1;
+    (*__l) = std::get<1>(*(__stack->end()-1)) + 1;
     cod__ = cod__ + x_.string();
 }
 

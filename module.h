@@ -79,15 +79,15 @@ public:
     void insert__to_code(std::string& x_, std::string c_);
     void end_func(std::string& x_, bool is_main);
     void create_return_function(std::string& cod__, std::string v_);
-    void end_selection(std::string& cod, int* __l, std::vector<std::pair<int, int> >& __stack);
+    void end_selection(std::string& cod, int* __l, std::vector<std::pair<int, int> >* __stack);
     std::string cond__if(__code& x, std::string cond_1, std::string cond_2, std::string type, std::string op, int* q, int* __e);
-    void create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >& __stack);
+    void create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >* __stack);
     void load_value(__code& x, std::string name, std::string v, std::string type_);
     std::string load_int_value(std::string& cod__, int* __e, std::string name, std::string v_);
     void create_unknowtype_var(std::string& cod__, std::string name, std::string ref, int* q);
     void create_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
     void change_variable_int32(std::string& cod__, std::string name, std::string var, int* q_, int* e);
-    void while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >& __stack);
+    void while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >* __stack);
     void create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q);
     void pointer_to_point(std::string& cod, std::string name, std::string v, int* q);
     void create_variable_expression_i32(std::string& cod__, std::string var_, int* q_);

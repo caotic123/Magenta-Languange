@@ -1,0 +1,83 @@
+function prime(n)
+#pr = (2)
+#y = (n)
+#t = (n)
+#q = (0)
+#nil = (0)
+#s = (1)
+#p = (false)
+if ((t) > (s))
+#v = (mod((y), (t)))
+if ((nil) == (v))
+#q = (q+1)
+end
+#t = (t-1)
+while
+
+if ((q) == (pr))
+#p = (true)
+end
+
+ret (p)
+
+function alloca_int(n)
+#i = (0)
+#par = (n+0)
+#space = (4)
+#vector = (mag_alloc((n)))
+if ((i) < (par))
+func _aloc((vector), (i), (space))
+#i = (i+1)
+while
+ret (vector)
+
+function set_int(vector, _, int)
+#space = (4)
+func _set((vector), (_), (int), (space))
+ret (0)
+
+function coutdown_vector(vector)
+#x = (0)
+#y = (99)
+#v = (0)
+if ((y) > (x))
+#v = (y+1)
+func set_int((vector), (y), (v))
+#y = (y-1)
+while
+ret (vector)
+
+function p_vec(vector)
+#x = (0)
+#y = (99)
+#nil = (0)
+#bool = (false)
+if ((y) > (x))
+#value = (_get((vector), (y)))
+#v = (prime((value)))
+if ((v) == (bool))
+func set_int((vector), (y), (nil)) 
+end
+#y = (y-1)
+while
+ret (y)
+
+function print_vector(vector)
+#x = (0)
+#y = (99)
+#int = (0)
+#nil = (0)
+if ((y) > (x))
+#value = (_get((vector), (y)))
+if ((value) != (nil))
+func print_n((value))
+end
+#y = (y-1)
+while
+ret (y)
+
+function main()
+#vector = (alloca_int((100)))
+func coutdown_vector((vector))
+func p_vec((vector))
+func print_vector((vector))
