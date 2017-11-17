@@ -4,7 +4,7 @@
 
 //lib used for basic lib magente compiler
 //this code is a just the version not compiled
-//you don't need of version this code for compiler magenta but you can compile new lib if you want to
+//you don't need this version this code for compiler magenta but you can compile newlib if you want to
 
 void* mod(void* n, void* y) {
    if (*(int*)n == 0 || *(int*)y == 0) {
