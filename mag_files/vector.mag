@@ -13,9 +13,9 @@ function prime(n)
       end
     #t = (t-1)
   while
-    if ((q) == (pr))
-      #p = (true)
-    end
+  if ((q) == (pr))
+    #p = (true)
+  end
 ret (p)
 
 function alloca_int(n)
@@ -54,12 +54,12 @@ function p_vec(vector)
   if ((y) > (x))
     #value = (_get((vector), (y)))
     #v = (prime((value)))
-      if ((v) == (bool))
-        func set_int((vector), (y), (nil)) 
+    if ((v) == (bool))
+      func set_int((vector), (y), (nil)) 
     end
     #y = (y-1)
   while
- 
+
 ret (y)
 
 function print_vector(vector)
@@ -69,9 +69,9 @@ function print_vector(vector)
   #nil = (0)
   if ((y) > (x))
     #value = (_get((vector), (y)))
-      if ((value) != (nil))
-        func print_n((value))
-      end
+    if ((value) != (nil))
+      func print_n((value))
+    end
     #y = (y-1)
    while
 ret (y)
