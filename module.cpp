@@ -341,7 +341,7 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
     
     std::pair<int, int> x__n;
     std::get<1>(x__n) = (*__l) + 1;
-	 __stack->push_back(x__n);
+	__stack->push_back(x__n);
 
     std::string n = cond__if(x_, __cond[0], __cond[1], type__, operator_, q, __e);
     create_continue_label(x_, q, __l, __stack);
