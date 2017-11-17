@@ -47,6 +47,20 @@ func set_int((vector), (y), (v))
 while
 ret (vector)
 
+function print_vector(vector)
+#x = (0)
+#y = (99)
+#int = (0)
+#nil = (0)
+if ((y) > (x))
+#value = (_get((vector), (y)))
+if ((value) != (nil))
+func print_n((value))
+end
+#y = (y-1)
+while
+ret (y)
+
 function p_vec(vector)
 #x = (0)
 #y = (99)
@@ -62,19 +76,6 @@ end
 while
 ret (y)
 
-function print_vector(vector)
-#x = (0)
-#y = (99)
-#int = (0)
-#nil = (0)
-if ((y) > (x))
-#value = (_get((vector), (y)))
-if ((value) != (nil))
-func print_n((value))
-end
-#y = (y-1)
-while
-ret (y)
 
 function main()
 #vector = (alloca_int((100)))
