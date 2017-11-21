@@ -61,7 +61,8 @@ enum type_command {
     LOAD_VALUE_BITCAST_COND = 27,
     LOAD_VALUE_BOOL_COND = 28,
     END_SELECTION_WHILE = 29,
-    ALLOC_STR = 30
+    ALLOC_STR = 30,
+    CHANGE_POINTER_STRING_VAR = 31
 };
 
 struct struct_ep {

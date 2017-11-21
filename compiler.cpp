@@ -216,8 +216,9 @@ void magenta_compiler::create_var_call_func(std::string name, std::string func_n
         if (s_.size() < 1 || strtol(get_value(s_[0].s, char_ign).c_str(), NULL, 10) == 0) {
             error_(name.c_str(), "alloc fail check paramaters", 0, ALLOC_STR_FAIL);
         }
-
-        create_command(name, ALLOC_STR, get_value(s_[0].s, char_ign), s_[0], string_type);
+        
+        
+        f->var_map[name] = create_command(name, ALLOC_STR, get_value(s_[0].s, char_ign), s_[0], string_type);
         return;
     }
 
@@ -268,8 +269,8 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
     func_* func__ = get_func();
     command_ label_;
     std::string value_ = get_value(s_.s, char_ign);
-    //ifs of captures types of declared variables, yes the order of conditionals is very important
-    if (var_e(name) && func__->var_map[name].type == bool_type) {
+    
+    if (var_e(name) && getType(value_, s_, char_ign) == bool_type) {
         create_command(name, VARIABLE_CHANGE_BOOL, value_, s_, bool_type);
         return;
     }
@@ -409,6 +410,11 @@ void magenta_compiler::create_variable_string(std::string name, std::string str_
     struct_ep s_;
     s_.t = true;
 
+    if (var_e(name) && func__->var_map[name].type == unknow_type) {
+        create_command(name, CHANGE_POINTER_STRING_VAR, str__, s_, unknow_type);
+        return;
+    }
+
     if (var_e(name)) {
         create_command(name, CHANGE_STRING_VAR, str__, s_, unknow_type);
         return;
@@ -538,6 +544,9 @@ void magenta_compiler::compile(std::string name__)
             }
             if (c_.x_ == ALLOC_STR) {
                 module->alloc_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
+            }
+            if (c_.x_ == CHANGE_POINTER_STRING_VAR) {
+                module->change_pointer_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
             }
             if (c_.x_ == RET_VALUE) {
                 module->create_return_function(cod__, c_.value);

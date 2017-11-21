@@ -95,6 +95,7 @@ public:
     void create_variable_str(std::string& cod__, std::string name, std::string str__, int* q);
     std::string load_bool_value_cond(std::string& cod__, int* __e, std::string name, std::string v_);
     void change_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);
+    void change_pointer_variable_str(std::string& cod__, std::string name, std::string str__, int* q_);
     std::string load_int_value_cond(std::string& cod__, int* __e, std::string name, std::string v_);
     void change_variable_expression_i32(std::string& cod__, std::string var, int* q, int* __e);
     void create_variable_bool(std::string& cod__, int* q_, int* ___e, std::string variable_name, bool t);

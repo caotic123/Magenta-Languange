@@ -131,6 +131,15 @@ void __store_i8(__code& x_, std::string n, std::string value__)
     x_.s_();
 }
 
+void __store_i8_p(__code& x_, std::string n, std::string value__)
+{
+    x_.insert_t(2, "store", "i8*");
+    x_.insert(value__);
+    x_.insert(", ");
+    x_.insert_t(2, "i8**", ("%" + n).c_str());
+    x_.s_();
+}
+
 void magneta_module::create_unknowtype_var(std::string& cod__, std::string name, std::string ref, int* q)
 {
     __code x_;
@@ -173,9 +182,35 @@ void magneta_module::change_variable_str(std::string& cod__, std::string name, s
     int i;
     int len_ = (str__.length()) - 1;
     std::string len = int_to_string(str__.length());
-    std::string type__ = ("[" + len + " x " + "i8" + "]");
+    std::string type__ = ("[" + std::string(int_to_string(len_)) + " x " + "i8" + "]");
     std::string n = name + "_stored_str";
 
+    for (i = 0; i <= len_ - 2; i++) {
+        n__ = (int_to_string(*q_));
+        __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i));
+        __store(x_, n__, int_to_string((int)str__[i + 1]), (char*)"i8");
+        (*q_)++;
+    }
+
+    n__ = (int_to_string(*q_));
+    __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i));
+    __store(x_, n__, int_to_string(0), (char*)"i8");
+    (*q_)++;
+
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::change_pointer_variable_str(std::string& cod__, std::string name, std::string str__, int* q_)
+{
+    __code x_;
+    std::string n__;
+    int i;
+    int len_ = (str__.length()) - 1;
+    std::string n = int_to_string(*q_);
+    std::string len = int_to_string(str__.length());
+    std::string type__ = ("[" + std::string(int_to_string(len_)) + " x " + "i8" + "]");
+    return__bit_cast(x_, n, name, type__);
+    (*q_)++;
     for (i = 0; i <= len_ - 2; i++) {
         n__ = (int_to_string(*q_));
         __get_ptr(x_, ("%" + n__), type__, ("%" + n).c_str(), int_to_string(i));
@@ -198,7 +233,7 @@ void magneta_module::create_variable_str(std::string& cod__, std::string name, s
     int len_ = str__.length() - 1;
     int i;
     std::string len = int_to_string(str__.length() + 1);
-    std::string type__ = ("[" + len + " x " + "i8" + "]");
+    std::string type__ = ("[" + std::string(int_to_string(len_)) + " x " + "i8" + "]");
     std::string n = __aloc_str(x_, name + "_stored_str", type__);
     __get_ptr(x_, ("%" + name), type__, ("%" + n).c_str(), int_to_string(0));
     __store(x_, name, int_to_string((int)str__[1]), (char*)"i8");
@@ -303,7 +338,7 @@ std::string re_load(__code& x, int* q, std::string bit_name, std::string type_)
 void magneta_module::create_return_function(std::string& cod__, std::string v_)
 {
     __code x_;
-    x_.insert_t(3, "ret", "i8*", ("%" + v_).c_str());
+     x_.insert_t(3, "ret", "i8*", ("%" + v_).c_str());
     cod__ = cod__ + x_.string();
 }
 
