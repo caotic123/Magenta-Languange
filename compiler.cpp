@@ -270,6 +270,10 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
     command_ label_;
     std::string value_ = get_value(s_.s, char_ign);
     
+    if (var_e(name) && func__->var_map[name].type == unknow_type) { // the variable unknow type assumes the last variable type set
+            func__->var_map[name].type = ((getType(value_, s_, char_ign) == int32_expression) ? int32_type : getType(value_, s_, char_ign));
+    }
+
     if (var_e(name) && getType(value_, s_, char_ign) == bool_type) {
         create_command(name, VARIABLE_CHANGE_BOOL, value_, s_, bool_type);
         return;
@@ -280,11 +284,6 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
         create_command(name, CHANGE_VARIABLE_EXPRESSION, "exp", s_, int32_type);
         return;
     }
-
-    //  if (var_e(value_) && func__->var_map[value_].type == unknow_type) { // yes of value reference
-    //	        func__->var_map[name] = create_command(name, UNKNOW_TYPE_TO_POINTER, value_, s_, unknow_type);
-    //        return;//
-    //} // removed
 
     if (var_e(name) && getType(value_, s_, char_ign) == int32_type) {
         create_command(name, VARIABLE_CHANGE_I32, is_value(value_, int32_type, operators, char_ign), s_, int32_type);
