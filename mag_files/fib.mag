@@ -1,3 +1,26 @@
+#macro
+#define macro-syntax (#var x)[(#var y)]
+vars -> ($d)
+top -> #($d) = (_get((x), (y)) 
+return -> ($d)
+#end macro
+
+#define macro-syntax (#var x)={(..any...)}
+top -> #(x) = (mag_vector(())
+macro -> vector->","->(..any..)
+#end macro
+
+#define macro-syntax (vector)
+top -> #(x) = (push())
+#end macro
+
+#define macro-syntax (#var x)%(#var y)
+vars -> ($d)
+top -> #($d) = (_mod((x), (y)) 
+return -> ($d)
+#end macro
+#macro
+
 function fib(limit)
 #n = (limit)
 #z = (1)

@@ -134,6 +134,112 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind uwtable
+define i8* @_abs(i8* %i) #0 {
+entry:
+  %i.addr = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %i, i8** %i.addr, align 8
+  %call = call noalias i8* @malloc(i64 4)
+  %0 = bitcast i8* %call to i32*
+  store i32* %0, i32** %r, align 8
+  %1 = load i8*, i8** %i.addr, align 8
+  %2 = bitcast i8* %1 to i32*
+  %3 = load i32, i32* %2, align 4
+  %call1 = call i32 @abs(i32 %3) #7
+  %4 = load i32*, i32** %r, align 8
+  store i32 %call1, i32* %4, align 4
+  %5 = load i32*, i32** %r, align 8
+  %6 = bitcast i32* %5 to i8*
+  ret i8* %6
+}
+
+declare noalias i8* @malloc(i64) #1
+
+; Function Attrs: nounwind readnone
+declare i32 @abs(i32) #2
+
+; Function Attrs: noinline nounwind uwtable
+define i8* @_ceil(i8* %i) #0 {
+entry:
+  %i.addr = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %i, i8** %i.addr, align 8
+  %call = call noalias i8* @malloc(i64 4)
+  %0 = bitcast i8* %call to i32*
+  store i32* %0, i32** %r, align 8
+  %1 = load i8*, i8** %i.addr, align 8
+  %2 = bitcast i8* %1 to i32*
+  %3 = load i32, i32* %2, align 4
+  %conv = sitofp i32 %3 to double
+  %call1 = call double @ceil(double %conv) #7
+  %conv2 = fptosi double %call1 to i32
+  %4 = load i32*, i32** %r, align 8
+  store i32 %conv2, i32* %4, align 4
+  %5 = load i32*, i32** %r, align 8
+  %6 = bitcast i32* %5 to i8*
+  ret i8* %6
+}
+
+; Function Attrs: nounwind readnone
+declare double @ceil(double) #2
+
+; Function Attrs: noinline nounwind uwtable
+define i8* @_floor(i8* %i) #0 {
+entry:
+  %i.addr = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %i, i8** %i.addr, align 8
+  %call = call noalias i8* @malloc(i64 4)
+  %0 = bitcast i8* %call to i32*
+  store i32* %0, i32** %r, align 8
+  %1 = load i8*, i8** %i.addr, align 8
+  %2 = bitcast i8* %1 to i32*
+  %3 = load i32, i32* %2, align 4
+  %conv = sitofp i32 %3 to double
+  %call1 = call double @floor(double %conv) #7
+  %conv2 = fptosi double %call1 to i32
+  %4 = load i32*, i32** %r, align 8
+  store i32 %conv2, i32* %4, align 4
+  %5 = load i32*, i32** %r, align 8
+  %6 = bitcast i32* %5 to i8*
+  ret i8* %6
+}
+
+; Function Attrs: nounwind readnone
+declare double @floor(double) #2
+
+; Function Attrs: noinline nounwind uwtable
+define i8* @_pow(i8* %i, i8* %b) #0 {
+entry:
+  %b.addr = alloca i8*, align 8
+  %i.addr = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %b, i8** %b.addr, align 8
+  store i8* %i, i8** %i.addr, align 8
+  %call = call noalias i8* @malloc(i64 4)
+  %0 = bitcast i8* %call to i32*
+  store i32* %0, i32** %r, align 8
+  %1 = load i8*, i8** %b.addr, align 8
+  %2 = bitcast i8* %1 to i32*
+  %3 = load i32, i32* %2, align 4
+  %conv = sitofp i32 %3 to double
+  %4 = load i8*, i8** %i.addr, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %conv1 = sitofp i32 %6 to double
+  %call2 = call double @pow(double %conv1, double %conv) #6
+  %conv3 = fptosi double %call2 to i32
+  %7 = load i32*, i32** %r, align 8
+  store i32 %conv3, i32* %7, align 4
+  %8 = load i32*, i32** %r, align 8
+  %9 = bitcast i32* %8 to i8*
+  ret i8* %9
+}
+
+; Function Attrs: nounwind
+declare double @pow(double, double) #3
+
+; Function Attrs: noinline nounwind uwtable
 define i8* @mod(i8* %n, i8* %y) #0 {
 entry:
   %retval = alloca i8*, align 8
@@ -189,8 +295,6 @@ return:                                           ; preds = %if.end, %if.then
   %20 = load i8*, i8** %retval, align 8
   ret i8* %20
 }
-
-declare noalias i8* @malloc(i64) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define i8* @print(i8* %str) #0 {
@@ -408,7 +512,7 @@ entry:
 }
 
 ; Function Attrs: argmemonly nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i32, i1) #2
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i32, i1) #4
 
 ; Function Attrs: noinline nounwind uwtable
 define i8* @_put(i8* %vector, i8* %i, i8* %r) #0 {
@@ -811,6 +915,30 @@ entry:
 declare void @free(i8*) #1
 
 ; Function Attrs: noinline nounwind uwtable
+define i8* @s_str(i8* %t, i8* %len) #0 {
+entry:
+  %len.addr = alloca i8*, align 8
+  %t.addr = alloca i8*, align 8
+  %buffer = alloca i8*, align 8
+  store i8* %len, i8** %len.addr, align 8
+  store i8* %t, i8** %t.addr, align 8
+  %0 = load i8*, i8** %len.addr, align 8
+  %1 = bitcast i8* %0 to i32*
+  %2 = load i32, i32* %1, align 4
+  %conv = sext i32 %2 to i64
+  %mul = mul i64 1, %conv
+  %call = call noalias i8* @malloc(i64 %mul)
+  store i8* %call, i8** %buffer, align 8
+  %3 = load i8*, i8** %t.addr, align 8
+  %4 = bitcast i8* %3 to i32*
+  %5 = load i32, i32* %4, align 4
+  %6 = load i8*, i8** %buffer, align 8
+  %call1 = call i32 (i8*, i8*, ...) @sprintf(i8* %6, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @"\01??_C@_02DPKJAMEF@?$CFd?$AA@", i32 0, i32 0), i32 %5)
+  %7 = load i8*, i8** %buffer, align 8
+  ret i8* %7
+}
+
+; Function Attrs: noinline nounwind uwtable
 define i8* @t_str(i8* %s, i8* %y, i8* %_r) #0 {
 entry:
   %_r.addr = alloca i8*, align 8
@@ -1022,7 +1150,18 @@ entry:
   %5 = bitcast i8* %4 to i32*
   store i32 %call1, i32* %5, align 4
   %6 = load i8*, i8** %s, align 8
-  ret i8* %6
+  %cmp = icmp eq i8* %6, null
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %7 = load i8*, i8** %s, align 8
+  %8 = bitcast i8* %7 to i32*
+  store i32 0, i32* %8, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %9 = load i8*, i8** %s, align 8
+  ret i8* %9
 }
 
 declare i32 @strtol(i8*, i8**, i32) #1
@@ -1054,7 +1193,7 @@ entry:
   store i32* %0, i32** %r, align 8
   %1 = load i32*, i32** %r, align 8
   store i32 0, i32* %1, align 4
-  call void @exit(i32 1) #5
+  call void @exit(i32 1) #8
   unreachable
 
 return:                                           ; No predecessors!
@@ -1063,7 +1202,7 @@ return:                                           ; No predecessors!
 }
 
 ; Function Attrs: noreturn
-declare void @exit(i32) #3
+declare void @exit(i32) #5
 
 ; Function Attrs: noinline nounwind uwtable
 define i8* @read(i8* %name) #0 {
@@ -1276,7 +1415,7 @@ entry:
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.va_start(i8*) #4
+declare void @llvm.va_start(i8*) #6
 
 ; Function Attrs: noinline nounwind uwtable
 define linkonce_odr i32 @_vsprintf_l(i8* %_Buffer, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {
@@ -1298,7 +1437,7 @@ entry:
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.va_end(i8*) #4
+declare void @llvm.va_end(i8*) #6
 
 ; Function Attrs: noinline nounwind uwtable
 define linkonce_odr i32 @_vsnprintf_l(i8* %_Buffer, i64 %_BufferCount, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {

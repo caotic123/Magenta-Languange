@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sstream>
 #include "magenta_header.h"
+#include "macro.h"
 
 #ifndef MAGENTA_LEX_H
 #define MAGENTA_LEX_H

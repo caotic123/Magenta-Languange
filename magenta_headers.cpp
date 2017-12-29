@@ -85,7 +85,10 @@ void error(st_ st)
         printf("LINE: CRITICAL ERROR COMMAND DON'T EXIST CHECK IF THE COMMAND NAME IS CORRECT",
             st.l);
         break;
-
+    case MACRO_ERROR:
+        printf("MACRO : DEFINITION OF THIS MACRO IS ILEGAL OR HAVE SOME ERROR",
+            st.l);
+        break;
     default:
         printf("A unknow error ocurred\n");
     }
