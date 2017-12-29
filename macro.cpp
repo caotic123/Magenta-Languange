@@ -1,0 +1,99 @@
+#include "macro.h"
+
+std::vector<std::string> macro::tok(std::string str, const char* abstract_logic[__abs][2]) {
+	std::vector<std::string> tok_macro;
+	std::string s = std::string(abstract_logic[5][0])+s_r[0], s_ = std::string(abstract_logic[5][0])+s_r[3];
+	std::size_t _ = str.find(s);
+	
+	while(_ !=std::string::npos) {
+		if (str.find(s_, _) == std::string::npos) {
+			error_("MACRO", "macro don't delimited", _, MACRO_ERROR);
+		}
+	  tok_macro.push_back(str.substr(_, str.find(s_, _)-_));
+    _ = str.find(s, (_+s.length())+1);
+	}
+
+	return tok_macro;
+}
+
+std::string macro::g_syntax(std::string t, const char* abstract_logic[__abs][2]) {
+  std::vector<std::string>::iterator __ = macro_reseverd.begin();
+  std::string c_;
+  std::string s = std::string(abstract_logic[5][0]) + s_r[0] + " " + s_r[2], ___r;
+  std::size_t _ = t.find(s), s_;
+  std::vector<std::size_t> t__;
+  std::function<void(std::string)> func_ = [&](std::string n) {if (t.find(n, _+s.length()) != std::string::npos) {t__.push_back(t.find(n, _+s.length()));}};
+  std::for_each(macro_reseverd.begin(), macro_reseverd.end(), func_);
+  std::sort (t__.begin(), t__.end());
+  if (t__.begin() != t__.end()) {___r = t.substr(_+s.length(), (*t__.begin())-(_+s.length())); return secure_string_format(___r);}
+  
+  error_("MACRO", "macro has rules?", _, MACRO_ERROR);
+}
+
+std::vector<std::string> syntax_tok(std::string syn_, char char_ign[ig__][2]) {
+  std::vector<std::string> tok_;
+  std::string c_, token_;
+  bool p_ = false;
+  std::string char_;
+  for (int i=0; i <= syn_.length(); i++) {
+  	char_ = char_ign[1][1];
+    p_ = (c_ == char_) ? true : p_;
+    c_ = syn_.substr(i, 1);
+    char_ = char_ign[1][0];
+    if ((c_ == char_ && token_.length() > 0) || p_ || (i >= syn_.length() && token_.length() > 0)) {std::cout << token_ << std::endl; tok_.push_back(token_); token_ = ""; p_ = false;}
+    token_ = token_+c_;
+  }
+  
+  if (p_) {
+   error_("MACRO", "syntax definition was defined?", 0, MACRO_ERROR);
+  }
+
+  return tok_;
+}
+
+std::tuple<int, int> macro::mac_p(std::string s, const char* abstract_logic[__abs][2]) {
+  std::string c_;
+  bool p_ = false;
+  std::string macr_;
+  std::string __pr = std::string(abstract_logic[5][0])+s_r[1];
+  for (int i=0; i <= s.length(); i++) {
+    if (c_ != " " && !p_ && s.substr(i, __pr.length()) != __pr) {return std::make_tuple(0, 0);}
+    if (s.substr(i, __pr.length()) == __pr) {if (!p_) {p_ = true;} else {return std::make_tuple(__pr.length(), macr_.length());}}
+    macr_ = macr_+s.substr(i, 1);
+  }
+
+  return std::make_tuple(0, 0);
+}
+
+std::tuple<std::string, std::string> macro::g_macro(std::string _, const char* abstract_logic[__abs][2]) {
+  std::tuple<int, int> r = mac_p(_, abstract_logic);
+  std::string c_,s_;
+  if (std::get<0>(r) == 0 && std::get<0>(r) == 0) {
+   return std::make_tuple(_, "");
+  }
+
+  return std::make_tuple(secure_string_format(_.substr(std::get<0>(r), std::get<1>(r)-std::get<0>(r))), secure_string_format(_.substr(std::get<1>(r)+std::get<0>(r), _.length()-(std::get<1>(r)+std::get<0>(r)))));
+}
+
+macro::macro(std::string s, const char* abstract_logic[__abs][2], char char_ign[ig__][2], std::string operators[len_op], std::string cond_ex[_cond_p]) {
+	input = s;
+	std::tuple<std::string, std::string> g_m = g_macro(s, abstract_logic);
+	if (std::get<1>(g_m) == "") {
+		return;
+	}
+	input = std::get<0>(g_m);
+	code_x = std::get<1>(g_m);
+	
+	load(abstract_logic, char_ign, operators, cond_ex);
+}
+
+void macro::load(const char* abstract_logic[__abs][2], char char_ign[ig__][2], std::string operators[len_op], std::string cond_ex[_cond_p]) {
+    mac_ mac;
+	std::vector<std::string> tok_ = tok(input, abstract_logic);
+	for (std::vector<std::string>::iterator it = tok_.begin(); it != tok_.end(); it++) {
+		mac.obj = g_syntax((*it), abstract_logic);
+		mac.s_objs = syntax_tok(mac.obj, char_ign);
+		std::cout << mac.obj << std::endl;
+	}
+	system("pause");
+}
