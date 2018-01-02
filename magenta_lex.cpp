@@ -129,7 +129,7 @@ st_ lex_::check__()
     bool check_b;
   
     macro mag_macro = macro(__input, abstract_logic, char_ign, operators, cond_ex);
-    
+
     st_ st = char___(sym_, __input);
 
     if (st._) {
