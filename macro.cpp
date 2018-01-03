@@ -106,9 +106,10 @@ std::map<std::string, std::string> macro::macr_c(std::string macrs_, char char_i
   for (int _=0; _ <= macrs_.length(); _++) {
     c_ = macrs_.substr(_, 1);
     if ((c_ == " " || c_ == "\n") && eq_(macrs_.substr(i+1, _-(i+1)), macro_reseverd.begin()) != "")
-	{t[macrs_.substr(i+1, _-(i+1))] = macrs_.substr(macrs_.find(syntax_r[0], i), next_special(macrs_, i, syntax_r[0], syntax_r[1])-macrs_.find(syntax_r[0], i));}
+	{t[macrs_.substr(i+1, _-(i+1))] = macrs_.substr(macrs_.find(syntax_r[0], i), (next_special(macrs_, i, syntax_r[0], syntax_r[1])-macrs_.find(syntax_r[0], i))+1);}
     i = (c_ == " " || c_ == "\n") ? _ : i;
   }
+  
 
    return t;
 }
@@ -137,8 +138,8 @@ std::tuple<bool, std::map<std::string, std::string>, int> macro::is_mac(std::vec
   return std::make_tuple(true, map_context, i);
 }
 
-void rule_macr(std::string __, int _, int p_, std::map<std::string, std::string> var_context, std::map<std::string, std::string> map_){
-	
+void rule_macr(std::string __, int _, int p_, std::map<std::string, std::string> var_context, std::map<std::string, std::string> map_) {
+  std::cout << __.substr(_, p_) << "-" << map_["vars"] << std::endl;	
 }
 
 void macro::_macro(std::string __, std::vector<std::string> tok, char char_ign[ig__][2], std::map<std::string, std::string> rul_) {
@@ -178,7 +179,7 @@ void macro::load(const char* abstract_logic[__abs][2], char char_ign[ig__][2], s
 	}
 
 	for (std::vector<mac_>::iterator _ = ____macro.begin(); _ != ____macro.end(); _++) {;
-		_macro(code_x, (*_).s_objs, char_ign, mac.rule);
+		_macro(code_x, (*_).s_objs, char_ign, (*_).rule);
 	}
 
 	system("pause");
