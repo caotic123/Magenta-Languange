@@ -17,7 +17,8 @@ char* c(char* y, int t, int a)
 
 void lex_::lex__(std::string x)
 {
-    __input = (char*)x.c_str();
+    __input = x;
+
 }
 
 st_ char___(char sym_[__symb][2], char* str)
@@ -127,10 +128,11 @@ st_ lex_::check__()
 {
     char* __;
     bool check_b;
+    std::cout << "result " << __input << std::endl;
   
     macro mag_macro = macro(__input, abstract_logic, char_ign, operators, cond_ex);
 
-    st_ st = char___(sym_, __input);
+    st_ st = char___(sym_, (char*)__input.c_str());
 
     if (st._) {
         return st;

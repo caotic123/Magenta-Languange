@@ -1,1542 +1,1251 @@
-%struct.__crt_locale_pointers = type { %struct.__crt_locale_data*, %struct.__crt_multibyte_data* }
-%struct.__crt_locale_data = type opaque
-%struct.__crt_multibyte_data = type opaque
-%struct._iobuf = type { i8* }
+; ModuleID = 'llvm/mag_lib.c'
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
 
-$sprintf = comdat any
+%struct._IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %struct._IO_marker*, %struct._IO_FILE*, i32, i32, i64, i16, i8, [1 x i8], i8*, i64, i8*, i8*, i8*, i8*, i64, i32, [20 x i8] }
+%struct._IO_marker = type { %struct._IO_marker*, %struct._IO_FILE*, i32 }
 
-$vsprintf = comdat any
+@.str = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str.2 = private unnamed_addr constant [5 x i8] c"%79s\00", align 1
+@.str.3 = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.4 = private unnamed_addr constant [6 x i8] c"pause\00", align 1
+@.str.5 = private unnamed_addr constant [3 x i8] c"rb\00", align 1
+@.str.6 = private unnamed_addr constant [2 x i8] c"w\00", align 1
 
-$_snprintf = comdat any
-
-$_vsnprintf = comdat any
-
-$printf = comdat any
-
-$scanf = comdat any
-
-$_vsprintf_l = comdat any
-
-$_vsnprintf_l = comdat any
-
-$__local_stdio_printf_options = comdat any
-
-$_vfprintf_l = comdat any
-
-$_vfscanf_l = comdat any
-
-$__local_stdio_scanf_options = comdat any
-
-$"\01??_C@_03OFAPEBGM@?$CFs?6?$AA@" = comdat any
-
-$"\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@" = comdat any
-
-$"\01??_C@_04HCKIJMKE@?$CF79s?$AA@" = comdat any
-
-$"\01??_C@_02DPKJAMEF@?$CFd?$AA@" = comdat any
-
-$"\01??_C@_05PDJBBECF@pause?$AA@" = comdat any
-
-$"\01??_C@_02JDPG@rb?$AA@" = comdat any
-
-$"\01??_C@_01NOFIACDB@w?$AA@" = comdat any
-
-@"\01??_C@_03OFAPEBGM@?$CFs?6?$AA@" = linkonce_odr unnamed_addr constant [4 x i8] c"%s\0A\00", comdat, align 1
-@"\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@" = linkonce_odr unnamed_addr constant [4 x i8] c"%d\0A\00", comdat, align 1
-@"\01??_C@_04HCKIJMKE@?$CF79s?$AA@" = linkonce_odr unnamed_addr constant [5 x i8] c"%79s\00", comdat, align 1
-@"\01??_C@_02DPKJAMEF@?$CFd?$AA@" = linkonce_odr unnamed_addr constant [3 x i8] c"%d\00", comdat, align 1
-@"\01??_C@_05PDJBBECF@pause?$AA@" = linkonce_odr unnamed_addr constant [6 x i8] c"pause\00", comdat, align 1
-@"\01??_C@_02JDPG@rb?$AA@" = linkonce_odr unnamed_addr constant [3 x i8] c"rb\00", comdat, align 1
-@"\01??_C@_01NOFIACDB@w?$AA@" = linkonce_odr unnamed_addr constant [2 x i8] c"w\00", comdat, align 1
-@__local_stdio_printf_options._OptionsStorage = internal global i64 0, align 8
-@__local_stdio_scanf_options._OptionsStorage = internal global i64 0, align 8
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @sprintf(i8* %_Buffer, i8* %_Format, ...) #0 comdat {
-entry:
-  %_Format.addr = alloca i8*, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  %_Result = alloca i32, align 4
-  %_ArgList = alloca i8*, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %_ArgList1 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_start(i8* %_ArgList1)
-  %0 = load i8*, i8** %_ArgList, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %2 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i32 @_vsprintf_l(i8* %2, i8* %1, %struct.__crt_locale_pointers* null, i8* %0)
-  store i32 %call, i32* %_Result, align 4
-  %_ArgList2 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_end(i8* %_ArgList2)
-  %3 = load i32, i32* %_Result, align 4
-  ret i32 %3
-}
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @vsprintf(i8* %_Buffer, i8* %_Format, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %2 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i32 @_vsnprintf_l(i8* %2, i64 -1, i8* %1, %struct.__crt_locale_pointers* null, i8* %0)
-  ret i32 %call
-}
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_snprintf(i8* %_Buffer, i64 %_BufferCount, i8* %_Format, ...) #0 comdat {
-entry:
-  %_Format.addr = alloca i8*, align 8
-  %_BufferCount.addr = alloca i64, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  %_Result = alloca i32, align 4
-  %_ArgList = alloca i8*, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i64 %_BufferCount, i64* %_BufferCount.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %_ArgList1 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_start(i8* %_ArgList1)
-  %0 = load i8*, i8** %_ArgList, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %2 = load i64, i64* %_BufferCount.addr, align 8
-  %3 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i32 @_vsnprintf(i8* %3, i64 %2, i8* %1, i8* %0)
-  store i32 %call, i32* %_Result, align 4
-  %_ArgList2 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_end(i8* %_ArgList2)
-  %4 = load i32, i32* %_Result, align 4
-  ret i32 %4
-}
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_vsnprintf(i8* %_Buffer, i64 %_BufferCount, i8* %_Format, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_BufferCount.addr = alloca i64, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i64 %_BufferCount, i64* %_BufferCount.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %2 = load i64, i64* %_BufferCount.addr, align 8
-  %3 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i32 @_vsnprintf_l(i8* %3, i64 %2, i8* %1, %struct.__crt_locale_pointers* null, i8* %0)
-  ret i32 %call
-}
-
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_abs(i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %r = alloca i32*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %i.addr, align 8
-  %2 = bitcast i8* %1 to i32*
-  %3 = load i32, i32* %2, align 4
-  %call1 = call i32 @abs(i32 %3) #7
-  %4 = load i32*, i32** %r, align 8
-  store i32 %call1, i32* %4, align 4
-  %5 = load i32*, i32** %r, align 8
-  %6 = bitcast i32* %5 to i8*
-  ret i8* %6
+  store i8* %i, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = call i32 @abs(i32 %6) #8
+  %8 = load i32*, i32** %r, align 8
+  store i32 %7, i32* %8, align 4
+  %9 = load i32*, i32** %r, align 8
+  %10 = bitcast i32* %9 to i8*
+  ret i8* %10
 }
 
+; Function Attrs: nounwind
 declare noalias i8* @malloc(i64) #1
 
 ; Function Attrs: nounwind readnone
 declare i32 @abs(i32) #2
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_ceil(i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %r = alloca i32*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %i.addr, align 8
-  %2 = bitcast i8* %1 to i32*
-  %3 = load i32, i32* %2, align 4
-  %conv = sitofp i32 %3 to double
-  %call1 = call double @ceil(double %conv) #7
-  %conv2 = fptosi double %call1 to i32
-  %4 = load i32*, i32** %r, align 8
-  store i32 %conv2, i32* %4, align 4
-  %5 = load i32*, i32** %r, align 8
-  %6 = bitcast i32* %5 to i8*
-  ret i8* %6
+  store i8* %i, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = sitofp i32 %6 to double
+  %8 = call double @ceil(double %7) #8
+  %9 = fptosi double %8 to i32
+  %10 = load i32*, i32** %r, align 8
+  store i32 %9, i32* %10, align 4
+  %11 = load i32*, i32** %r, align 8
+  %12 = bitcast i32* %11 to i8*
+  ret i8* %12
 }
 
 ; Function Attrs: nounwind readnone
 declare double @ceil(double) #2
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_floor(i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %r = alloca i32*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %i.addr, align 8
-  %2 = bitcast i8* %1 to i32*
-  %3 = load i32, i32* %2, align 4
-  %conv = sitofp i32 %3 to double
-  %call1 = call double @floor(double %conv) #7
-  %conv2 = fptosi double %call1 to i32
-  %4 = load i32*, i32** %r, align 8
-  store i32 %conv2, i32* %4, align 4
-  %5 = load i32*, i32** %r, align 8
-  %6 = bitcast i32* %5 to i8*
-  ret i8* %6
+  store i8* %i, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = sitofp i32 %6 to double
+  %8 = call double @floor(double %7) #8
+  %9 = fptosi double %8 to i32
+  %10 = load i32*, i32** %r, align 8
+  store i32 %9, i32* %10, align 4
+  %11 = load i32*, i32** %r, align 8
+  %12 = bitcast i32* %11 to i8*
+  ret i8* %12
 }
 
 ; Function Attrs: nounwind readnone
 declare double @floor(double) #2
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_pow(i8* %i, i8* %b) #0 {
-entry:
-  %b.addr = alloca i8*, align 8
-  %i.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
   %r = alloca i32*, align 8
-  store i8* %b, i8** %b.addr, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %b.addr, align 8
-  %2 = bitcast i8* %1 to i32*
-  %3 = load i32, i32* %2, align 4
-  %conv = sitofp i32 %3 to double
-  %4 = load i8*, i8** %i.addr, align 8
-  %5 = bitcast i8* %4 to i32*
-  %6 = load i32, i32* %5, align 4
-  %conv1 = sitofp i32 %6 to double
-  %call2 = call double @pow(double %conv1, double %conv) #6
-  %conv3 = fptosi double %call2 to i32
-  %7 = load i32*, i32** %r, align 8
-  store i32 %conv3, i32* %7, align 4
-  %8 = load i32*, i32** %r, align 8
-  %9 = bitcast i32* %8 to i8*
-  ret i8* %9
+  store i8* %i, i8** %1, align 8
+  store i8* %b, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 4) #7
+  %4 = bitcast i8* %3 to i32*
+  store i32* %4, i32** %r, align 8
+  %5 = load i8*, i8** %1, align 8
+  %6 = bitcast i8* %5 to i32*
+  %7 = load i32, i32* %6, align 4
+  %8 = sitofp i32 %7 to double
+  %9 = load i8*, i8** %2, align 8
+  %10 = bitcast i8* %9 to i32*
+  %11 = load i32, i32* %10, align 4
+  %12 = sitofp i32 %11 to double
+  %13 = call double @pow(double %8, double %12) #7
+  %14 = fptosi double %13 to i32
+  %15 = load i32*, i32** %r, align 8
+  store i32 %14, i32* %15, align 4
+  %16 = load i32*, i32** %r, align 8
+  %17 = bitcast i32* %16 to i8*
+  ret i8* %17
 }
 
 ; Function Attrs: nounwind
-declare double @pow(double, double) #3
+declare double @pow(double, double) #1
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @mod(i8* %n, i8* %y) #0 {
-entry:
-  %retval = alloca i8*, align 8
-  %y.addr = alloca i8*, align 8
-  %n.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
   %ret = alloca i32*, align 8
   %r = alloca i32*, align 8
-  store i8* %y, i8** %y.addr, align 8
-  store i8* %n, i8** %n.addr, align 8
-  %0 = load i8*, i8** %n.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %cmp = icmp eq i32 %2, 0
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  store i8* %n, i8** %2, align 8
+  store i8* %y, i8** %3, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = icmp eq i32 %6, 0
+  br i1 %7, label %13, label %8
 
-lor.lhs.false:                                    ; preds = %entry
-  %3 = load i8*, i8** %y.addr, align 8
-  %4 = bitcast i8* %3 to i32*
-  %5 = load i32, i32* %4, align 4
-  %cmp1 = icmp eq i32 %5, 0
-  br i1 %cmp1, label %if.then, label %if.end
+; <label>:8                                       ; preds = %0
+  %9 = load i8*, i8** %3, align 8
+  %10 = bitcast i8* %9 to i32*
+  %11 = load i32, i32* %10, align 4
+  %12 = icmp eq i32 %11, 0
+  br i1 %12, label %13, label %19
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  %call = call noalias i8* @malloc(i64 4)
-  %6 = bitcast i8* %call to i32*
-  store i32* %6, i32** %ret, align 8
-  %7 = load i32*, i32** %ret, align 8
-  store i32 0, i32* %7, align 4
-  %8 = load i32*, i32** %ret, align 8
-  %9 = bitcast i32* %8 to i8*
-  store i8* %9, i8** %retval, align 8
-  br label %return
-
-if.end:                                           ; preds = %lor.lhs.false
-  %call2 = call noalias i8* @malloc(i64 4)
-  %10 = bitcast i8* %call2 to i32*
-  store i32* %10, i32** %r, align 8
-  %11 = load i8*, i8** %n.addr, align 8
-  %12 = bitcast i8* %11 to i32*
-  %13 = load i32, i32* %12, align 4
-  %14 = load i8*, i8** %y.addr, align 8
+; <label>:13                                      ; preds = %8, %0
+  %14 = call noalias i8* @malloc(i64 4) #7
   %15 = bitcast i8* %14 to i32*
-  %16 = load i32, i32* %15, align 4
-  %rem = srem i32 %13, %16
-  %17 = load i32*, i32** %r, align 8
-  store i32 %rem, i32* %17, align 4
-  %18 = load i32*, i32** %r, align 8
-  %19 = bitcast i32* %18 to i8*
-  store i8* %19, i8** %retval, align 8
-  br label %return
+  store i32* %15, i32** %ret, align 8
+  %16 = load i32*, i32** %ret, align 8
+  store i32 0, i32* %16, align 4
+  %17 = load i32*, i32** %ret, align 8
+  %18 = bitcast i32* %17 to i8*
+  store i8* %18, i8** %1, align 8
+  br label %32
 
-return:                                           ; preds = %if.end, %if.then
-  %20 = load i8*, i8** %retval, align 8
-  ret i8* %20
+; <label>:19                                      ; preds = %8
+  %20 = call noalias i8* @malloc(i64 4) #7
+  %21 = bitcast i8* %20 to i32*
+  store i32* %21, i32** %r, align 8
+  %22 = load i8*, i8** %2, align 8
+  %23 = bitcast i8* %22 to i32*
+  %24 = load i32, i32* %23, align 4
+  %25 = load i8*, i8** %3, align 8
+  %26 = bitcast i8* %25 to i32*
+  %27 = load i32, i32* %26, align 4
+  %28 = srem i32 %24, %27
+  %29 = load i32*, i32** %r, align 8
+  store i32 %28, i32* %29, align 4
+  %30 = load i32*, i32** %r, align 8
+  %31 = bitcast i32* %30 to i8*
+  store i8* %31, i8** %1, align 8
+  br label %32
+
+; <label>:32                                      ; preds = %19, %13
+  %33 = load i8*, i8** %1, align 8
+  ret i8* %33
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @print(i8* %str) #0 {
-entry:
-  %str.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %ret = alloca i32*, align 8
-  store i8* %str, i8** %str.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %ret, align 8
-  %1 = load i32*, i32** %ret, align 8
-  store i32 1, i32* %1, align 4
-  %2 = load i8*, i8** %str.addr, align 8
-  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @"\01??_C@_03OFAPEBGM@?$CFs?6?$AA@", i32 0, i32 0), i8* %2)
-  %3 = load i32*, i32** %ret, align 8
-  %4 = bitcast i32* %3 to i8*
+  store i8* %str, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %ret, align 8
+  %4 = load i32*, i32** %ret, align 8
+  store i32 1, i32* %4, align 4
+  %5 = load i8*, i8** %1, align 8
+  %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i8* %5)
+  %7 = load i32*, i32** %ret, align 8
+  %8 = bitcast i32* %7 to i8*
+  ret i8* %8
+}
+
+declare i32 @printf(i8*, ...) #3
+
+; Function Attrs: nounwind uwtable
+define i8* @print_n(i8* %i) #0 {
+  %1 = alloca i8*, align 8
+  %ret = alloca i32*, align 8
+  store i8* %i, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %ret, align 8
+  %4 = load i32*, i32** %ret, align 8
+  store i32 1, i32* %4, align 4
+  %5 = load i8*, i8** %1, align 8
+  %6 = bitcast i8* %5 to i32*
+  %7 = load i32, i32* %6, align 4
+  %8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %7)
+  %9 = load i32*, i32** %ret, align 8
+  %10 = bitcast i32* %9 to i8*
+  ret i8* %10
+}
+
+; Function Attrs: nounwind uwtable
+define i8* @scanf_insecure() #0 {
+  %x = alloca i8*, align 8
+  %1 = call noalias i8* @malloc(i64 80) #7
+  store i8* %1, i8** %x, align 8
+  %2 = load i8*, i8** %x, align 8
+  %3 = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.2, i32 0, i32 0), i8* %2)
+  %4 = load i8*, i8** %x, align 8
   ret i8* %4
 }
 
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @printf(i8* %_Format, ...) #0 comdat {
-entry:
-  %_Format.addr = alloca i8*, align 8
-  %_Result = alloca i32, align 4
-  %_ArgList = alloca i8*, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  %_ArgList1 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_start(i8* %_ArgList1)
-  %0 = load i8*, i8** %_ArgList, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %call = call %struct._iobuf* @__acrt_iob_func(i32 1)
-  %call2 = call i32 @_vfprintf_l(%struct._iobuf* %call, i8* %1, %struct.__crt_locale_pointers* null, i8* %0)
-  store i32 %call2, i32* %_Result, align 4
-  %_ArgList3 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_end(i8* %_ArgList3)
-  %2 = load i32, i32* %_Result, align 4
-  ret i32 %2
-}
+declare i32 @__isoc99_scanf(i8*, ...) #3
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @print_n(i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
-  %ret = alloca i32*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %ret, align 8
-  %1 = load i32*, i32** %ret, align 8
-  store i32 1, i32* %1, align 4
-  %2 = load i8*, i8** %i.addr, align 8
-  %3 = bitcast i8* %2 to i32*
-  %4 = load i32, i32* %3, align 4
-  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @"\01??_C@_03PMGGPEJJ@?$CFd?6?$AA@", i32 0, i32 0), i32 %4)
-  %5 = load i32*, i32** %ret, align 8
+; Function Attrs: nounwind uwtable
+define i8* @get_scanf_int_insecure() #0 {
+  %int_ = alloca i32*, align 8
+  %1 = call noalias i8* @malloc(i64 4) #7
+  %2 = bitcast i8* %1 to i32*
+  store i32* %2, i32** %int_, align 8
+  %3 = load i32*, i32** %int_, align 8
+  %4 = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.3, i32 0, i32 0), i32* %3)
+  %5 = load i32*, i32** %int_, align 8
   %6 = bitcast i32* %5 to i8*
   ret i8* %6
 }
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @scanf_insecure() #0 {
-entry:
-  %x = alloca i8*, align 8
-  %call = call noalias i8* @malloc(i64 80)
-  store i8* %call, i8** %x, align 8
-  %0 = load i8*, i8** %x, align 8
-  %call1 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @"\01??_C@_04HCKIJMKE@?$CF79s?$AA@", i32 0, i32 0), i8* %0)
-  %1 = load i8*, i8** %x, align 8
-  ret i8* %1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @scanf(i8* %_Format, ...) #0 comdat {
-entry:
-  %_Format.addr = alloca i8*, align 8
-  %_Result = alloca i32, align 4
-  %_ArgList = alloca i8*, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  %_ArgList1 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_start(i8* %_ArgList1)
-  %0 = load i8*, i8** %_ArgList, align 8
-  %1 = load i8*, i8** %_Format.addr, align 8
-  %call = call %struct._iobuf* @__acrt_iob_func(i32 0)
-  %call2 = call i32 @_vfscanf_l(%struct._iobuf* %call, i8* %1, %struct.__crt_locale_pointers* null, i8* %0)
-  store i32 %call2, i32* %_Result, align 4
-  %_ArgList3 = bitcast i8** %_ArgList to i8*
-  call void @llvm.va_end(i8* %_ArgList3)
-  %2 = load i32, i32* %_Result, align 4
-  ret i32 %2
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @get_scanf_int_insecure() #0 {
-entry:
-  %int_ = alloca i32*, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %int_, align 8
-  %1 = load i32*, i32** %int_, align 8
-  %call1 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @"\01??_C@_02DPKJAMEF@?$CFd?$AA@", i32 0, i32 0), i32* %1)
-  %2 = load i32*, i32** %int_, align 8
-  %3 = bitcast i32* %2 to i8*
-  ret i8* %3
-}
-
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @mag_alloc(i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %m = alloca i8**, align 8
-  store i8* %len, i8** %len.addr, align 8
-  %0 = load i8*, i8** %len.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %mul = mul i64 %conv, 8
-  %call = call noalias i8* @malloc(i64 %mul)
-  %3 = bitcast i8* %call to i8**
-  store i8** %3, i8*** %m, align 8
-  %4 = load i8**, i8*** %m, align 8
-  %5 = bitcast i8** %4 to i8*
-  ret i8* %5
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @mag_realloc(i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %m = alloca i8**, align 8
-  store i8* %len, i8** %len.addr, align 8
-  %0 = load i8*, i8** %len.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %mul = mul i64 %conv, 8
-  %3 = load i8**, i8*** %m, align 8
-  %4 = bitcast i8** %3 to i8*
-  %call = call noalias i8* @realloc(i8* %4, i64 %mul)
-  %5 = bitcast i8* %call to i8**
-  store i8** %5, i8*** %m, align 8
-  %6 = load i8**, i8*** %m, align 8
-  %7 = bitcast i8** %6 to i8*
-  ret i8* %7
-}
-
-declare noalias i8* @realloc(i8*, i64) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @_aloc(i8* %vector, i8* %i, i8* %space) #0 {
-entry:
-  %space.addr = alloca i8*, align 8
-  %i.addr = alloca i8*, align 8
-  %vector.addr = alloca i8*, align 8
-  %r = alloca i32*, align 8
-  store i8* %space, i8** %space.addr, align 8
-  store i8* %i, i8** %i.addr, align 8
-  store i8* %vector, i8** %vector.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i32*, i32** %r, align 8
-  store i32 0, i32* %1, align 4
-  %2 = load i8*, i8** %space.addr, align 8
+  store i8* %len, i8** %1, align 8
+  %2 = load i8*, i8** %1, align 8
   %3 = bitcast i8* %2 to i32*
   %4 = load i32, i32* %3, align 4
-  %conv = sext i32 %4 to i64
-  %call1 = call noalias i8* @malloc(i64 %conv)
-  %5 = load i8*, i8** %vector.addr, align 8
-  %6 = bitcast i8* %5 to i8**
-  %7 = load i8*, i8** %i.addr, align 8
-  %8 = bitcast i8* %7 to i32*
-  %9 = load i32, i32* %8, align 4
-  %idxprom = sext i32 %9 to i64
-  %arrayidx = getelementptr inbounds i8*, i8** %6, i64 %idxprom
-  store i8* %call1, i8** %arrayidx, align 8
-  %10 = load i32*, i32** %r, align 8
-  %11 = bitcast i32* %10 to i8*
-  ret i8* %11
+  %5 = sext i32 %4 to i64
+  %6 = mul i64 %5, 8
+  %7 = call noalias i8* @malloc(i64 %6) #7
+  %8 = bitcast i8* %7 to i8**
+  store i8** %8, i8*** %m, align 8
+  %9 = load i8**, i8*** %m, align 8
+  %10 = bitcast i8** %9 to i8*
+  ret i8* %10
 }
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @_set(i8* %vector, i8* %i, i8* %r, i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %r.addr = alloca i8*, align 8
-  %i.addr = alloca i8*, align 8
-  %vector.addr = alloca i8*, align 8
-  %r_ = alloca i32*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  store i8* %r, i8** %r.addr, align 8
-  store i8* %i, i8** %i.addr, align 8
-  store i8* %vector, i8** %vector.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r_, align 8
-  %1 = load i32*, i32** %r_, align 8
-  store i32 0, i32* %1, align 4
-  %2 = load i8*, i8** %vector.addr, align 8
-  %3 = bitcast i8* %2 to i8**
-  %4 = load i8*, i8** %i.addr, align 8
+; Function Attrs: nounwind uwtable
+define i8* @mag_realloc(i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %m = alloca i8**, align 8
+  store i8* %len, i8** %1, align 8
+  %2 = load i8**, i8*** %m, align 8
+  %3 = bitcast i8** %2 to i8*
+  %4 = load i8*, i8** %1, align 8
   %5 = bitcast i8* %4 to i32*
   %6 = load i32, i32* %5, align 4
-  %idxprom = sext i32 %6 to i64
-  %arrayidx = getelementptr inbounds i8*, i8** %3, i64 %idxprom
-  %7 = load i8*, i8** %arrayidx, align 8
-  %8 = load i8*, i8** %r.addr, align 8
-  %9 = load i8*, i8** %len.addr, align 8
-  %10 = bitcast i8* %9 to i32*
-  %11 = load i32, i32* %10, align 4
-  %conv = sext i32 %11 to i64
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %7, i8* %8, i64 %conv, i32 1, i1 false)
-  %12 = load i32*, i32** %r_, align 8
-  %13 = bitcast i32* %12 to i8*
-  ret i8* %13
+  %7 = sext i32 %6 to i64
+  %8 = mul i64 %7, 8
+  %9 = call i8* @realloc(i8* %3, i64 %8) #7
+  %10 = bitcast i8* %9 to i8**
+  store i8** %10, i8*** %m, align 8
+  %11 = load i8**, i8*** %m, align 8
+  %12 = bitcast i8** %11 to i8*
+  ret i8* %12
+}
+
+; Function Attrs: nounwind
+declare i8* @realloc(i8*, i64) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @_aloc(i8* %vector, i8* %i, i8* %space) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %vector, i8** %1, align 8
+  store i8* %i, i8** %2, align 8
+  store i8* %space, i8** %3, align 8
+  %4 = call noalias i8* @malloc(i64 4) #7
+  %5 = bitcast i8* %4 to i32*
+  store i32* %5, i32** %r, align 8
+  %6 = load i32*, i32** %r, align 8
+  store i32 0, i32* %6, align 4
+  %7 = load i8*, i8** %3, align 8
+  %8 = bitcast i8* %7 to i32*
+  %9 = load i32, i32* %8, align 4
+  %10 = sext i32 %9 to i64
+  %11 = call noalias i8* @malloc(i64 %10) #7
+  %12 = load i8*, i8** %2, align 8
+  %13 = bitcast i8* %12 to i32*
+  %14 = load i32, i32* %13, align 4
+  %15 = sext i32 %14 to i64
+  %16 = load i8*, i8** %1, align 8
+  %17 = bitcast i8* %16 to i8**
+  %18 = getelementptr inbounds i8*, i8** %17, i64 %15
+  store i8* %11, i8** %18, align 8
+  %19 = load i32*, i32** %r, align 8
+  %20 = bitcast i32* %19 to i8*
+  ret i8* %20
+}
+
+; Function Attrs: nounwind uwtable
+define i8* @_set(i8* %vector, i8* %i, i8* %r, i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
+  %4 = alloca i8*, align 8
+  %r_ = alloca i32*, align 8
+  store i8* %vector, i8** %1, align 8
+  store i8* %i, i8** %2, align 8
+  store i8* %r, i8** %3, align 8
+  store i8* %len, i8** %4, align 8
+  %5 = call noalias i8* @malloc(i64 4) #7
+  %6 = bitcast i8* %5 to i32*
+  store i32* %6, i32** %r_, align 8
+  %7 = load i32*, i32** %r_, align 8
+  store i32 0, i32* %7, align 4
+  %8 = load i8*, i8** %2, align 8
+  %9 = bitcast i8* %8 to i32*
+  %10 = load i32, i32* %9, align 4
+  %11 = sext i32 %10 to i64
+  %12 = load i8*, i8** %1, align 8
+  %13 = bitcast i8* %12 to i8**
+  %14 = getelementptr inbounds i8*, i8** %13, i64 %11
+  %15 = load i8*, i8** %14, align 8
+  %16 = load i8*, i8** %3, align 8
+  %17 = load i8*, i8** %4, align 8
+  %18 = bitcast i8* %17 to i32*
+  %19 = load i32, i32* %18, align 4
+  %20 = sext i32 %19 to i64
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %15, i8* %16, i64 %20, i32 1, i1 false)
+  %21 = load i32*, i32** %r_, align 8
+  %22 = bitcast i32* %21 to i8*
+  ret i8* %22
 }
 
 ; Function Attrs: argmemonly nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i32, i1) #4
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #4
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_put(i8* %vector, i8* %i, i8* %r) #0 {
-entry:
-  %r.addr = alloca i8*, align 8
-  %i.addr = alloca i8*, align 8
-  %vector.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
   %r_ = alloca i32*, align 8
-  store i8* %r, i8** %r.addr, align 8
-  store i8* %i, i8** %i.addr, align 8
-  store i8* %vector, i8** %vector.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r_, align 8
-  %1 = load i32*, i32** %r_, align 8
-  store i32 0, i32* %1, align 4
-  %2 = load i8*, i8** %r.addr, align 8
-  %3 = load i8*, i8** %vector.addr, align 8
-  %4 = bitcast i8* %3 to i8**
-  %5 = load i8*, i8** %i.addr, align 8
-  %6 = bitcast i8* %5 to i32*
-  %7 = load i32, i32* %6, align 4
-  %idxprom = sext i32 %7 to i64
-  %arrayidx = getelementptr inbounds i8*, i8** %4, i64 %idxprom
-  store i8* %2, i8** %arrayidx, align 8
-  %8 = load i32*, i32** %r_, align 8
-  %9 = bitcast i32* %8 to i8*
-  ret i8* %9
+  store i8* %vector, i8** %1, align 8
+  store i8* %i, i8** %2, align 8
+  store i8* %r, i8** %3, align 8
+  %4 = call noalias i8* @malloc(i64 4) #7
+  %5 = bitcast i8* %4 to i32*
+  store i32* %5, i32** %r_, align 8
+  %6 = load i32*, i32** %r_, align 8
+  store i32 0, i32* %6, align 4
+  %7 = load i8*, i8** %3, align 8
+  %8 = load i8*, i8** %2, align 8
+  %9 = bitcast i8* %8 to i32*
+  %10 = load i32, i32* %9, align 4
+  %11 = sext i32 %10 to i64
+  %12 = load i8*, i8** %1, align 8
+  %13 = bitcast i8* %12 to i8**
+  %14 = getelementptr inbounds i8*, i8** %13, i64 %11
+  store i8* %7, i8** %14, align 8
+  %15 = load i32*, i32** %r_, align 8
+  %16 = bitcast i32* %15 to i8*
+  ret i8* %16
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @_get(i8* %vector, i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
-  %vector.addr = alloca i8*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  store i8* %vector, i8** %vector.addr, align 8
-  %0 = load i8*, i8** %vector.addr, align 8
-  %1 = bitcast i8* %0 to i8**
-  %2 = load i8*, i8** %i.addr, align 8
-  %3 = bitcast i8* %2 to i32*
-  %4 = load i32, i32* %3, align 4
-  %idxprom = sext i32 %4 to i64
-  %arrayidx = getelementptr inbounds i8*, i8** %1, i64 %idxprom
-  %5 = load i8*, i8** %arrayidx, align 8
-  ret i8* %5
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  store i8* %vector, i8** %1, align 8
+  store i8* %i, i8** %2, align 8
+  %3 = load i8*, i8** %2, align 8
+  %4 = bitcast i8* %3 to i32*
+  %5 = load i32, i32* %4, align 4
+  %6 = sext i32 %5 to i64
+  %7 = load i8*, i8** %1, align 8
+  %8 = bitcast i8* %7 to i8**
+  %9 = getelementptr inbounds i8*, i8** %8, i64 %6
+  %10 = load i8*, i8** %9, align 8
+  ret i8* %10
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @new_int() #0 {
-entry:
   %p_ = alloca i32*, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %p_, align 8
-  %1 = load i32*, i32** %p_, align 8
-  store i32 0, i32* %1, align 4
-  %2 = load i32*, i32** %p_, align 8
-  %3 = bitcast i32* %2 to i8*
-  ret i8* %3
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @new_bool() #0 {
-entry:
-  %p_ = alloca i8*, align 8
-  %call = call noalias i8* @malloc(i64 1)
-  store i8* %call, i8** %p_, align 8
-  %0 = load i8*, i8** %p_, align 8
-  store i8 1, i8* %0, align 1
-  %1 = load i8*, i8** %p_, align 8
-  ret i8* %1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @new_str(i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %p_ = alloca i32*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  %0 = load i8*, i8** %len.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %mul = mul i64 1, %conv
-  %call = call noalias i8* @malloc(i64 %mul)
-  %3 = bitcast i8* %call to i32*
-  store i32* %3, i32** %p_, align 8
+  %1 = call noalias i8* @malloc(i64 4) #7
+  %2 = bitcast i8* %1 to i32*
+  store i32* %2, i32** %p_, align 8
+  %3 = load i32*, i32** %p_, align 8
+  store i32 0, i32* %3, align 4
   %4 = load i32*, i32** %p_, align 8
   %5 = bitcast i32* %4 to i8*
   ret i8* %5
 }
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @l_str(i8* %str) #0 {
-entry:
-  %str.addr = alloca i8*, align 8
-  %r = alloca i32*, align 8
-  store i8* %str, i8** %str.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %str.addr, align 8
-  %call1 = call i64 @strlen(i8* %1)
-  %conv = trunc i64 %call1 to i32
-  %2 = load i32*, i32** %r, align 8
-  store i32 %conv, i32* %2, align 4
-  %3 = load i32*, i32** %r, align 8
-  %4 = bitcast i32* %3 to i8*
-  ret i8* %4
+; Function Attrs: nounwind uwtable
+define i8* @new_bool() #0 {
+  %p_ = alloca i8*, align 8
+  %1 = call noalias i8* @malloc(i64 1) #7
+  store i8* %1, i8** %p_, align 8
+  %2 = load i8*, i8** %p_, align 8
+  store i8 1, i8* %2, align 1
+  %3 = load i8*, i8** %p_, align 8
+  ret i8* %3
 }
 
-declare i64 @strlen(i8*) #1
+; Function Attrs: nounwind uwtable
+define i8* @new_str(i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %p_ = alloca i32*, align 8
+  store i8* %len, i8** %1, align 8
+  %2 = load i8*, i8** %1, align 8
+  %3 = bitcast i8* %2 to i32*
+  %4 = load i32, i32* %3, align 4
+  %5 = sext i32 %4 to i64
+  %6 = mul i64 1, %5
+  %7 = call noalias i8* @malloc(i64 %6) #7
+  %8 = bitcast i8* %7 to i32*
+  store i32* %8, i32** %p_, align 8
+  %9 = load i32*, i32** %p_, align 8
+  %10 = bitcast i32* %9 to i8*
+  ret i8* %10
+}
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
+define i8* @l_str(i8* %str) #0 {
+  %1 = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  store i8* %str, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = call i64 @strlen(i8* %4) #9
+  %6 = trunc i64 %5 to i32
+  %7 = load i32*, i32** %r, align 8
+  store i32 %6, i32* %7, align 4
+  %8 = load i32*, i32** %r, align 8
+  %9 = bitcast i32* %8 to i8*
+  ret i8* %9
+}
+
+; Function Attrs: nounwind readonly
+declare i64 @strlen(i8*) #5
+
+; Function Attrs: nounwind uwtable
 define i8* @f_str(i8* %str, i8* %str_, i8* %r) #0 {
-entry:
-  %retval = alloca i8*, align 8
-  %r.addr = alloca i8*, align 8
-  %str_.addr = alloca i8*, align 8
-  %str.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
+  %4 = alloca i8*, align 8
   %t = alloca i8, align 1
   %y = alloca i32, align 4
   %s = alloca i32, align 4
   %return_ = alloca i8*, align 8
   %i = alloca i32, align 4
-  store i8* %r, i8** %r.addr, align 8
-  store i8* %str_, i8** %str_.addr, align 8
-  store i8* %str, i8** %str.addr, align 8
+  store i8* %str, i8** %2, align 8
+  store i8* %str_, i8** %3, align 8
+  store i8* %r, i8** %4, align 8
   store i32 0, i32* %y, align 4
   store i32 0, i32* %s, align 4
-  %call = call noalias i8* @malloc(i64 4)
-  store i8* %call, i8** %return_, align 8
-  %0 = load i8*, i8** %return_, align 8
-  %1 = bitcast i8* %0 to i32*
-  store i32 0, i32* %1, align 4
+  %5 = call noalias i8* @malloc(i64 4) #7
+  store i8* %5, i8** %return_, align 8
+  %6 = load i8*, i8** %return_, align 8
+  %7 = bitcast i8* %6 to i32*
+  store i32 0, i32* %7, align 4
   store i32 0, i32* %i, align 4
-  br label %for.cond
+  br label %8
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %2 = load i32, i32* %i, align 4
-  %conv = sext i32 %2 to i64
-  %3 = load i8*, i8** %str.addr, align 8
-  %call1 = call i64 @strlen(i8* %3)
-  %cmp = icmp ule i64 %conv, %call1
-  br i1 %cmp, label %for.body, label %for.end
+; <label>:8                                       ; preds = %75, %0
+  %9 = load i32, i32* %i, align 4
+  %10 = sext i32 %9 to i64
+  %11 = load i8*, i8** %2, align 8
+  %12 = call i64 @strlen(i8* %11) #9
+  %13 = icmp ule i64 %10, %12
+  br i1 %13, label %14, label %78
 
-for.body:                                         ; preds = %for.cond
-  %4 = load i8, i8* %t, align 1
-  %tobool = trunc i8 %4 to i1
-  br i1 %tobool, label %land.lhs.true, label %if.else
+; <label>:14                                      ; preds = %8
+  %15 = load i8, i8* %t, align 1
+  %16 = trunc i8 %15 to i1
+  br i1 %16, label %17, label %34
 
-land.lhs.true:                                    ; preds = %for.body
-  %5 = load i8*, i8** %str.addr, align 8
-  %6 = load i32, i32* %i, align 4
-  %idxprom = sext i32 %6 to i64
-  %arrayidx = getelementptr inbounds i8, i8* %5, i64 %idxprom
-  %7 = load i8, i8* %arrayidx, align 1
-  %conv4 = sext i8 %7 to i32
-  %8 = load i8*, i8** %str_.addr, align 8
-  %9 = load i32, i32* %y, align 4
-  %idxprom5 = sext i32 %9 to i64
-  %arrayidx6 = getelementptr inbounds i8, i8* %8, i64 %idxprom5
-  %10 = load i8, i8* %arrayidx6, align 1
-  %conv7 = sext i8 %10 to i32
-  %cmp8 = icmp eq i32 %conv4, %conv7
-  br i1 %cmp8, label %if.then, label %if.else
+; <label>:17                                      ; preds = %14
+  %18 = load i32, i32* %i, align 4
+  %19 = sext i32 %18 to i64
+  %20 = load i8*, i8** %2, align 8
+  %21 = getelementptr inbounds i8, i8* %20, i64 %19
+  %22 = load i8, i8* %21, align 1
+  %23 = sext i8 %22 to i32
+  %24 = load i32, i32* %y, align 4
+  %25 = sext i32 %24 to i64
+  %26 = load i8*, i8** %3, align 8
+  %27 = getelementptr inbounds i8, i8* %26, i64 %25
+  %28 = load i8, i8* %27, align 1
+  %29 = sext i8 %28 to i32
+  %30 = icmp eq i32 %23, %29
+  br i1 %30, label %31, label %34
 
-if.then:                                          ; preds = %land.lhs.true
+; <label>:31                                      ; preds = %17
   store i8 1, i8* %t, align 1
-  %11 = load i32, i32* %y, align 4
-  %inc = add nsw i32 %11, 1
-  store i32 %inc, i32* %y, align 4
-  br label %if.end
+  %32 = load i32, i32* %y, align 4
+  %33 = add nsw i32 %32, 1
+  store i32 %33, i32* %y, align 4
+  br label %35
 
-if.else:                                          ; preds = %land.lhs.true, %for.body
+; <label>:34                                      ; preds = %17, %14
   store i8 0, i8* %t, align 1
   store i32 0, i32* %y, align 4
-  br label %if.end
+  br label %35
 
-if.end:                                           ; preds = %if.else, %if.then
-  %12 = load i8, i8* %t, align 1
-  %tobool10 = trunc i8 %12 to i1
-  br i1 %tobool10, label %if.end20, label %land.lhs.true11
+; <label>:35                                      ; preds = %34, %31
+  %36 = load i8, i8* %t, align 1
+  %37 = trunc i8 %36 to i1
+  br i1 %37, label %53, label %38
 
-land.lhs.true11:                                  ; preds = %if.end
-  %13 = load i8*, i8** %str.addr, align 8
-  %14 = load i32, i32* %i, align 4
-  %idxprom12 = sext i32 %14 to i64
-  %arrayidx13 = getelementptr inbounds i8, i8* %13, i64 %idxprom12
-  %15 = load i8, i8* %arrayidx13, align 1
-  %conv14 = sext i8 %15 to i32
-  %16 = load i8*, i8** %str_.addr, align 8
-  %arrayidx15 = getelementptr inbounds i8, i8* %16, i64 0
-  %17 = load i8, i8* %arrayidx15, align 1
-  %conv16 = sext i8 %17 to i32
-  %cmp17 = icmp eq i32 %conv14, %conv16
-  br i1 %cmp17, label %if.then19, label %if.end20
+; <label>:38                                      ; preds = %35
+  %39 = load i32, i32* %i, align 4
+  %40 = sext i32 %39 to i64
+  %41 = load i8*, i8** %2, align 8
+  %42 = getelementptr inbounds i8, i8* %41, i64 %40
+  %43 = load i8, i8* %42, align 1
+  %44 = sext i8 %43 to i32
+  %45 = load i8*, i8** %3, align 8
+  %46 = getelementptr inbounds i8, i8* %45, i64 0
+  %47 = load i8, i8* %46, align 1
+  %48 = sext i8 %47 to i32
+  %49 = icmp eq i32 %44, %48
+  br i1 %49, label %50, label %53
 
-if.then19:                                        ; preds = %land.lhs.true11
+; <label>:50                                      ; preds = %38
   store i8 1, i8* %t, align 1
-  %18 = load i32, i32* %y, align 4
-  %add = add nsw i32 %18, 1
-  store i32 %add, i32* %y, align 4
-  br label %if.end20
+  %51 = load i32, i32* %y, align 4
+  %52 = add nsw i32 %51, 1
+  store i32 %52, i32* %y, align 4
+  br label %53
 
-if.end20:                                         ; preds = %if.then19, %land.lhs.true11, %if.end
-  %19 = load i32, i32* %y, align 4
-  %conv21 = sext i32 %19 to i64
-  %20 = load i8*, i8** %str_.addr, align 8
-  %call22 = call i64 @strlen(i8* %20)
-  %cmp23 = icmp eq i64 %conv21, %call22
-  br i1 %cmp23, label %if.then25, label %if.end32
+; <label>:53                                      ; preds = %50, %38, %35
+  %54 = load i32, i32* %y, align 4
+  %55 = sext i32 %54 to i64
+  %56 = load i8*, i8** %3, align 8
+  %57 = call i64 @strlen(i8* %56) #9
+  %58 = icmp eq i64 %55, %57
+  br i1 %58, label %59, label %74
 
-if.then25:                                        ; preds = %if.end20
-  %21 = load i32, i32* %s, align 4
-  %22 = load i8*, i8** %r.addr, align 8
-  %23 = bitcast i8* %22 to i32*
-  %24 = load i32, i32* %23, align 4
-  %cmp26 = icmp sge i32 %21, %24
-  br i1 %cmp26, label %if.then28, label %if.end30
+; <label>:59                                      ; preds = %53
+  %60 = load i32, i32* %s, align 4
+  %61 = load i8*, i8** %4, align 8
+  %62 = bitcast i8* %61 to i32*
+  %63 = load i32, i32* %62, align 4
+  %64 = icmp sge i32 %60, %63
+  br i1 %64, label %65, label %71
 
-if.then28:                                        ; preds = %if.then25
-  %25 = load i32, i32* %i, align 4
-  %add29 = add nsw i32 %25, 1
-  %26 = load i8*, i8** %return_, align 8
-  %27 = bitcast i8* %26 to i32*
-  store i32 %add29, i32* %27, align 4
-  %28 = load i8*, i8** %return_, align 8
-  store i8* %28, i8** %retval, align 8
-  br label %return
+; <label>:65                                      ; preds = %59
+  %66 = load i32, i32* %i, align 4
+  %67 = add nsw i32 %66, 1
+  %68 = load i8*, i8** %return_, align 8
+  %69 = bitcast i8* %68 to i32*
+  store i32 %67, i32* %69, align 4
+  %70 = load i8*, i8** %return_, align 8
+  store i8* %70, i8** %1, align 8
+  br label %80
 
-if.end30:                                         ; preds = %if.then25
-  %29 = load i32, i32* %s, align 4
-  %inc31 = add nsw i32 %29, 1
-  store i32 %inc31, i32* %s, align 4
+; <label>:71                                      ; preds = %59
+  %72 = load i32, i32* %s, align 4
+  %73 = add nsw i32 %72, 1
+  store i32 %73, i32* %s, align 4
   store i8 0, i8* %t, align 1
   store i32 0, i32* %y, align 4
-  br label %if.end32
+  br label %74
 
-if.end32:                                         ; preds = %if.end30, %if.end20
-  br label %for.inc
+; <label>:74                                      ; preds = %71, %53
+  br label %75
 
-for.inc:                                          ; preds = %if.end32
-  %30 = load i32, i32* %i, align 4
-  %inc33 = add nsw i32 %30, 1
-  store i32 %inc33, i32* %i, align 4
-  br label %for.cond
+; <label>:75                                      ; preds = %74
+  %76 = load i32, i32* %i, align 4
+  %77 = add nsw i32 %76, 1
+  store i32 %77, i32* %i, align 4
+  br label %8
 
-for.end:                                          ; preds = %for.cond
-  %31 = load i8*, i8** %return_, align 8
-  store i8* %31, i8** %retval, align 8
-  br label %return
+; <label>:78                                      ; preds = %8
+  %79 = load i8*, i8** %return_, align 8
+  store i8* %79, i8** %1, align 8
+  br label %80
 
-return:                                           ; preds = %for.end, %if.then28
-  %32 = load i8*, i8** %retval, align 8
-  ret i8* %32
+; <label>:80                                      ; preds = %78, %65
+  %81 = load i8*, i8** %1, align 8
+  ret i8* %81
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @e_str(i8* %_, i8* %__) #0 {
-entry:
-  %__.addr = alloca i8*, align 8
-  %_.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
   %r_ = alloca i8*, align 8
-  store i8* %__, i8** %__.addr, align 8
-  store i8* %_, i8** %_.addr, align 8
-  %call = call noalias i8* @malloc(i64 1)
-  store i8* %call, i8** %r_, align 8
-  %0 = load i8*, i8** %__.addr, align 8
-  %1 = load i8*, i8** %_.addr, align 8
-  %call1 = call i32 @strcmp(i8* %1, i8* %0)
-  %cmp = icmp eq i32 %call1, 0
-  %cond = select i1 %cmp, i32 1, i32 0
-  %tobool = icmp ne i32 %cond, 0
-  %2 = load i8*, i8** %r_, align 8
-  %frombool = zext i1 %tobool to i8
-  store i8 %frombool, i8* %2, align 1
-  %3 = load i8*, i8** %r_, align 8
-  ret i8* %3
+  store i8* %_, i8** %1, align 8
+  store i8* %__, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 1) #7
+  store i8* %3, i8** %r_, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = load i8*, i8** %2, align 8
+  %6 = call i32 @strcmp(i8* %4, i8* %5) #9
+  %7 = icmp eq i32 %6, 0
+  %8 = select i1 %7, i32 1, i32 0
+  %9 = icmp ne i32 %8, 0
+  %10 = load i8*, i8** %r_, align 8
+  %11 = zext i1 %9 to i8
+  store i8 %11, i8* %10, align 1
+  %12 = load i8*, i8** %r_, align 8
+  ret i8* %12
 }
 
-declare i32 @strcmp(i8*, i8*) #1
+; Function Attrs: nounwind readonly
+declare i32 @strcmp(i8*, i8*) #5
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @to_c(i8* %s) #0 {
-entry:
-  %s.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %r = alloca i32*, align 8
-  store i8* %s, i8** %s.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i8*, i8** %s.addr, align 8
-  %arrayidx = getelementptr inbounds i8, i8* %1, i64 0
-  %2 = load i8, i8* %arrayidx, align 1
-  %conv = sext i8 %2 to i32
-  %3 = load i32*, i32** %r, align 8
-  store i32 %conv, i32* %3, align 4
-  %4 = load i32*, i32** %r, align 8
-  %5 = bitcast i32* %4 to i8*
-  ret i8* %5
+  store i8* %s, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = getelementptr inbounds i8, i8* %4, i64 0
+  %6 = load i8, i8* %5, align 1
+  %7 = sext i8 %6 to i32
+  %8 = load i32*, i32** %r, align 8
+  store i32 %7, i32* %8, align 4
+  %9 = load i32*, i32** %r, align 8
+  %10 = bitcast i32* %9 to i8*
+  ret i8* %10
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @to_ch(i8* %_) #0 {
-entry:
-  %_.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %r = alloca i8*, align 8
-  store i8* %_, i8** %_.addr, align 8
-  %call = call noalias i8* @malloc(i64 2)
-  store i8* %call, i8** %r, align 8
-  %0 = load i8*, i8** %_.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = trunc i32 %2 to i8
-  %3 = load i8*, i8** %r, align 8
-  %arrayidx = getelementptr inbounds i8, i8* %3, i64 0
-  store i8 %conv, i8* %arrayidx, align 1
-  %4 = load i8*, i8** %r, align 8
-  %arrayidx1 = getelementptr inbounds i8, i8* %4, i64 1
-  store i8 48, i8* %arrayidx1, align 1
-  %5 = load i8*, i8** %r, align 8
-  ret i8* %5
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @g_str(i8* %str) #0 {
-entry:
-  %str.addr = alloca i8*, align 8
-  %___ = alloca i32*, align 8
-  store i8* %str, i8** %str.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %___, align 8
-  %1 = load i8*, i8** %str.addr, align 8
-  %call1 = call i64 @strlen(i8* %1)
-  %conv = trunc i64 %call1 to i32
-  %2 = load i32*, i32** %___, align 8
-  store i32 %conv, i32* %2, align 4
-  %3 = load i32*, i32** %___, align 8
-  %4 = bitcast i32* %3 to i8*
-  ret i8* %4
-}
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @ad_str(i8* %s, i8* %y) #0 {
-entry:
-  %y.addr = alloca i8*, align 8
-  %s.addr = alloca i8*, align 8
-  store i8* %y, i8** %y.addr, align 8
-  store i8* %s, i8** %s.addr, align 8
-  %0 = load i8*, i8** %y.addr, align 8
-  %1 = load i8*, i8** %s.addr, align 8
-  %call = call i8* @strcat(i8* %1, i8* %0)
-  %2 = load i8*, i8** %s.addr, align 8
-  ret i8* %2
-}
-
-declare i8* @strcat(i8*, i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @p_str(i8* %s, i8* %y) #0 {
-entry:
-  %y.addr = alloca i8*, align 8
-  %s.addr = alloca i8*, align 8
-  store i8* %y, i8** %y.addr, align 8
-  store i8* %s, i8** %s.addr, align 8
-  %0 = load i8*, i8** %y.addr, align 8
-  %1 = load i8*, i8** %s.addr, align 8
-  %call = call i8* @strcpy(i8* %1, i8* %0)
-  %2 = load i8*, i8** %s.addr, align 8
-  ret i8* %2
-}
-
-declare i8* @strcpy(i8*, i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @em_str(i8* %s, i8* %y) #0 {
-entry:
-  %y.addr = alloca i8*, align 8
-  %s.addr = alloca i8*, align 8
-  %_ = alloca i8*, align 8
-  store i8* %y, i8** %y.addr, align 8
-  store i8* %s, i8** %s.addr, align 8
-  %call = call noalias i8* @malloc(i64 1)
-  store i8* %call, i8** %_, align 8
-  %0 = load i8*, i8** %_, align 8
-  %arrayidx = getelementptr inbounds i8, i8* %0, i64 0
-  store i8 0, i8* %arrayidx, align 1
-  %1 = load i8*, i8** %_, align 8
-  %2 = load i8*, i8** %s.addr, align 8
-  %call1 = call i8* @strcpy(i8* %2, i8* %1)
-  %3 = load i8*, i8** %_, align 8
-  call void @free(i8* %3)
-  %4 = load i8*, i8** %s.addr, align 8
-  ret i8* %4
-}
-
-declare void @free(i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @s_str(i8* %t, i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %t.addr = alloca i8*, align 8
-  %buffer = alloca i8*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  store i8* %t, i8** %t.addr, align 8
-  %0 = load i8*, i8** %len.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %mul = mul i64 1, %conv
-  %call = call noalias i8* @malloc(i64 %mul)
-  store i8* %call, i8** %buffer, align 8
-  %3 = load i8*, i8** %t.addr, align 8
+  store i8* %_, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 2) #7
+  store i8* %2, i8** %r, align 8
+  %3 = load i8*, i8** %1, align 8
   %4 = bitcast i8* %3 to i32*
   %5 = load i32, i32* %4, align 4
-  %6 = load i8*, i8** %buffer, align 8
-  %call1 = call i32 (i8*, i8*, ...) @sprintf(i8* %6, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @"\01??_C@_02DPKJAMEF@?$CFd?$AA@", i32 0, i32 0), i32 %5)
-  %7 = load i8*, i8** %buffer, align 8
-  ret i8* %7
+  %6 = trunc i32 %5 to i8
+  %7 = load i8*, i8** %r, align 8
+  %8 = getelementptr inbounds i8, i8* %7, i64 0
+  store i8 %6, i8* %8, align 1
+  %9 = load i8*, i8** %r, align 8
+  %10 = getelementptr inbounds i8, i8* %9, i64 1
+  store i8 48, i8* %10, align 1
+  %11 = load i8*, i8** %r, align 8
+  ret i8* %11
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
+define i8* @g_str(i8* %str) #0 {
+  %1 = alloca i8*, align 8
+  %___ = alloca i32*, align 8
+  store i8* %str, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %___, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = call i64 @strlen(i8* %4) #9
+  %6 = trunc i64 %5 to i32
+  %7 = load i32*, i32** %___, align 8
+  store i32 %6, i32* %7, align 4
+  %8 = load i32*, i32** %___, align 8
+  %9 = bitcast i32* %8 to i8*
+  ret i8* %9
+}
+
+; Function Attrs: nounwind uwtable
+define i8* @ad_str(i8* %s, i8* %y) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  store i8* %s, i8** %1, align 8
+  store i8* %y, i8** %2, align 8
+  %3 = load i8*, i8** %1, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call i8* @strcat(i8* %3, i8* %4) #7
+  %6 = load i8*, i8** %1, align 8
+  ret i8* %6
+}
+
+; Function Attrs: nounwind
+declare i8* @strcat(i8*, i8*) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @p_str(i8* %s, i8* %y) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  store i8* %s, i8** %1, align 8
+  store i8* %y, i8** %2, align 8
+  %3 = load i8*, i8** %1, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call i8* @strcpy(i8* %3, i8* %4) #7
+  %6 = load i8*, i8** %1, align 8
+  ret i8* %6
+}
+
+; Function Attrs: nounwind
+declare i8* @strcpy(i8*, i8*) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @em_str(i8* %s, i8* %y) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %_ = alloca i8*, align 8
+  store i8* %s, i8** %1, align 8
+  store i8* %y, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 1) #7
+  store i8* %3, i8** %_, align 8
+  %4 = load i8*, i8** %_, align 8
+  %5 = getelementptr inbounds i8, i8* %4, i64 0
+  store i8 0, i8* %5, align 1
+  %6 = load i8*, i8** %1, align 8
+  %7 = load i8*, i8** %_, align 8
+  %8 = call i8* @strcpy(i8* %6, i8* %7) #7
+  %9 = load i8*, i8** %_, align 8
+  call void @free(i8* %9) #7
+  %10 = load i8*, i8** %1, align 8
+  ret i8* %10
+}
+
+; Function Attrs: nounwind
+declare void @free(i8*) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @s_str(i8* %t, i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %buffer = alloca i8*, align 8
+  store i8* %t, i8** %1, align 8
+  store i8* %len, i8** %2, align 8
+  %3 = load i8*, i8** %2, align 8
+  %4 = bitcast i8* %3 to i32*
+  %5 = load i32, i32* %4, align 4
+  %6 = sext i32 %5 to i64
+  %7 = mul i64 1, %6
+  %8 = call noalias i8* @malloc(i64 %7) #7
+  store i8* %8, i8** %buffer, align 8
+  %9 = load i8*, i8** %buffer, align 8
+  %10 = load i8*, i8** %1, align 8
+  %11 = bitcast i8* %10 to i32*
+  %12 = load i32, i32* %11, align 4
+  %13 = call i32 (i8*, i8*, ...) @sprintf(i8* %9, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.3, i32 0, i32 0), i32 %12) #7
+  %14 = load i8*, i8** %buffer, align 8
+  ret i8* %14
+}
+
+; Function Attrs: nounwind
+declare i32 @sprintf(i8*, i8*, ...) #1
+
+; Function Attrs: nounwind uwtable
 define i8* @t_str(i8* %s, i8* %y, i8* %_r) #0 {
-entry:
-  %_r.addr = alloca i8*, align 8
-  %y.addr = alloca i8*, align 8
-  %s.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
   %buf__ = alloca i8*, align 8
   %i = alloca i32, align 4
   %r_ = alloca i8**, align 8
-  store i8* %_r, i8** %_r.addr, align 8
-  store i8* %y, i8** %y.addr, align 8
-  store i8* %s, i8** %s.addr, align 8
+  store i8* %s, i8** %1, align 8
+  store i8* %y, i8** %2, align 8
+  store i8* %_r, i8** %3, align 8
   store i32 0, i32* %i, align 4
-  %0 = load i32, i32* %i, align 4
-  %conv = sext i32 %0 to i64
-  %call = call noalias i8* @malloc(i64 %conv)
-  %1 = bitcast i8* %call to i8**
-  store i8** %1, i8*** %r_, align 8
-  %2 = load i8*, i8** %y.addr, align 8
-  %3 = load i8*, i8** %s.addr, align 8
-  %call1 = call i8* @strtok(i8* %3, i8* %2)
-  store i8* %call1, i8** %buf__, align 8
+  %4 = load i32, i32* %i, align 4
+  %5 = sext i32 %4 to i64
+  %6 = call noalias i8* @malloc(i64 %5) #7
+  %7 = bitcast i8* %6 to i8**
+  store i8** %7, i8*** %r_, align 8
+  %8 = load i8*, i8** %1, align 8
+  %9 = load i8*, i8** %2, align 8
+  %10 = call i8* @strtok(i8* %8, i8* %9) #7
+  store i8* %10, i8** %buf__, align 8
   store i32 1, i32* %i, align 4
-  br label %for.cond
+  br label %11
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %4 = load i8*, i8** %buf__, align 8
-  %cmp = icmp ne i8* %4, null
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %5 = load i32, i32* %i, align 4
-  %conv3 = sext i32 %5 to i64
-  %mul = mul i64 8, %conv3
-  %6 = load i8**, i8*** %r_, align 8
-  %7 = bitcast i8** %6 to i8*
-  %call4 = call noalias i8* @realloc(i8* %7, i64 %mul)
-  %8 = bitcast i8* %call4 to i8**
-  store i8** %8, i8*** %r_, align 8
-  %9 = load i8*, i8** %buf__, align 8
-  %call5 = call i64 @strlen(i8* %9)
-  %sub = sub i64 %call5, 1
-  %call6 = call noalias i8* @malloc(i64 %sub)
-  %10 = load i8**, i8*** %r_, align 8
-  %11 = load i32, i32* %i, align 4
-  %sub7 = sub nsw i32 %11, 1
-  %idxprom = sext i32 %sub7 to i64
-  %arrayidx = getelementptr inbounds i8*, i8** %10, i64 %idxprom
-  store i8* %call6, i8** %arrayidx, align 8
+; <label>:11                                      ; preds = %44, %0
   %12 = load i8*, i8** %buf__, align 8
-  %call8 = call i64 @strlen(i8* %12)
-  %add = add i64 %call8, 1
-  %13 = load i8*, i8** %buf__, align 8
-  %14 = load i8**, i8*** %r_, align 8
-  %15 = load i32, i32* %i, align 4
-  %sub9 = sub nsw i32 %15, 1
-  %idxprom10 = sext i32 %sub9 to i64
-  %arrayidx11 = getelementptr inbounds i8*, i8** %14, i64 %idxprom10
-  %16 = load i8*, i8** %arrayidx11, align 8
-  %call12 = call i8* @strncpy(i8* %16, i8* %13, i64 %add)
-  %17 = load i8*, i8** %y.addr, align 8
-  %call13 = call i8* @strtok(i8* null, i8* %17)
-  store i8* %call13, i8** %buf__, align 8
-  br label %for.inc
+  %13 = icmp ne i8* %12, null
+  br i1 %13, label %14, label %47
 
-for.inc:                                          ; preds = %for.body
-  %18 = load i32, i32* %i, align 4
-  %inc = add nsw i32 %18, 1
-  store i32 %inc, i32* %i, align 4
-  br label %for.cond
+; <label>:14                                      ; preds = %11
+  %15 = load i8**, i8*** %r_, align 8
+  %16 = bitcast i8** %15 to i8*
+  %17 = load i32, i32* %i, align 4
+  %18 = sext i32 %17 to i64
+  %19 = mul i64 8, %18
+  %20 = call i8* @realloc(i8* %16, i64 %19) #7
+  %21 = bitcast i8* %20 to i8**
+  store i8** %21, i8*** %r_, align 8
+  %22 = load i8*, i8** %buf__, align 8
+  %23 = call i64 @strlen(i8* %22) #9
+  %24 = sub i64 %23, 1
+  %25 = call noalias i8* @malloc(i64 %24) #7
+  %26 = load i32, i32* %i, align 4
+  %27 = sub nsw i32 %26, 1
+  %28 = sext i32 %27 to i64
+  %29 = load i8**, i8*** %r_, align 8
+  %30 = getelementptr inbounds i8*, i8** %29, i64 %28
+  store i8* %25, i8** %30, align 8
+  %31 = load i32, i32* %i, align 4
+  %32 = sub nsw i32 %31, 1
+  %33 = sext i32 %32 to i64
+  %34 = load i8**, i8*** %r_, align 8
+  %35 = getelementptr inbounds i8*, i8** %34, i64 %33
+  %36 = load i8*, i8** %35, align 8
+  %37 = load i8*, i8** %buf__, align 8
+  %38 = load i8*, i8** %buf__, align 8
+  %39 = call i64 @strlen(i8* %38) #9
+  %40 = add i64 %39, 1
+  %41 = call i8* @strncpy(i8* %36, i8* %37, i64 %40) #7
+  %42 = load i8*, i8** %2, align 8
+  %43 = call i8* @strtok(i8* null, i8* %42) #7
+  store i8* %43, i8** %buf__, align 8
+  br label %44
 
-for.end:                                          ; preds = %for.cond
-  %19 = load i32, i32* %i, align 4
-  %sub14 = sub nsw i32 %19, 1
-  %20 = load i8*, i8** %_r.addr, align 8
-  %21 = bitcast i8* %20 to i32*
-  store i32 %sub14, i32* %21, align 4
-  %22 = load i8**, i8*** %r_, align 8
-  %23 = bitcast i8** %22 to i8*
-  ret i8* %23
+; <label>:44                                      ; preds = %14
+  %45 = load i32, i32* %i, align 4
+  %46 = add nsw i32 %45, 1
+  store i32 %46, i32* %i, align 4
+  br label %11
+
+; <label>:47                                      ; preds = %11
+  %48 = load i32, i32* %i, align 4
+  %49 = sub nsw i32 %48, 1
+  %50 = load i8*, i8** %3, align 8
+  %51 = bitcast i8* %50 to i32*
+  store i32 %49, i32* %51, align 4
+  %52 = load i8**, i8*** %r_, align 8
+  %53 = bitcast i8** %52 to i8*
+  ret i8* %53
 }
 
+; Function Attrs: nounwind
 declare i8* @strtok(i8*, i8*) #1
 
+; Function Attrs: nounwind
 declare i8* @strncpy(i8*, i8*, i64) #1
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @c_str(i8* %y, i8* %t, i8* %a) #0 {
-entry:
-  %a.addr = alloca i8*, align 8
-  %t.addr = alloca i8*, align 8
-  %y.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
   %i = alloca i32, align 4
   %len = alloca i32, align 4
   %str = alloca i8*, align 8
   %s = alloca i32, align 4
-  store i8* %a, i8** %a.addr, align 8
-  store i8* %t, i8** %t.addr, align 8
-  store i8* %y, i8** %y.addr, align 8
+  store i8* %y, i8** %1, align 8
+  store i8* %t, i8** %2, align 8
+  store i8* %a, i8** %3, align 8
   store i32 0, i32* %i, align 4
-  %0 = load i8*, i8** %a.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %mul = mul i64 1, %conv
-  %add = add i64 %mul, 1
-  %call = call noalias i8* @malloc(i64 %add)
-  store i8* %call, i8** %str, align 8
-  %3 = load i8*, i8** %t.addr, align 8
-  %4 = bitcast i8* %3 to i32*
-  %5 = load i32, i32* %4, align 4
-  store i32 %5, i32* %s, align 4
-  br label %for.cond
+  %4 = load i8*, i8** %3, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = sext i32 %6 to i64
+  %8 = mul i64 1, %7
+  %9 = add i64 %8, 1
+  %10 = call noalias i8* @malloc(i64 %9) #7
+  store i8* %10, i8** %str, align 8
+  %11 = load i8*, i8** %2, align 8
+  %12 = bitcast i8* %11 to i32*
+  %13 = load i32, i32* %12, align 4
+  store i32 %13, i32* %s, align 4
+  br label %14
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %6 = load i32, i32* %s, align 4
-  %7 = load i8*, i8** %t.addr, align 8
-  %8 = bitcast i8* %7 to i32*
-  %9 = load i32, i32* %8, align 4
-  %10 = load i8*, i8** %a.addr, align 8
-  %11 = bitcast i8* %10 to i32*
-  %12 = load i32, i32* %11, align 4
-  %add1 = add nsw i32 %9, %12
-  %sub = sub nsw i32 %add1, 1
-  %cmp = icmp sle i32 %6, %sub
-  br i1 %cmp, label %for.body, label %for.end
+; <label>:14                                      ; preds = %37, %0
+  %15 = load i32, i32* %s, align 4
+  %16 = load i8*, i8** %2, align 8
+  %17 = bitcast i8* %16 to i32*
+  %18 = load i32, i32* %17, align 4
+  %19 = load i8*, i8** %3, align 8
+  %20 = bitcast i8* %19 to i32*
+  %21 = load i32, i32* %20, align 4
+  %22 = add nsw i32 %18, %21
+  %23 = sub nsw i32 %22, 1
+  %24 = icmp sle i32 %15, %23
+  br i1 %24, label %25, label %40
 
-for.body:                                         ; preds = %for.cond
-  %13 = load i8*, i8** %y.addr, align 8
-  %14 = load i32, i32* %s, align 4
-  %idxprom = sext i32 %14 to i64
-  %arrayidx = getelementptr inbounds i8, i8* %13, i64 %idxprom
-  %15 = load i8, i8* %arrayidx, align 1
-  %16 = load i8*, i8** %str, align 8
-  %17 = load i32, i32* %i, align 4
-  %idxprom3 = sext i32 %17 to i64
-  %arrayidx4 = getelementptr inbounds i8, i8* %16, i64 %idxprom3
-  store i8 %15, i8* %arrayidx4, align 1
-  %18 = load i32, i32* %i, align 4
-  %inc = add nsw i32 %18, 1
-  store i32 %inc, i32* %i, align 4
-  br label %for.inc
+; <label>:25                                      ; preds = %14
+  %26 = load i32, i32* %s, align 4
+  %27 = sext i32 %26 to i64
+  %28 = load i8*, i8** %1, align 8
+  %29 = getelementptr inbounds i8, i8* %28, i64 %27
+  %30 = load i8, i8* %29, align 1
+  %31 = load i32, i32* %i, align 4
+  %32 = sext i32 %31 to i64
+  %33 = load i8*, i8** %str, align 8
+  %34 = getelementptr inbounds i8, i8* %33, i64 %32
+  store i8 %30, i8* %34, align 1
+  %35 = load i32, i32* %i, align 4
+  %36 = add nsw i32 %35, 1
+  store i32 %36, i32* %i, align 4
+  br label %37
 
-for.inc:                                          ; preds = %for.body
-  %19 = load i32, i32* %s, align 4
-  %inc5 = add nsw i32 %19, 1
-  store i32 %inc5, i32* %s, align 4
-  br label %for.cond
+; <label>:37                                      ; preds = %25
+  %38 = load i32, i32* %s, align 4
+  %39 = add nsw i32 %38, 1
+  store i32 %39, i32* %s, align 4
+  br label %14
 
-for.end:                                          ; preds = %for.cond
-  %20 = load i8*, i8** %str, align 8
-  %21 = load i32, i32* %i, align 4
-  %idxprom6 = sext i32 %21 to i64
-  %arrayidx7 = getelementptr inbounds i8, i8* %20, i64 %idxprom6
-  store i8 0, i8* %arrayidx7, align 1
-  %22 = load i8*, i8** %str, align 8
-  ret i8* %22
+; <label>:40                                      ; preds = %14
+  %41 = load i32, i32* %i, align 4
+  %42 = sext i32 %41 to i64
+  %43 = load i8*, i8** %str, align 8
+  %44 = getelementptr inbounds i8, i8* %43, i64 %42
+  store i8 0, i8* %44, align 1
+  %45 = load i8*, i8** %str, align 8
+  ret i8* %45
 }
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @ch_str(i8* %s, i8* %i) #0 {
-entry:
-  %i.addr = alloca i8*, align 8
-  %s.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
   %s_ = alloca i8*, align 8
-  store i8* %i, i8** %i.addr, align 8
-  store i8* %s, i8** %s.addr, align 8
-  %call = call noalias i8* @malloc(i64 2)
-  store i8* %call, i8** %s_, align 8
-  %0 = load i8*, i8** %i.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = trunc i32 %2 to i8
-  %3 = load i8*, i8** %s_, align 8
-  %arrayidx = getelementptr inbounds i8, i8* %3, i64 0
-  store i8 %conv, i8* %arrayidx, align 1
-  %4 = load i8*, i8** %s_, align 8
-  %arrayidx1 = getelementptr inbounds i8, i8* %4, i64 1
-  store i8 0, i8* %arrayidx1, align 1
-  %5 = load i8*, i8** %s.addr, align 8
-  %call2 = call i64 @strlen(i8* %5)
-  %add = add i64 %call2, 2
-  %6 = load i8*, i8** %s_, align 8
-  %7 = load i8*, i8** %s.addr, align 8
-  %call3 = call i8* @strncat(i8* %7, i8* %6, i64 %add)
+  store i8* %s, i8** %1, align 8
+  store i8* %i, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 2) #7
+  store i8* %3, i8** %s_, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = trunc i32 %6 to i8
   %8 = load i8*, i8** %s_, align 8
-  call void @free(i8* %8)
-  %9 = load i8*, i8** %s.addr, align 8
-  ret i8* %9
+  %9 = getelementptr inbounds i8, i8* %8, i64 0
+  store i8 %7, i8* %9, align 1
+  %10 = load i8*, i8** %s_, align 8
+  %11 = getelementptr inbounds i8, i8* %10, i64 1
+  store i8 0, i8* %11, align 1
+  %12 = load i8*, i8** %1, align 8
+  %13 = load i8*, i8** %s_, align 8
+  %14 = load i8*, i8** %1, align 8
+  %15 = call i64 @strlen(i8* %14) #9
+  %16 = add i64 %15, 2
+  %17 = call i8* @strncat(i8* %12, i8* %13, i64 %16) #7
+  %18 = load i8*, i8** %s_, align 8
+  call void @free(i8* %18) #7
+  %19 = load i8*, i8** %1, align 8
+  ret i8* %19
 }
 
+; Function Attrs: nounwind
 declare i8* @strncat(i8*, i8*, i64) #1
 
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @n_str(i8* %t, i8* %b_) #0 {
-entry:
-  %b_.addr = alloca i8*, align 8
-  %t.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
   %s = alloca i8*, align 8
-  store i8* %b_, i8** %b_.addr, align 8
-  store i8* %t, i8** %t.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  store i8* %call, i8** %s, align 8
-  %0 = load i8*, i8** %b_.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %3 = load i8*, i8** %t.addr, align 8
-  %call1 = call i32 @strtol(i8* %3, i8** null, i32 %2)
-  %4 = load i8*, i8** %s, align 8
-  %5 = bitcast i8* %4 to i32*
-  store i32 %call1, i32* %5, align 4
-  %6 = load i8*, i8** %s, align 8
-  %cmp = icmp eq i8* %6, null
-  br i1 %cmp, label %if.then, label %if.end
+  store i8* %t, i8** %1, align 8
+  store i8* %b_, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 4) #7
+  store i8* %3, i8** %s, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = load i8*, i8** %2, align 8
+  %6 = bitcast i8* %5 to i32*
+  %7 = load i32, i32* %6, align 4
+  %8 = call i64 @strtol(i8* %4, i8** null, i32 %7) #7
+  %9 = trunc i64 %8 to i32
+  %10 = load i8*, i8** %s, align 8
+  %11 = bitcast i8* %10 to i32*
+  store i32 %9, i32* %11, align 4
+  %12 = load i8*, i8** %s, align 8
+  %13 = icmp eq i8* %12, null
+  br i1 %13, label %14, label %17
 
-if.then:                                          ; preds = %entry
-  %7 = load i8*, i8** %s, align 8
+; <label>:14                                      ; preds = %0
+  %15 = load i8*, i8** %s, align 8
+  %16 = bitcast i8* %15 to i32*
+  store i32 0, i32* %16, align 4
+  br label %17
+
+; <label>:17                                      ; preds = %14, %0
+  %18 = load i8*, i8** %s, align 8
+  ret i8* %18
+}
+
+; Function Attrs: nounwind
+declare i64 @strtol(i8*, i8**, i32) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @pause() #0 {
+  %r = alloca i32*, align 8
+  %1 = call noalias i8* @malloc(i64 4) #7
+  %2 = bitcast i8* %1 to i32*
+  store i32* %2, i32** %r, align 8
+  %3 = load i32*, i32** %r, align 8
+  store i32 0, i32* %3, align 4
+  %4 = call i32 @system(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.4, i32 0, i32 0))
+  %5 = load i32*, i32** %r, align 8
+  %6 = bitcast i32* %5 to i8*
+  ret i8* %6
+}
+
+declare i32 @system(i8*) #3
+
+; Function Attrs: nounwind uwtable
+define i8* @exit_() #0 {
+  %1 = alloca i8*, align 8
+  %r = alloca i32*, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %r, align 8
+  %4 = load i32*, i32** %r, align 8
+  store i32 0, i32* %4, align 4
+  call void @exit(i32 1) #10
+  unreachable
+                                                  ; No predecessors!
+  %6 = load i8*, i8** %1, align 8
+  ret i8* %6
+}
+
+; Function Attrs: noreturn nounwind
+declare void @exit(i32) #6
+
+; Function Attrs: nounwind uwtable
+define i8* @read(i8* %name) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %f_ = alloca %struct._IO_FILE*, align 8
+  %r = alloca i8*, align 8
+  %s = alloca i64, align 8
+  %str = alloca i8*, align 8
+  store i8* %name, i8** %2, align 8
+  %3 = load i8*, i8** %2, align 8
+  %4 = call %struct._IO_FILE* @fopen(i8* %3, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.5, i32 0, i32 0))
+  store %struct._IO_FILE* %4, %struct._IO_FILE** %f_, align 8
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %6 = icmp eq %struct._IO_FILE* %5, null
+  br i1 %6, label %7, label %12
+
+; <label>:7                                       ; preds = %0
+  %8 = call noalias i8* @malloc(i64 4) #7
+  store i8* %8, i8** %r, align 8
+  %9 = load i8*, i8** %r, align 8
+  %10 = bitcast i8* %9 to i32*
+  store i32 0, i32* %10, align 4
+  %11 = load i8*, i8** %r, align 8
+  store i8* %11, i8** %1, align 8
+  br label %32
+
+; <label>:12                                      ; preds = %0
+  %13 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %14 = call i32 @fseek(%struct._IO_FILE* %13, i64 0, i32 2)
+  %15 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %16 = call i64 @ftell(%struct._IO_FILE* %15)
+  store i64 %16, i64* %s, align 8
+  %17 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %18 = call i32 @fseek(%struct._IO_FILE* %17, i64 0, i32 0)
+  %19 = load i64, i64* %s, align 8
+  %20 = add nsw i64 %19, 1
+  %21 = call noalias i8* @malloc(i64 %20) #7
+  store i8* %21, i8** %str, align 8
+  %22 = load i8*, i8** %str, align 8
+  %23 = load i64, i64* %s, align 8
+  %24 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %25 = call i64 @fread(i8* %22, i64 %23, i64 1, %struct._IO_FILE* %24)
+  %26 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %27 = call i32 @fclose(%struct._IO_FILE* %26)
+  %28 = load i64, i64* %s, align 8
+  %29 = load i8*, i8** %str, align 8
+  %30 = getelementptr inbounds i8, i8* %29, i64 %28
+  store i8 0, i8* %30, align 1
+  %31 = load i8*, i8** %str, align 8
+  store i8* %31, i8** %1, align 8
+  br label %32
+
+; <label>:32                                      ; preds = %12, %7
+  %33 = load i8*, i8** %1, align 8
+  ret i8* %33
+}
+
+declare %struct._IO_FILE* @fopen(i8*, i8*) #3
+
+declare i32 @fseek(%struct._IO_FILE*, i64, i32) #3
+
+declare i64 @ftell(%struct._IO_FILE*) #3
+
+declare i64 @fread(i8*, i64, i64, %struct._IO_FILE*) #3
+
+declare i32 @fclose(%struct._IO_FILE*) #3
+
+; Function Attrs: nounwind uwtable
+define i8* @write(i8* %file, i8* %c__) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
+  %f_ = alloca %struct._IO_FILE*, align 8
+  %r = alloca i8*, align 8
+  %r1 = alloca i8*, align 8
+  store i8* %file, i8** %2, align 8
+  store i8* %c__, i8** %3, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call %struct._IO_FILE* @fopen(i8* %4, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.6, i32 0, i32 0))
+  store %struct._IO_FILE* %5, %struct._IO_FILE** %f_, align 8
+  %6 = call noalias i8* @malloc(i64 4) #7
+  store i8* %6, i8** %r, align 8
+  %7 = load i8*, i8** %r, align 8
   %8 = bitcast i8* %7 to i32*
-  store i32 0, i32* %8, align 4
-  br label %if.end
+  store i32 1, i32* %8, align 4
+  %9 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %10 = icmp eq %struct._IO_FILE* %9, null
+  br i1 %10, label %11, label %16
 
-if.end:                                           ; preds = %if.then, %entry
-  %9 = load i8*, i8** %s, align 8
+; <label>:11                                      ; preds = %0
+  %12 = call noalias i8* @malloc(i64 4) #7
+  store i8* %12, i8** %r1, align 8
+  %13 = load i8*, i8** %r1, align 8
+  %14 = bitcast i8* %13 to i32*
+  store i32 0, i32* %14, align 4
+  %15 = load i8*, i8** %r1, align 8
+  store i8* %15, i8** %1, align 8
+  br label %23
+
+; <label>:16                                      ; preds = %0
+  %17 = load i8*, i8** %3, align 8
+  %18 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %19 = call i32 @fputs(i8* %17, %struct._IO_FILE* %18)
+  %20 = load %struct._IO_FILE*, %struct._IO_FILE** %f_, align 8
+  %21 = call i32 @fclose(%struct._IO_FILE* %20)
+  %22 = load i8*, i8** %r, align 8
+  store i8* %22, i8** %1, align 8
+  br label %23
+
+; <label>:23                                      ; preds = %16, %11
+  %24 = load i8*, i8** %1, align 8
+  ret i8* %24
+}
+
+declare i32 @fputs(i8*, %struct._IO_FILE*) #3
+
+; Function Attrs: nounwind uwtable
+define i8* @sys_dr__alloca(i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %b_ = alloca i8*, align 8
+  store i8* %len, i8** %1, align 8
+  %2 = load i8*, i8** %1, align 8
+  %3 = bitcast i8* %2 to i32*
+  %4 = load i32, i32* %3, align 4
+  %5 = sext i32 %4 to i64
+  %6 = call i8* @mmap(i8* null, i64 %5, i32 3, i32 33, i32 -1, i64 0) #7
+  store i8* %6, i8** %b_, align 8
+  %7 = load i8*, i8** %b_, align 8
+  ret i8* %7
+}
+
+; Function Attrs: nounwind
+declare i8* @mmap(i8*, i64, i32, i32, i32, i64) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @sys_dr__free(i8* %i, i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  store i8* %i, i8** %1, align 8
+  store i8* %len, i8** %2, align 8
+  %3 = load i8*, i8** %1, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = bitcast i8* %4 to i32*
+  %6 = load i32, i32* %5, align 4
+  %7 = sext i32 %6 to i64
+  %8 = call i32 @munmap(i8* %3, i64 %7) #7
+  %9 = load i8*, i8** %1, align 8
   ret i8* %9
 }
 
-declare i32 @strtol(i8*, i8**, i32) #1
+; Function Attrs: nounwind
+declare i32 @munmap(i8*, i64) #1
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @pause() #0 {
-entry:
-  %r = alloca i32*, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i32*, i32** %r, align 8
-  store i32 0, i32* %1, align 4
-  %call1 = call i32 @system(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @"\01??_C@_05PDJBBECF@pause?$AA@", i32 0, i32 0))
-  %2 = load i32*, i32** %r, align 8
-  %3 = bitcast i32* %2 to i8*
-  ret i8* %3
-}
-
-declare i32 @system(i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @exit_() #0 {
-entry:
-  %retval = alloca i8*, align 8
-  %r = alloca i32*, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %r, align 8
-  %1 = load i32*, i32** %r, align 8
-  store i32 0, i32* %1, align 4
-  call void @exit(i32 1) #8
-  unreachable
-
-return:                                           ; No predecessors!
-  %2 = load i8*, i8** %retval, align 8
-  ret i8* %2
-}
-
-; Function Attrs: noreturn
-declare void @exit(i32) #5
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @read(i8* %name) #0 {
-entry:
-  %retval = alloca i8*, align 8
-  %name.addr = alloca i8*, align 8
-  %f_ = alloca %struct._iobuf*, align 8
-  %r = alloca i8*, align 8
-  %s = alloca i32, align 4
-  %str = alloca i8*, align 8
-  store i8* %name, i8** %name.addr, align 8
-  %0 = load i8*, i8** %name.addr, align 8
-  %call = call %struct._iobuf* @fopen(i8* %0, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @"\01??_C@_02JDPG@rb?$AA@", i32 0, i32 0))
-  store %struct._iobuf* %call, %struct._iobuf** %f_, align 8
-  %1 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %cmp = icmp eq %struct._iobuf* %1, null
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %call1 = call noalias i8* @malloc(i64 4)
-  store i8* %call1, i8** %r, align 8
-  %2 = load i8*, i8** %r, align 8
-  %3 = bitcast i8* %2 to i32*
-  store i32 0, i32* %3, align 4
-  %4 = load i8*, i8** %r, align 8
-  store i8* %4, i8** %retval, align 8
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %5 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %call2 = call i32 @fseek(%struct._iobuf* %5, i32 0, i32 2)
-  %6 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %call3 = call i32 @ftell(%struct._iobuf* %6)
-  store i32 %call3, i32* %s, align 4
-  %7 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %call4 = call i32 @fseek(%struct._iobuf* %7, i32 0, i32 0)
-  %8 = load i32, i32* %s, align 4
-  %add = add nsw i32 %8, 1
-  %conv = sext i32 %add to i64
-  %call5 = call noalias i8* @malloc(i64 %conv)
-  store i8* %call5, i8** %str, align 8
-  %9 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %10 = load i32, i32* %s, align 4
-  %conv6 = sext i32 %10 to i64
-  %11 = load i8*, i8** %str, align 8
-  %call7 = call i64 @fread(i8* %11, i64 %conv6, i64 1, %struct._iobuf* %9)
-  %12 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %call8 = call i32 @fclose(%struct._iobuf* %12)
-  %13 = load i8*, i8** %str, align 8
-  %14 = load i32, i32* %s, align 4
-  %idxprom = sext i32 %14 to i64
-  %arrayidx = getelementptr inbounds i8, i8* %13, i64 %idxprom
-  store i8 0, i8* %arrayidx, align 1
-  %15 = load i8*, i8** %str, align 8
-  store i8* %15, i8** %retval, align 8
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %16 = load i8*, i8** %retval, align 8
-  ret i8* %16
-}
-
-declare %struct._iobuf* @fopen(i8*, i8*) #1
-
-declare i32 @fseek(%struct._iobuf*, i32, i32) #1
-
-declare i32 @ftell(%struct._iobuf*) #1
-
-declare i64 @fread(i8*, i64, i64, %struct._iobuf*) #1
-
-declare i32 @fclose(%struct._iobuf*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @write(i8* %file, i8* %c__) #0 {
-entry:
-  %retval = alloca i8*, align 8
-  %c__.addr = alloca i8*, align 8
-  %file.addr = alloca i8*, align 8
-  %f_ = alloca %struct._iobuf*, align 8
-  %r = alloca i8*, align 8
-  %r2 = alloca i8*, align 8
-  store i8* %c__, i8** %c__.addr, align 8
-  store i8* %file, i8** %file.addr, align 8
-  %0 = load i8*, i8** %file.addr, align 8
-  %call = call %struct._iobuf* @fopen(i8* %0, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @"\01??_C@_01NOFIACDB@w?$AA@", i32 0, i32 0))
-  store %struct._iobuf* %call, %struct._iobuf** %f_, align 8
-  %call1 = call noalias i8* @malloc(i64 4)
-  store i8* %call1, i8** %r, align 8
-  %1 = load i8*, i8** %r, align 8
-  %2 = bitcast i8* %1 to i32*
-  store i32 1, i32* %2, align 4
-  %3 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %cmp = icmp eq %struct._iobuf* %3, null
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %call3 = call noalias i8* @malloc(i64 4)
-  store i8* %call3, i8** %r2, align 8
-  %4 = load i8*, i8** %r2, align 8
-  %5 = bitcast i8* %4 to i32*
-  store i32 0, i32* %5, align 4
-  %6 = load i8*, i8** %r2, align 8
-  store i8* %6, i8** %retval, align 8
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %7 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %8 = load i8*, i8** %c__.addr, align 8
-  %call4 = call i32 @fputs(i8* %8, %struct._iobuf* %7)
-  %9 = load %struct._iobuf*, %struct._iobuf** %f_, align 8
-  %call5 = call i32 @fclose(%struct._iobuf* %9)
-  %10 = load i8*, i8** %r, align 8
-  store i8* %10, i8** %retval, align 8
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %11 = load i8*, i8** %retval, align 8
+; Function Attrs: nounwind uwtable
+define i8* @sys_p(i8* %c, i8* %t, i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
+  store i8* %c, i8** %1, align 8
+  store i8* %t, i8** %2, align 8
+  store i8* %len, i8** %3, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = load i8*, i8** %2, align 8
+  %6 = load i8*, i8** %3, align 8
+  %7 = bitcast i8* %6 to i32*
+  %8 = load i32, i32* %7, align 4
+  %9 = sdiv i32 %8, 1024
+  %10 = sext i32 %9 to i64
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %4, i8* %5, i64 %10, i32 1, i1 false)
+  %11 = load i8*, i8** %1, align 8
   ret i8* %11
 }
 
-declare i32 @fputs(i8*, %struct._iobuf*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @sys_dr__alloca(i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %b_ = alloca i8*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  %0 = load i8*, i8** %len.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %call = call i8* @VirtualAlloc(i8* null, i64 %conv, i32 12288, i32 4)
-  store i8* %call, i8** %b_, align 8
-  %3 = load i8*, i8** %b_, align 8
-  ret i8* %3
-}
-
-declare dllimport i8* @VirtualAlloc(i8*, i64, i32, i32) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @sys_dr__free(i8* %i, i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %i.addr = alloca i8*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  store i8* %i, i8** %i.addr, align 8
-  %0 = load i8*, i8** %i.addr, align 8
-  %call = call i32 @VirtualFree(i8* %0, i64 0, i32 32768)
-  %1 = load i8*, i8** %i.addr, align 8
-  ret i8* %1
-}
-
-declare dllimport i32 @VirtualFree(i8*, i64, i32) #1
-
-; Function Attrs: noinline nounwind uwtable
-define i8* @sys_p(i8* %c, i8* %t, i8* %len) #0 {
-entry:
-  %len.addr = alloca i8*, align 8
-  %t.addr = alloca i8*, align 8
-  %c.addr = alloca i8*, align 8
-  store i8* %len, i8** %len.addr, align 8
-  store i8* %t, i8** %t.addr, align 8
-  store i8* %c, i8** %c.addr, align 8
-  %0 = load i8*, i8** %c.addr, align 8
-  %1 = load i8*, i8** %t.addr, align 8
-  %2 = load i8*, i8** %len.addr, align 8
+; Function Attrs: nounwind uwtable
+define i8* @sys_acess(i8* %t) #0 {
+  %1 = alloca i8*, align 8
+  %t_ = alloca i8*, align 8
+  store i8* %t, i8** %1, align 8
+  %2 = load i8*, i8** %1, align 8
   %3 = bitcast i8* %2 to i32*
   %4 = load i32, i32* %3, align 4
-  %div = sdiv i32 %4, 1024
-  %conv = sext i32 %div to i64
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 %conv, i32 1, i1 false)
-  %5 = load i8*, i8** %c.addr, align 8
-  ret i8* %5
+  %5 = sext i32 %4 to i64
+  %6 = inttoptr i64 %5 to i8*
+  store i8* %6, i8** %t_, align 8
+  %7 = load i8*, i8** %t_, align 8
+  ret i8* %7
 }
 
-; Function Attrs: noinline nounwind uwtable
-define i8* @sys_acess(i8* %t) #0 {
-entry:
-  %t.addr = alloca i8*, align 8
-  %t_ = alloca i8*, align 8
-  store i8* %t, i8** %t.addr, align 8
-  %0 = load i8*, i8** %t.addr, align 8
-  %1 = bitcast i8* %0 to i32*
-  %2 = load i32, i32* %1, align 4
-  %conv = sext i32 %2 to i64
-  %3 = inttoptr i64 %conv to i8*
-  store i8* %3, i8** %t_, align 8
-  %4 = load i8*, i8** %t_, align 8
-  ret i8* %4
-}
-
-; Function Attrs: noinline nounwind uwtable
+; Function Attrs: nounwind uwtable
 define i8* @sys_t(i8* %_) #0 {
-entry:
-  %_.addr = alloca i8*, align 8
+  %1 = alloca i8*, align 8
   %a = alloca i32*, align 8
-  store i8* %_, i8** %_.addr, align 8
-  %call = call noalias i8* @malloc(i64 4)
-  %0 = bitcast i8* %call to i32*
-  store i32* %0, i32** %a, align 8
-  %1 = load i8*, i8** %_.addr, align 8
-  %2 = ptrtoint i8* %1 to i64
-  %conv = trunc i64 %2 to i32
-  %3 = load i32*, i32** %a, align 8
-  store i32 %conv, i32* %3, align 4
-  %4 = load i32*, i32** %a, align 8
-  %5 = bitcast i32* %4 to i8*
-  ret i8* %5
+  store i8* %_, i8** %1, align 8
+  %2 = call noalias i8* @malloc(i64 4) #7
+  %3 = bitcast i8* %2 to i32*
+  store i32* %3, i32** %a, align 8
+  %4 = load i8*, i8** %1, align 8
+  %5 = ptrtoint i8* %4 to i64
+  %6 = trunc i64 %5 to i32
+  %7 = load i32*, i32** %a, align 8
+  store i32 %6, i32* %7, align 4
+  %8 = load i32*, i32** %a, align 8
+  %9 = bitcast i32* %8 to i8*
+  ret i8* %9
 }
 
-; Function Attrs: nounwind
-declare void @llvm.va_start(i8*) #6
+attributes #0 = { nounwind uwtable "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { argmemonly nounwind }
+attributes #5 = { nounwind readonly "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { noreturn nounwind "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { nounwind }
+attributes #8 = { nounwind readnone }
+attributes #9 = { nounwind readonly }
+attributes #10 = { noreturn nounwind }
 
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_vsprintf_l(i8* %_Buffer, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Locale.addr = alloca %struct.__crt_locale_pointers*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store %struct.__crt_locale_pointers* %_Locale, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load %struct.__crt_locale_pointers*, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  %2 = load i8*, i8** %_Format.addr, align 8
-  %3 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i32 @_vsnprintf_l(i8* %3, i64 -1, i8* %2, %struct.__crt_locale_pointers* %1, i8* %0)
-  ret i32 %call
-}
+!llvm.ident = !{!0}
 
-; Function Attrs: nounwind
-declare void @llvm.va_end(i8*) #6
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_vsnprintf_l(i8* %_Buffer, i64 %_BufferCount, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Locale.addr = alloca %struct.__crt_locale_pointers*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_BufferCount.addr = alloca i64, align 8
-  %_Buffer.addr = alloca i8*, align 8
-  %_Result = alloca i32, align 4
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store %struct.__crt_locale_pointers* %_Locale, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store i64 %_BufferCount, i64* %_BufferCount.addr, align 8
-  store i8* %_Buffer, i8** %_Buffer.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load %struct.__crt_locale_pointers*, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  %2 = load i8*, i8** %_Format.addr, align 8
-  %3 = load i64, i64* %_BufferCount.addr, align 8
-  %4 = load i8*, i8** %_Buffer.addr, align 8
-  %call = call i64* @__local_stdio_printf_options()
-  %5 = load i64, i64* %call, align 8
-  %or = or i64 %5, 1
-  %call1 = call i32 @__stdio_common_vsprintf(i64 %or, i8* %4, i64 %3, i8* %2, %struct.__crt_locale_pointers* %1, i8* %0)
-  store i32 %call1, i32* %_Result, align 4
-  %6 = load i32, i32* %_Result, align 4
-  %cmp = icmp slt i32 %6, 0
-  br i1 %cmp, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %7 = load i32, i32* %_Result, align 4
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ -1, %cond.true ], [ %7, %cond.false ]
-  ret i32 %cond
-}
-
-declare i32 @__stdio_common_vsprintf(i64, i8*, i64, i8*, %struct.__crt_locale_pointers*, i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i64* @__local_stdio_printf_options() #0 comdat {
-entry:
-  ret i64* @__local_stdio_printf_options._OptionsStorage
-}
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_vfprintf_l(%struct._iobuf* %_Stream, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Locale.addr = alloca %struct.__crt_locale_pointers*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_Stream.addr = alloca %struct._iobuf*, align 8
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store %struct.__crt_locale_pointers* %_Locale, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store %struct._iobuf* %_Stream, %struct._iobuf** %_Stream.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load %struct.__crt_locale_pointers*, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  %2 = load i8*, i8** %_Format.addr, align 8
-  %3 = load %struct._iobuf*, %struct._iobuf** %_Stream.addr, align 8
-  %call = call i64* @__local_stdio_printf_options()
-  %4 = load i64, i64* %call, align 8
-  %call1 = call i32 @__stdio_common_vfprintf(i64 %4, %struct._iobuf* %3, i8* %2, %struct.__crt_locale_pointers* %1, i8* %0)
-  ret i32 %call1
-}
-
-declare %struct._iobuf* @__acrt_iob_func(i32) #1
-
-declare i32 @__stdio_common_vfprintf(i64, %struct._iobuf*, i8*, %struct.__crt_locale_pointers*, i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i32 @_vfscanf_l(%struct._iobuf* %_Stream, i8* %_Format, %struct.__crt_locale_pointers* %_Locale, i8* %_ArgList) #0 comdat {
-entry:
-  %_ArgList.addr = alloca i8*, align 8
-  %_Locale.addr = alloca %struct.__crt_locale_pointers*, align 8
-  %_Format.addr = alloca i8*, align 8
-  %_Stream.addr = alloca %struct._iobuf*, align 8
-  store i8* %_ArgList, i8** %_ArgList.addr, align 8
-  store %struct.__crt_locale_pointers* %_Locale, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  store i8* %_Format, i8** %_Format.addr, align 8
-  store %struct._iobuf* %_Stream, %struct._iobuf** %_Stream.addr, align 8
-  %0 = load i8*, i8** %_ArgList.addr, align 8
-  %1 = load %struct.__crt_locale_pointers*, %struct.__crt_locale_pointers** %_Locale.addr, align 8
-  %2 = load i8*, i8** %_Format.addr, align 8
-  %3 = load %struct._iobuf*, %struct._iobuf** %_Stream.addr, align 8
-  %call = call i64* @__local_stdio_scanf_options()
-  %4 = load i64, i64* %call, align 8
-  %call1 = call i32 @__stdio_common_vfscanf(i64 %4, %struct._iobuf* %3, i8* %2, %struct.__crt_locale_pointers* %1, i8* %0)
-  ret i32 %call1
-}
-
-declare i32 @__stdio_common_vfscanf(i64, %struct._iobuf*, i8*, %struct.__crt_locale_pointers*, i8*) #1
-
-; Function Attrs: noinline nounwind uwtable
-define linkonce_odr i64* @__local_stdio_scanf_options() #0 comdat {
-entry:
-  ret i64* @__local_stdio_scanf_options._OptionsStorage
-}
+!0 = !{!"clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)"}

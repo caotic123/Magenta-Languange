@@ -251,6 +251,15 @@ void magenta_run(std::string name, std::string code)
 #if _WIN32
     name = (name + ".exe");
 #endif
+#if defined(unix) || defined(__unix__) || defined(__unix)
+    system((std::string("clang -O3 ") + std::string("llvm/compile.ll") + " -o " + name + " -lm").c_str());
+std::cout << (std::string("clang -O3") + std::string("llvm/compile.ll") + " -o " + name + " -lm").c_str() << std::endl;
+#endif
+#if _WIN32
     system((std::string("clang -Wno-everything -O3 ") + std::string("llvm/compile.ll") + " -o " + name).c_str());
+#endif
+#if defined(unix) || defined(__unix__) || defined(__unix)
+    name = ("./" + name);
+#endif
     system(name.c_str());
 }

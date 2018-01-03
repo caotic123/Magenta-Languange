@@ -31,7 +31,7 @@ public:
     std::vector<std::string> get__exp();
 
 private:
-    char* __input;
+    std::string __input;
     token n__;
     token token_lex;
 };
