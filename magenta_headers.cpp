@@ -231,8 +231,8 @@ std::string getFile__(std::string name) // load only .mag files
         while (!__f.eof()) {
             getline(__f, buffer);
             if (buffer.substr(0, 2) != "//") {
-              _cs = _cs + secure_string_format(buffer) + " ";
-           }
+                _cs = _cs + secure_string_format(buffer) + " ";
+            }
         }
     }
 
@@ -253,7 +253,6 @@ void magenta_run(std::string name, std::string code)
 #endif
 #if defined(unix) || defined(__unix__) || defined(__unix)
     system((std::string("clang -O3 ") + std::string("llvm/compile.ll") + " -o " + name + " -lm").c_str());
-std::cout << (std::string("clang -O3") + std::string("llvm/compile.ll") + " -o " + name + " -lm").c_str() << std::endl;
 #endif
 #if _WIN32
     system((std::string("clang -Wno-everything -O3 ") + std::string("llvm/compile.ll") + " -o " + name).c_str());
