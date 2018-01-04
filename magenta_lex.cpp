@@ -128,7 +128,6 @@ st_ lex_::check__()
 {
     char* __;
     bool check_b;
-    std::cout << "result " << __input << std::endl;
   
     macro mag_macro = macro(__input, abstract_logic, char_ign, operators, cond_ex);
 

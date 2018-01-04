@@ -93,7 +93,6 @@ void error(st_ st)
         printf("A unknow error ocurred\n");
     }
 
-    system("pause");
     exit(0);
 }
 

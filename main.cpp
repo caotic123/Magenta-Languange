@@ -17,7 +17,5 @@ int main(int argc, char** argv)
     scanf("%79s", x_);
     magenta_l->load__file(x_);
 
-    system("pause");
-
     return 0;
 }
