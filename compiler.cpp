@@ -86,11 +86,11 @@ type_ magenta_compiler::getType(std::string ex_, struct_ep s_, char char_ign[ig_
         return bool_type;
     }
     if (s_.n_.size() > 1 || s_.n_[0].size() > 1) {
-        return int32_expression;
+        return number_expression;
     }
 
-    if (value == "0" || strtol(value.c_str(), NULL, 10) != 0 || var_e(value)) {
-        return int32_type;
+    if (value == "0" || strtod(value.c_str(), NULL) != 0.0 || var_e(value)) {
+        return number_type;
     }
 
     if (__str(value, char_ign)) {
@@ -138,7 +138,7 @@ std::string magenta_compiler::is_value(std::string v_, type_ type, std::string o
     func_* f = get_func();
     v_ = secure_string_format(v_);
 
-    if (v_ != "0" && v_ != "%auto" && !is_prec_value(v_) && strtol(v_.c_str(), NULL, 10) == 0) {
+    if (v_ != "0" && v_ != "%auto" && !is_prec_value(v_) && strtod(v_.c_str(), NULL) == 0.0) {
         std::map<std::string, command_>::iterator var__ = f->var_map.find(v_);
         if (var__ == f->var_map.end()) {
             error_(v_.c_str(), "variable don't declared", 0, COMPILER_VARIABLE_DONT_FOUND);
@@ -153,7 +153,7 @@ std::string magenta_compiler::is_value(std::string v_, type_ type, std::string o
 
         switch (type) {
 
-        case int32_type:
+        case number_type:
             create_command("load value", LOAD_VALUE_BITCAST, v_, s_, unknow_type);
             return "%" + v_;
 
@@ -177,19 +177,19 @@ void magenta_compiler::load_expression(struct_ep s_, std::string operators[len_o
         for (std::vector<std::string>::iterator __i = (*i).begin(); __i != (*i).end(); __i++) {
             token = (*__i);
             if (token == operators[0]) {
-                create_add_operation(is_value(p, int32_type, operators, char_ign), is_value(*(__i + 1), int32_type, operators, char_ign), s_);
+                create_add_operation(is_value(p, number_type, operators, char_ign), is_value(*(__i + 1), number_type, operators, char_ign), s_);
                 p = ("%" + std::string("auto"));
             }
             if (token == operators[1]) {
-                create_sub_operation(is_value(p, int32_type, operators, char_ign), is_value(*(__i + 1), int32_type, operators, char_ign), s_);
+                create_sub_operation(is_value(p, number_type, operators, char_ign), is_value(*(__i + 1), number_type, operators, char_ign), s_);
                 p = ("%" + std::string("auto"));
             }
             if (token == operators[2]) {
-                create_mul_operation(is_value(p, int32_type, operators, char_ign), is_value(*(__i + 1), int32_type, operators, char_ign), s_);
+                create_mul_operation(is_value(p, number_type, operators, char_ign), is_value(*(__i + 1), number_type, operators, char_ign), s_);
                 p = ("%" + std::string("auto"));
             }
             if (token == operators[3]) {
-                create_div_operation(is_value(p, int32_type, operators, char_ign), is_value(*(__i + 1), int32_type, operators, char_ign), s_);
+                create_div_operation(is_value(p, number_type, operators, char_ign), is_value(*(__i + 1), number_type, operators, char_ign), s_);
                 p = ("%" + std::string("auto"));
             }
         }
@@ -213,7 +213,7 @@ void magenta_compiler::create_var_call_func(std::string name, std::string func_n
     std::string name_ = (func_name + int_to_string(*f->par__arg_int));
 
     if (func_name == "str") {
-        if (s_.size() < 1 || strtol(get_value(s_[0].s, char_ign).c_str(), NULL, 10) == 0) {
+        if (s_.size() < 1 || strtod(get_value(s_[0].s, char_ign).c_str(), NULL) == 0) {
             error_(name.c_str(), "alloc fail check paramaters", 0, ALLOC_STR_FAIL);
         }
         
@@ -271,7 +271,7 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
     std::string value_ = get_value(s_.s, char_ign);
     
     if (var_e(name) && func__->var_map[name].type == unknow_type) { // the variable unknow type assumes the last variable type set
-            func__->var_map[name].type = ((getType(value_, s_, char_ign) == int32_expression) ? int32_type : getType(value_, s_, char_ign));
+            func__->var_map[name].type = ((getType(value_, s_, char_ign) == number_expression) ? number_type : getType(value_, s_, char_ign));
     }
 
     if (var_e(name) && getType(value_, s_, char_ign) == bool_type) {
@@ -279,14 +279,14 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
         return;
     }
 
-    if (var_e(name) && getType(value_, s_, char_ign) == int32_expression) {
+    if (var_e(name) && getType(value_, s_, char_ign) == number_expression) {
         load_expression(s_, operators, char_ign);
-        create_command(name, CHANGE_VARIABLE_EXPRESSION, "exp", s_, int32_type);
+        create_command(name, CHANGE_VARIABLE_EXPRESSION, "exp", s_, number_type);
         return;
     }
 
-    if (var_e(name) && getType(value_, s_, char_ign) == int32_type) {
-        create_command(name, VARIABLE_CHANGE_I32, is_value(value_, int32_type, operators, char_ign), s_, int32_type);
+    if (var_e(name) && getType(value_, s_, char_ign) == number_type) {
+        create_command(name, VARIABLE_CHANGE_number, is_value(value_, number_type, operators, char_ign), s_, number_type);
         return;
     }
 
@@ -295,12 +295,12 @@ void magenta_compiler::create_var(std::string name, std::string operators[len_op
     case bool_type:
         func__->var_map[name] = create_command(name, VARIABLE_DECLARATION_BOOL, value_, s_, bool_type);
         break;
-    case int32_type:
-        func__->var_map[name] = create_command(name, VARIABLE_DECLARATION_I32, is_value(value_, int32_type, operators, char_ign), s_, int32_type);
+    case number_type:
+        func__->var_map[name] = create_command(name, VARIABLE_DECLARATION_number, is_value(value_, number_type, operators, char_ign), s_, number_type);
         break;
-    case int32_expression:
+    case number_expression:
         load_expression(s_, operators, char_ign);
-        func__->var_map[name] = create_command(name, CREATE_VARIABLE_EXPRESSION, "exp", s_, int32_type);
+        func__->var_map[name] = create_command(name, CREATE_VARIABLE_EXPRESSION, "exp", s_, number_type);
         break;
 
     default:
@@ -344,9 +344,9 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
     std::vector<std::string> cond__;
     
     if (var_e(get_value(c_.s, char_ign))) {
-        if (f->var_map[get_value(c_.s, char_ign)].type == int32_type) {
+        if (f->var_map[get_value(c_.s, char_ign)].type == number_type) {
             create_command("if1_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BITCAST_COND, get_value(c_.s, char_ign), c_, unknow_type);
-            command.type = int32_type;
+            command.type = number_type;
         }
 
         if (f->var_map[get_value(c_.s, char_ign)].type == bool_type) {
@@ -355,7 +355,7 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
         }
         
         if (f->var_map[get_value(c_.s, char_ign)].type == unknow_type) {	
-            create_command("if1_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(s_.s, char_ign)].type == int32_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(c_.s, char_ign), c_, unknow_type);
+            create_command("if1_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(s_.s, char_ign)].type == number_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(c_.s, char_ign), c_, unknow_type);
             command.type = f->var_map[get_value(s_.s, char_ign)].type;
         }
 
@@ -363,9 +363,9 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
     }
 
     if (var_e(get_value(s_.s, char_ign))) {
-        if (f->var_map[get_value(s_.s, char_ign)].type == int32_type) {
+        if (f->var_map[get_value(s_.s, char_ign)].type == number_type) {
             create_command("if2_" + std::string(int_to_string((*f->f_cond_))), LOAD_VALUE_BITCAST_COND, get_value(s_.s, char_ign), s_, unknow_type);
-            command.type = int32_type;
+            command.type = number_type;
         }
 
         if (f->var_map[get_value(s_.s, char_ign)].type == bool_type) {
@@ -374,7 +374,7 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
         }
 
         if (f->var_map[get_value(s_.s, char_ign)].type == unknow_type) {
-            create_command("if2_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(c_.s, char_ign)].type == int32_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(s_.s, char_ign), s_, unknow_type);
+            create_command("if2_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(c_.s, char_ign)].type == number_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(s_.s, char_ign), s_, unknow_type);
             command.type = f->var_map[get_value(c_.s, char_ign)].type;
         }
         
@@ -490,11 +490,11 @@ void magenta_compiler::compile(std::string name__)
             if (c_.x_ == VARIABLE_DECLARATION_BOOL) {
                 module->create_variable_bool(cod__, (*i_).q, (*i_).__e, c_.command_name, (c_.value == "true" ? true : false));
             }
-            if (c_.x_ == VARIABLE_DECLARATION_I32) {
-                module->create_variable_int32(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
+            if (c_.x_ == VARIABLE_DECLARATION_number) {
+                module->create_variable_number(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
             }
-            if (c_.x_ == VARIABLE_CHANGE_I32) {
-                module->change_variable_int32(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
+            if (c_.x_ == VARIABLE_CHANGE_number) {
+                module->change_variable_number(cod__, c_.command_name, c_.value, (*i_).q, (*i_).__e);
             }
             if (c_.x_ == VARIABLE_CHANGE_BOOL) {
                 module->change_variable_bool(cod__, (*i_).q, (*i_).__e, c_.command_name, (c_.value == "true" ? true : false));
@@ -512,16 +512,16 @@ void magenta_compiler::compile(std::string name__)
                 module->mul_value(cod__, c_.command_name, c_.value, (*i_).q, (*i_).n, (*i_).__e);
             }
             if (c_.x_ == LOAD_VALUE_BITCAST) {
-                module->load_int_value(cod__, (*i_).__e, c_.value, c_.value);
+                module->load_number_value(cod__, (*i_).__e, c_.value, c_.value);
             }
             if (c_.x_ == LOAD_VALUE_BOOL_BITCAST) {
                 module->load_bool_value(cod__, (*i_).__e, c_.value, c_.value);
             }
             if (c_.x_ == CREATE_VARIABLE_EXPRESSION) {
-                module->create_variable_expression_i32(cod__, c_.command_name, (*i_).q);
+                module->create_variable_expression_number(cod__, c_.command_name, (*i_).q);
             }
             if (c_.x_ == CHANGE_VARIABLE_EXPRESSION) {
-                module->change_variable_expression_i32(cod__, c_.command_name, (*i_).q, (*i_).__e);
+                module->change_variable_expression_number(cod__, c_.command_name, (*i_).q, (*i_).__e);
             }
             if (c_.x_ == DECLARATION_STRING_VAR) {
                 module->create_variable_str(cod__, c_.command_name, c_.value, (*i_).q);
@@ -536,7 +536,7 @@ void magenta_compiler::compile(std::string name__)
                 module->pointer_to_point(cod__, c_.command_name, c_.value, (*i_).q);
             }
             if (c_.x_ == LOAD_VALUE_BITCAST_COND) {
-                module->load_int_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);
+                module->load_number_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);
             }
             if (c_.x_ == LOAD_VALUE_BOOL_COND) {
                 module->load_bool_value_cond(cod__, (*i_).__e, c_.command_name, c_.value);

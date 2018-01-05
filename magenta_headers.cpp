@@ -78,15 +78,15 @@ void error(st_ st)
             st.l);
         break;
     case COMPILER_CONDITION_VARIABLE_DONT_FOUND:
-        printf("CONDITION: check values the condition",
+        printf("CONDITION: check values the condition %d\n",
             st.l);
         break;
     case ABSTRACT_COMMAND_DONT_FOUND:
-        printf("LINE: CRITICAL ERROR COMMAND DON'T EXIST CHECK IF THE COMMAND NAME IS CORRECT",
+        printf("LINE: CRITICAL ERROR COMMAND DON'T EXIST CHECK IF THE COMMAND NAME IS CORRECT %d\n",
             st.l);
         break;
     case MACRO_ERROR:
-        printf("MACRO : DEFINITION OF THIS MACRO IS ILEGAL OR HAVE SOME ERROR",
+        printf("MACRO : DEFINITION OF THIS MACRO IS ILEGAL OR HAVE SOME ERROR %d\n",
             st.l);
         break;
     default:

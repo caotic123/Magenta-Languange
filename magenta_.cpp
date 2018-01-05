@@ -7,6 +7,7 @@ int to_int_exp_n(std::string s_, std::string s)
     if (n == 0) {
         error_(s_.c_str(), "? maybe ()", 0, SEMANTIC_EXPRESSION_CRITICAL_ERROR);
     }
+
     return n;
 }
 
@@ -505,7 +506,7 @@ struct_ep c__m(struct_ep struct_s, std::string operators[len_op], char char_ign[
         return struct_s;
     }
     str_ = s.substr(i, get__c(s, i, char__) - i + 1);
-    sprintf(buffer, "%d", struct_s.n_.size());
+    sprintf(buffer, "%d", (int)struct_s.n_.size());
     if (!is_precedence_value(str_)) {
         struct_s.n_.push_back(token_exp(str_, operators));
     }
@@ -838,7 +839,8 @@ void magenta::__analysis()
 
 void magenta::__token()
 {
-    lex->lex__(code__);
+
+    lex->lex__((new macro)->__macro(code__, lex->abstract_logic, lex->char_ign, lex->operators, lex->cond_ex) + " ");
     st_ st = lex->check__();
     if (st._) {
         printf("Error ocurred\n");

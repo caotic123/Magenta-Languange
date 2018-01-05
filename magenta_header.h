@@ -18,11 +18,11 @@ enum type_ {
     unknow_type = 0,
     int8_type = 1,
     int16_type = 2,
-    int32_type = 3,
+    number_type = 3,
     int64_type = 4,
     string_type = 5,
     bool_type = 6,
-    int32_expression = 7
+    number_expression = 7
 };
 
 enum type_func {
@@ -51,8 +51,8 @@ enum type_command {
     LOAD_VALUE_BOOL_BITCAST = 17,
     CREATE_VARIABLE_EXPRESSION = 18,
     CHANGE_VARIABLE_EXPRESSION = 19,
-    VARIABLE_DECLARATION_I32 = 20,
-    VARIABLE_CHANGE_I32 = 21,
+    VARIABLE_DECLARATION_number = 20,
+    VARIABLE_CHANGE_number = 21,
     DECLARATION_STRING_VAR = 22,
     CHANGE_STRING_VAR = 23,
     CREATE_I8_VAR = 24,

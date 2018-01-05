@@ -17,8 +17,8 @@ char* c(char* y, int t, int a)
 
 void lex_::lex__(std::string x)
 {
+    std::cout << x << std::endl;
     __input = x;
-
 }
 
 st_ char___(char sym_[__symb][2], char* str)
@@ -97,7 +97,6 @@ std::string lex_::l__(std::string str, std::string sep, std::string sep_)
         printf("LEXICAL ERROR: LINE OF CODE BROKEN\n");
         printf("In ...%s...\n", e.c_str());
         printf("Use of illegal way of characters \"(\" \")\"\n");
-        system("pause");
         exit(0);
     }
 
@@ -128,8 +127,6 @@ st_ lex_::check__()
 {
     char* __;
     bool check_b;
-  
-    macro mag_macro = macro(__input, abstract_logic, char_ign, operators, cond_ex);
 
     st_ st = char___(sym_, (char*)__input.c_str());
 
@@ -175,7 +172,6 @@ st_ lex_::check__()
             }
 
             printf("Check the logical structures names\n");
-            system("pause");
             exit(0);
         }
     }

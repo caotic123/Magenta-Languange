@@ -12,52 +12,66 @@
 #include <windows.h>
 #endif
 
+int get_i(void* t) {
+  double x;
+  modf(*(double*)t, &x);
+  return (int)x;
+}
+
 void* _abs(void* i) {
-	int* r = malloc(sizeof(int));
-	(*r) = abs(*(int*)i);
+	double* r = malloc(sizeof(double));
+	(*r) = fabs(*(double*)i);
 	return (void*)r;
 }
 
 void* _ceil(void* i) {
-	int* r = malloc(sizeof(int));
-	(*r) = ceil(*(int*)i);
+	double* r = malloc(sizeof(double));
+	(*r) = ceil(*(double*)i);
 	return (void*)r;
 }
 
 void* _floor(void* i) {
-	int* r = malloc(sizeof(int));
-	(*r) = floor(*(int*)i);
+	double* r = malloc(sizeof(double));
+	(*r) = floor(*(double*)i);
 	return (void*)r;
 }
 
 void* _pow(void* i, void* b) {
-	int* r = malloc(sizeof(int));
-	(*r) = pow(*(int*)i, *(int*)b);
+	double* r = malloc(sizeof(double));
+	(*r) = pow(*(int*)i, *(double*)b);
 	return (void*)r;
 }
 
 void* mod(void* n, void* y) {
-   if (*(int*)n == 0 || *(int*)y == 0) {
-	   int* ret = malloc(sizeof(int));
+   if (*(double*)n == 0 || *(double*)y == 0) {
+	   double* ret = malloc(sizeof(double));
 	   (*ret) = 0;
 	   return (void*)ret;
    }
-  int* r = malloc(sizeof(int));
-  (*r) = *(int*)n % *(int*)y;
+
+  double* r = malloc(sizeof(double));
+  (*r) = get_i(n) % get_i(y);
   return (void*)r;
  }
 
 void* print(char* str) {
-	int* ret = malloc(sizeof(int));
+	double* ret = malloc(sizeof(double));
 	(*ret) = 1;
 	printf("%s\n", str);
 	return (void*)ret;
 }
 
 void* print_n(void* i) {
-	int* ret = malloc(sizeof(int));
+	double* ret = malloc(sizeof(double));
 	(*ret) = 1;
-	printf("%d\n", *(int*)i);
+	printf("%d\n", get_i(i));
+	return (void*)ret;
+}
+
+void* print_f(void* i) {
+	double* ret = malloc(sizeof(double));
+	(*ret) = 1;
+	printf("%f\n", *(double*)i);
 	return (void*)ret;
 }
 
@@ -68,52 +82,51 @@ void* scanf_insecure() {
 }
 
 void* get_scanf_int_insecure() {
-	int* int_ = malloc(sizeof(int));
-	scanf("%d", int_);
-	return (void*)int_;
+	double* d = malloc(sizeof(double));
+	scanf("%lf", d);
+	return (void*)d;
 }
-
 
 //functions of magenta vectors
 //this function just me remeber He-Man: "HEYEAYEA"
 
 void* mag_alloc(void* len) {
-	void** m = malloc(*(int*)len*sizeof(void*));
+	void** m = malloc(get_i(len)*sizeof(void*));
 	return (void*)m;
 }
 
 void* mag_realloc(void* len) {
-	void** m = realloc(m, *(int*)len*sizeof(void*));
+	void** m = realloc(m, get_i(len)*sizeof(void*));
 	return (void*)m;
 }
 
 void* _aloc(void* vector, void* i, void* space) {
-	int* r = malloc(sizeof(int));
+	double* r = malloc(sizeof(double));
 	(*r) = 0;
-	((void**)vector)[*(int*)i] = malloc(*(int*)space);
+	((void**)vector)[get_i(i)] = malloc(get_i(space));
 	return (void*)r;
 }
 
 void* _set(void* vector, void* i, void* r, void* len) {
-	int* r_ = malloc(sizeof(int));
+	double* r_ = malloc(sizeof(double));
 	(*r_) = 0;
-	memcpy(((void**)vector)[*(int*)i], r, *(int*)len);
+	memcpy(((void**)vector)[get_i(i)], r, get_i(len));
 	return (void*)r_;
 }
 
 void* _put(void* vector, void* i, void* r) {
-	int* r_ = malloc(sizeof(int));
+	double* r_ = malloc(sizeof(double));
 	(*r_) = 0;
-	((void**)vector)[*(int*)i] = r;
+	((void**)vector)[get_i(i)] = r;
 	return (void*)r_;
 }
 
 void* _get(void* vector, void* i) {
-	return ((void**)vector)[*(int*)i];
+	return ((void**)vector)[get_i(i)];
 }
 
-void* new_int() {
-	int *p_ = malloc(sizeof(int));
+void* number() {
+	double *p_ = malloc(sizeof(double));
 	(*p_) = 0;
 	return (void*)p_;
 }
@@ -125,15 +138,15 @@ void* new_bool() {
 }
 
 void* new_str(void* len) {
-	int *p_ = malloc(sizeof(char)*(*(int*)len));
+	double *p_ = malloc(sizeof(char)*get_i(len));
 	return (void*)p_;
 }
 
 //function of string pattern
 
 void* l_str(char* str) {
-	int* r = malloc(sizeof(int));
-	(*r) = strlen(str);
+	double* r = malloc(sizeof(double));
+	(*r) = (double)strlen(str);
 	return (void*)r;
 }
 
@@ -142,8 +155,8 @@ void* f_str(char* str, char* str_, void* r)
     bool t;
     int y = 0;
     int s = 0;
-	void* return_ = malloc(sizeof(int));
-	(*(int*)return_) = 0;
+	void* return_ = malloc(sizeof(double));
+	(*(double*)return_) = 0;
     for (int i = 0; i <= strlen(str); i++) {
         if (t && str[i] == str_[y]) {
             t = true;
@@ -160,8 +173,8 @@ void* f_str(char* str, char* str_, void* r)
         }
 
         if (y == strlen(str_)) {
-            if (s >= *(int*)r) {
-				(*(int*)return_) = i + 1;
+            if (s >= get_i(r)) {
+				(*(double*)return_) = i + 1;
                 return return_;
             }
             s++;
@@ -180,21 +193,21 @@ void* e_str(char* _, char* __) {
 }
 
 void* to_c(char* s) {
-	int* r = malloc(sizeof(int));
+	double* r = malloc(sizeof(double));
 	(*r) = (char)s[0];
 	return (void*)r;
 }
 
 void* to_ch(void* _) {
 	char* r = malloc(sizeof(char)*2);
-	r[0] = (char)(*(int*)_);
-	r[1] = '/0';
+	r[0] = (char)(get_i(_));
+	r[1] = (char)0;
 	return (void*)r;
 }
 
 void* g_str(void* str) {
-	int* ___ = malloc(sizeof(int));
-	(*___) = strlen(str);
+	double* ___ = malloc(sizeof(double));
+	(*___) = (double)strlen(str);
 	return (void*)___;
 }
 
@@ -217,8 +230,14 @@ void* em_str(char* s, char* y) {
 }
 
 void* s_str(void* t, void* len) {
-	char* buffer = malloc(sizeof(char)*(*(int*)len));
-	sprintf(buffer, "%d", *(int*)t);
+	char* buffer = malloc(sizeof(char)*(get_i(len)));
+	sprintf(buffer, "%d", get_i(t));
+	return (void*)buffer;
+}
+
+void* s__str(void* t, void* len) {
+	char* buffer = malloc(sizeof(char)*(get_i(len)));
+	sprintf(buffer, "%f", *(double*)t);
 	return (void*)buffer;
 }
 
@@ -234,7 +253,7 @@ void* t_str(char* s, char* y, void* _r) {
 		buf__ = strtok(NULL, y);
 	}
 	
-	(*(int*)_r) = (i-1);
+	(*(double*)_r) = (i-1);
 	return (void*)r_;
 }
 
@@ -242,8 +261,8 @@ void* c_str(char* y, void* t, void* a)
 {
     int i = 0;
     int len;
-    char* str = (char*)malloc(sizeof(char) * (*(int*)a) + 1);
-    for (int s = (*(int*)t); s <= ((*(int*)t)+(*(int*)a))-1; s++) {
+    char* str = (char*)malloc(sizeof(char) * get_i(a) + 1);
+    for (int s = get_i(t); s <= get_i(t)+get_i(a)-1; s++) {
         str[i] = y[s];
         i++;
     }
@@ -255,18 +274,18 @@ void* c_str(char* y, void* t, void* a)
 
 void* ch_str(char* s, void* i) {
 	char* s_ = malloc(sizeof(char)*2);
-	s_[0] = (char)(*(int*)i);
-    s_[1] = '\0';
+	s_[0] = (char)get_i(i);
+        s_[1] = '\0';
 	strncat(s, s_, strlen(s)+2);
 	free(s_);
 	return (void*)s;
 }
 
 void* n_str(void *t, void* b_) {
-	void* s = malloc(sizeof(int));
-	(*(int*)s) = strtol((char*)t, NULL, *(int*)b_);
+	void* s = malloc(sizeof(double));
+	(*(double*)s) = (double)strtol((char*)t, NULL, get_i(b_));
 	if (s == NULL) {
-		(*(int*)s) = 0;
+		(*(double*)s) = 0;
 	}
 	
 	return s;
@@ -274,14 +293,14 @@ void* n_str(void *t, void* b_) {
 
 //system functions
 void* pause() {
-	int* r = malloc(sizeof(int));
+	double* r = malloc(sizeof(double));
 	(*r) = 0;
 	system("pause");
 	return r;
 }
 
 void* exit_() {
-	int* r = malloc(sizeof(int));
+	double* r = malloc(sizeof(double));
 	(*r) = 0;
 	exit(1);
 	return r;
@@ -291,8 +310,8 @@ void* exit_() {
 void* read(char* name) {
   FILE *f_ = fopen(name, "rb");
   if (f_ == NULL) {
-	  void* r = malloc(sizeof(int));
-	  (*(int*)r) = 0;
+	  void* r = malloc(sizeof(double));
+	  (*(double*)r) = 0;
 	  return r;
   }
  
@@ -308,11 +327,11 @@ void* read(char* name) {
 
 void* write(char* file, char* c__) {
 	FILE* f_ = fopen(file, "w");
-    void* r = malloc(sizeof(int));
-	(*(int*)r) = 1;
-	if (f_ == NULL) {
-	  void* r = malloc(sizeof(int));
-	  (*(int*)r) = 0;
+    void* r = malloc(sizeof(double));
+	(*(double*)r) = 1;
+	if (f_== NULL) {
+	  void* r = malloc(sizeof(double));
+	  (*(double*)r) = 0;
 	  return r;
     }
 	fputs(c__, f_);
@@ -325,11 +344,11 @@ void* sys_dr__alloca(void* len) {
   
   void* b_;
   #if _WIN32 
-  b_ = VirtualAlloc(0, *(int*)len, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+  b_ = VirtualAlloc(0, get_i(len), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
   #endif
 
   #if defined(unix) || defined(__unix__) || defined(__unix)
-  b_ = mmap(NULL, *(int*)len, PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED, -1, 0);
+  b_ = mmap(NULL, get_i(len), PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED, -1, 0);
   #endif
   
   return b_;
@@ -337,28 +356,28 @@ void* sys_dr__alloca(void* len) {
 
 void* sys_dr__free(void* i, void* len) {
   #if _WIN32 
-  VirtualFree(i, 0, MEM_RELEASE);
+  VirtualFree(i, get_i(len), MEM_RELEASE);
   #endif
 
   #if defined(unix) || defined(__unix__) || defined(__unix)
-  munmap(i, *(int*)len);
+  munmap(i, get_i(len));
   #endif
  
   return i;
 }
 
 void* sys_p(void* c, void *t, void* len) {
-	memcpy(c, t, (*(int*)len)/1024);
+	memcpy(c, t, get_i(len)/1024);
 	return c;
 }
 
 void* sys_acess(void* t) {
-	void* t_ = (void*)(intptr_t) (*(int*)t);
+	void* t_ = (void*)(intptr_t)(get_i(t));
 	return t_;
 }
 
 void* sys_t(void* _) {
-	int* a = malloc(sizeof(int));
-	(*a) = (int)(intptr_t)_;
+	double* a = malloc(sizeof(double));
+	(*a) = (double)(intptr_t)_;
 	return a;
 }

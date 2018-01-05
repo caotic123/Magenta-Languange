@@ -7,6 +7,7 @@
 #include "module.h"
 #include "magenta_lex.h"
 #include "compiler.h"
+#include "macro.h"
 
 #ifndef MAGENTA_H
 #define MAGENTA_H
