@@ -215,12 +215,28 @@ std::string get__file(std::string name)
 
 std::string getFile__(std::string name) // load only .mag files
 {
-    
-    std::ifstream ifs("mag_files/" + name + ".mag");
-    std::string _cs( (std::istreambuf_iterator<char>(ifs) ),
-                       (std::istreambuf_iterator<char>()    ) );
-    
+    int length;
+    std::string buffer;
+    std::string _cs;
+    std::ifstream __f;
+    __f.open("mag_files/" + name + ".mag");
+    if (!__f) {
+        std::cout << "ERROR DON'T LOAD FILE CODE\n";
+        system("pause");
+        exit(EXIT_FAILURE);
+    }
+
+    if (__f.is_open()) {
+        while (!__f.eof()) {
+            getline(__f, buffer);
+            if (buffer.substr(0, 2) != "//") {
+                _cs = _cs + secure_string_format(buffer) + " ";
+            }
+        }
+    }
+
     std::replace(_cs.begin(), _cs.end(), '\n', ' ');
+
     return _cs;
 }
 

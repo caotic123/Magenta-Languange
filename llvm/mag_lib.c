@@ -95,9 +95,15 @@ void* mag_alloc(void* len) {
 	return (void*)m;
 }
 
-void* mag_realloc(void* len) {
-	void** m = realloc(m, get_i(len)*sizeof(void*));
-	return (void*)m;
+void* m_realloc(void* vector, void* len) {;
+        void* ret = malloc(sizeof(double));
+        (*(double*)ret) = 0;
+	vector = realloc(vector, get_i(len)*sizeof(void*));
+        return ret;
+}
+
+void* mag_realloc(void* vector, void* len) {;
+	return realloc(vector, get_i(len)*sizeof(void*));;
 }
 
 void* _aloc(void* vector, void* i, void* space) {

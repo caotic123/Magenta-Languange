@@ -355,7 +355,7 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
         }
         
         if (f->var_map[get_value(c_.s, char_ign)].type == unknow_type) {	
-            create_command("if1_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(s_.s, char_ign)].type == number_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(c_.s, char_ign), c_, unknow_type);
+            create_command("if1_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(s_.s, char_ign)].type == bool_type) ? LOAD_VALUE_BOOL_COND : LOAD_VALUE_BITCAST_COND, get_value(c_.s, char_ign), c_, unknow_type);
             command.type = f->var_map[get_value(s_.s, char_ign)].type;
         }
 
@@ -374,7 +374,7 @@ bool magenta_compiler::create_condition(struct_ep c_, struct_ep s_, std::string 
         }
 
         if (f->var_map[get_value(s_.s, char_ign)].type == unknow_type) {
-            create_command("if2_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(c_.s, char_ign)].type == number_type) ? LOAD_VALUE_BITCAST_COND : LOAD_VALUE_BOOL_COND , get_value(s_.s, char_ign), s_, unknow_type);
+            create_command("if2_" + std::string(int_to_string((*f->f_cond_))), (f->var_map[get_value(c_.s, char_ign)].type == bool_type) ? LOAD_VALUE_BOOL_COND : LOAD_VALUE_BITCAST_COND , get_value(s_.s, char_ign), s_, unknow_type);
             command.type = f->var_map[get_value(c_.s, char_ign)].type;
         }
         

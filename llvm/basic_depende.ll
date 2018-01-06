@@ -285,26 +285,45 @@ define i8* @mag_alloc(i8* %len) #0 {
 }
 
 ; Function Attrs: nounwind uwtable
-define i8* @mag_realloc(i8* %len) #0 {
+define i8* @m_realloc(i8* %vector, i8* %len) #0 {
   %1 = alloca i8*, align 8
-  %m = alloca i8**, align 8
-  store i8* %len, i8** %1, align 8
-  %2 = load i8**, i8*** %m, align 8
-  %3 = bitcast i8** %2 to i8*
-  %4 = load i8*, i8** %1, align 8
-  %5 = call i32 @get_i(i8* %4)
-  %6 = sext i32 %5 to i64
-  %7 = mul i64 %6, 8
-  %8 = call i8* @realloc(i8* %3, i64 %7) #7
-  %9 = bitcast i8* %8 to i8**
-  store i8** %9, i8*** %m, align 8
-  %10 = load i8**, i8*** %m, align 8
-  %11 = bitcast i8** %10 to i8*
-  ret i8* %11
+  %2 = alloca i8*, align 8
+  %ret = alloca i8*, align 8
+  store i8* %vector, i8** %1, align 8
+  store i8* %len, i8** %2, align 8
+  %3 = call noalias i8* @malloc(i64 8) #7
+  store i8* %3, i8** %ret, align 8
+  %4 = load i8*, i8** %ret, align 8
+  %5 = bitcast i8* %4 to double*
+  store double 0.000000e+00, double* %5, align 8
+  %6 = load i8*, i8** %1, align 8
+  %7 = load i8*, i8** %2, align 8
+  %8 = call i32 @get_i(i8* %7)
+  %9 = sext i32 %8 to i64
+  %10 = mul i64 %9, 8
+  %11 = call i8* @realloc(i8* %6, i64 %10) #7
+  store i8* %11, i8** %1, align 8
+  %12 = load i8*, i8** %ret, align 8
+  ret i8* %12
 }
 
 ; Function Attrs: nounwind
 declare i8* @realloc(i8*, i64) #1
+
+; Function Attrs: nounwind uwtable
+define i8* @mag_realloc(i8* %vector, i8* %len) #0 {
+  %1 = alloca i8*, align 8
+  %2 = alloca i8*, align 8
+  store i8* %vector, i8** %1, align 8
+  store i8* %len, i8** %2, align 8
+  %3 = load i8*, i8** %1, align 8
+  %4 = load i8*, i8** %2, align 8
+  %5 = call i32 @get_i(i8* %4)
+  %6 = sext i32 %5 to i64
+  %7 = mul i64 %6, 8
+  %8 = call i8* @realloc(i8* %3, i64 %7) #7
+  ret i8* %8
+}
 
 ; Function Attrs: nounwind uwtable
 define i8* @_aloc(i8* %vector, i8* %i, i8* %space) #0 {

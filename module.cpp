@@ -116,7 +116,7 @@ void __get_ptr(__code& x_, std::string n_, std::string vector_type, std::string 
 void __store(__code& x_, std::string n, std::string value__, std::string type_)
 {
     x_.insert_t(2, "store", type_.c_str());
-    value__ = (value__ == "0" || (strtol(value__.c_str(), NULL, 10) != 0 && type_ == "double" && value__.find(".") == std::string::npos)) ? value__ + ".0" : value__;
+    value__ = (type_ == "double" && (value__ == "0" || (strtol(value__.c_str(), NULL, 10) != 0 && value__.find(".") == std::string::npos))) ? value__ + ".0" : value__;
     x_.insert(value__);
     x_.insert(", ");
     x_.insert_t(2, (type_ + "*").c_str(), ("%" + n).c_str());
@@ -349,7 +349,7 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
     std::string operator_;
     std::string type__;
 
-    if (type == number_type) {
+    if (type == number_type || type == unknow_type) {
         operator_ = (op == "==") ? "oeq" : (op == "!=") ? "une" : (op == ">") ? "ogt" : (op == "<") ? "olt" : (op == ">=") ? "oge" : (op == "<=") ? "ole" : "";
         type__ = "double";
     }
