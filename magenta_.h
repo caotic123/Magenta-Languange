@@ -1,6 +1,5 @@
 #include <vector>
 #include <string>
-#include <stdlib.h>
 #include <algorithm>
 #include <iterator>
 #include "magenta_header.h"

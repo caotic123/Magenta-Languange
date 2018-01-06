@@ -3,7 +3,10 @@
 #include <stdarg.h>
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 #include <iostream>
+#include "stdlib.h"
+#include "string.h"
 
 #define __symb 16
 #define __abs 8

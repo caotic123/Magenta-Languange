@@ -116,7 +116,7 @@ void __get_ptr(__code& x_, std::string n_, std::string vector_type, std::string 
 void __store(__code& x_, std::string n, std::string value__, std::string type_)
 {
     x_.insert_t(2, "store", type_.c_str());
-    value__ = ((strtol(value__.c_str(), NULL, 10) != 0 && type_ == "double" && value__.find(".") == std::string::npos)) ? value__ + ".0" : value__;
+    value__ = (value__ == "0" || (strtol(value__.c_str(), NULL, 10) != 0 && type_ == "double" && value__.find(".") == std::string::npos)) ? value__ + ".0" : value__;
     x_.insert(value__);
     x_.insert(", ");
     x_.insert_t(2, (type_ + "*").c_str(), ("%" + n).c_str());
@@ -546,8 +546,8 @@ void magneta_module::add_value(std::string& cod__, std::string x, std::string y,
     __add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(__add)))) : __add;
     y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(y)))) : y;
 
-    __add = ((strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
-    y = ((strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
+    __add = (__add == "0"  || (strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
+    y = (y == "0" || (strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");
@@ -584,8 +584,8 @@ void magneta_module::sub_value(std::string& cod__, std::string x, std::string y,
     __add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(__add)))) : __add;
     y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(y)))) : y;
 
-    __add = ((strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
-    y = ((strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
+    __add = (__add == "0" || (strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
+    y = (y == "0" || (strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");
@@ -622,8 +622,8 @@ void magneta_module::div_value(std::string& cod__, std::string x, std::string y,
     __add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(__add)))) : __add;
     y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(y)))) : y;
 
-    __add = ((strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
-    y = ((strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
+    __add = (__add == "0" || (strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
+    y = (y == "0" || (strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");
@@ -661,8 +661,8 @@ void magneta_module::mul_value(std::string& cod__, std::string x, std::string y,
     __add = (is_prec_value(__add)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(__add)))) : __add;
     y = (is_prec_value(y)) ? ("%" + std::string(int_to_string((*n) + get_pr_str_value(y)))) : y;
 
-    __add = ((strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
-    y = ((strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
+    __add = (__add == "0" || (strtol(__add.c_str(), NULL, 10) != 0 && __add.find(".") == std::string::npos)) ? (__add + ".0") : __add;
+    y = (y == "0" || (strtol(y.c_str(), NULL, 10) != 0 && y.find(".") == std::string::npos)) ? (y + ".0") : y;
 
     x_.insert(s_);
     x_.insert_t(1, " =");

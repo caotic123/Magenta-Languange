@@ -839,7 +839,6 @@ void magenta::__analysis()
 
 void magenta::__token()
 {
-
     lex->lex__((new macro)->__macro(code__, lex->abstract_logic, lex->char_ign, lex->operators, lex->cond_ex) + " ");
     st_ st = lex->check__();
     if (st._) {
