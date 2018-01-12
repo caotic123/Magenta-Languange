@@ -83,8 +83,8 @@ Now, just add code generation.
 #return {($x)}
 #end macro
 ```
-Variables defined in (vars {}) are hygiencs and (top, down, return) generates codes in relative position of macro syntax found.
-Magenta macros works like a grammatic free of context so we can translate this
+Variables defined in (vars {}) are hygienic and (top, down, return) generates codes in relative position of macro syntax found.
+Magenta macros works like a grammatic free of context then we can translate this
 
 ```#define macro-syntax [(#var y)] 
 where [([(x)])] in magenta is [([(#var y)])]
