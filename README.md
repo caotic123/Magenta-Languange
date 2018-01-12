@@ -40,7 +40,7 @@ The variable var recevied the value of andress of function returned of func this
 
 # POINTERS
 
-if in Magenta everything is referenced then it is possible to allocate memory and do not give anything special treatment for this variable.
+If in Magenta everything is referenced then it is possible to allocate memory and do not give anything special treatment for this variable.
 
 ```
 #string = (new_str(23))
