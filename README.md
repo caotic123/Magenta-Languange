@@ -82,6 +82,9 @@ vars {($x)}
 top {#($x) = ($y)}
 return {($x)}
 #end macro
+
+function main() #var = ([(func())]+2)
+
 ```
 Variables defined in (vars {}) are hygienic and (top, down, return) generates codes in relative position of macro syntax found.
 Magenta macros works like a grammatic free of context then we can translate this
