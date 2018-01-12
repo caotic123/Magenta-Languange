@@ -78,9 +78,9 @@ Now, just add code generation.
 
 ```
 #define macro-syntax [(var y)]
-#vars {($x)}
-#top {#($x) = ($y)}
-#return {($x)}
+vars {($x)}
+top {#($x) = ($y)}
+return {($x)}
 #end macro
 ```
 Variables defined in (vars {}) are hygienic and (top, down, return) generates codes in relative position of macro syntax found.
