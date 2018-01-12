@@ -126,8 +126,7 @@ st_ lex_::check__()
 {
     char* __;
     bool check_b;
-
-    std::cout << __input << std::endl;
+    
     st_ st = char___(sym_, (char*)__input.c_str());
 
     if (st._) {

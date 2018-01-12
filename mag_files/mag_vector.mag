@@ -1,0 +1,54 @@
+#macro
+#define macro-syntax {}
+return {(new_vector())}
+#end macro
+
+#define macro-syntax (var vec)<n>[] = (var value)
+return {func vec_push_value(($vec), ($value))}
+#end macro
+
+#define macro-syntax (var vector)[(var index)]
+vars {($val)}
+top {#($val) = (value_vector(($vector), ($index)))}
+return {($val)}
+#end macro
+
+#macro
+
+function new_vector()
+#struct_vec = (mag_alloc((3)))
+#vector = (mag_alloc((1)))
+func _aloc((struct_vec), (0), (8))
+func _set((struct_vec), (0), (0), (8))
+func _aloc((struct_vec), (1), (8))
+func _set((struct_vec), (1), (1), (8))
+func _put((struct_vec), (2), (vector))
+ret (struct_vec)
+
+function vec_push_value(struct_vec, val)
+#index = (_get((struct_vec), (0))) #vec_size = (_get((struct_vec), (1)))
+#vector = (_get((struct_vec), (2)))
+#dif = (vec_size+1)
+func _set((struct_vec), (1), (dif), (8))
+#new_vector = (mag_realloc((vector), (dif)))
+func _set((struct_vec), (0), (index+1), (8))
+func _aloc((new_vector), (index), (8))
+func _set((new_vector), (index), (val), (8))
+func _put((struct_vec), (2), (new_vector))
+ret (struct_vec)
+
+function value_vector(struct_vec, i)
+#vector = (_get((struct_vec), (2)))
+#value = (_get((vector), (i)))
+ret (value)
+
+function main()
+#y = {}
+#x = (0)
+#l = (100)
+if ((x) < (l))
+(y)<n>[] = (x)
+#x = (x+1)
+while
+
+func print_n(((y)[(50)]))
