@@ -22,7 +22,7 @@ while
 
 # TYPES
 
-Magenta don't have complete system of types but the compiles don't check all possibilites of erros because types this means that you don't need declare types of variables.
+Magenta don't have complete system of types but the compiler doesn't check all possibilities of errors this means that you don't need declare types of variables.
 
 Consider this code:
 
