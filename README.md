@@ -114,40 +114,6 @@ free -> anything
 [([(x)])]
 ```
 
-Hello World In Magenta Language:
-
-In lua:
-```lua
-x = 3
-while(x <= 36) do
-print(x)
-x = (x+3)*(x-2)
-end
-```
-Output:
-```
-3
-6
-36
-```
-
-The same code In Magenta:
-```
-function main()
-#x = (3)
-#limit = (36)
-if ((x) < (limit))
-func print_n((x))
-#x = ((x+3)*(x-2))
-while
-```
-Output:
-```
-3
-6
-36
-```
-
 Simple examples:
 https://github.com/caotic123/Magenta-Languange/tree/master/mag_files
 
