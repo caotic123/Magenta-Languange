@@ -1,4 +1,4 @@
-# Magenta-Languange
+# MAGENTA-LANGUAGE
 
 ```
 function main() func print("Hello World")
@@ -38,7 +38,7 @@ Other detail is that all variable are references, so if you defines:
 
 The variable var recevied the value of andress of function returned of func this else means that the compiler don't know what type of this variable then Magenta consider this var as unknow type. Operations as unknow type are treated as number(double). To fix this just cast the variable.
 
-# Pointers
+# POINTERS
 
 if in Magenta everything is referenced then it is possible to allocate memory and do not give anything special treatment for this variable.
 
@@ -95,7 +95,6 @@ where [([(x)])] in magenta is [([(#var y)])]
 (x) = (var y)
 ] = ]
 ```
-
 ```
 A -> [BCD
 B -> (free
@@ -117,7 +116,7 @@ free -> anything
 Simple examples:
 https://github.com/caotic123/Magenta-Languange/tree/master/mag_files
 
-# Building 
+# BULDING
 You don't need any lib for compilation, but magenta requires CLANG for run.
 Clang(uses Pre-Built Binaries) is available in:
 
