@@ -3,8 +3,8 @@
 ```
 function main() func print("Hello World")
 ```
-Magenta is a untyped compiled language that compiles to LLVM ASSEMBLY to JIT CLANG.
-Magenta has a simple syntax and a basic imperatives structures, however can supports redefition complex syntactics.
+Magenta is a untyped compiled language that compiles for LLVM ASSEMBLY to JIT CLANG.
+Magenta has a simple syntax and a basic imperative structures, however can supports redefition complex syntactics.
 
 # SYNTAX
 
