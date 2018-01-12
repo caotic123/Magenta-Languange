@@ -77,11 +77,13 @@ This macro captures (var y) as function (but can be a variable or anything in "(
 Now, just add code generation.
 
 ```
+#macro
 #define macro-syntax [(var y)]
 vars {($x)}
 top {#($x) = ($y)}
 return {($x)}
 #end macro
+#macro
 
 function main() #var = ([(func())]+2)
 
