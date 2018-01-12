@@ -63,7 +63,7 @@ Like C language Magenta supports textual macros, however magenta macros are hygi
 #var = (func()+2)
 //this is not possible
 ```
-But with macro is possiblites magenta compiles run this expression.
+But with macro is possibilities magenta compiles run this expression.
 First should defines a new macro syntax```#define macro-syntax (anything)``` and the syntax.
 I will consider ```[(value)]``` to recevied function so... ```[(function())]```
 
