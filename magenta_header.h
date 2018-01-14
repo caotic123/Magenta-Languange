@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <tuple>
 #include "stdlib.h"
 #include "string.h"
 
@@ -19,13 +20,10 @@
 
 enum type_ {
     unknow_type = 0,
-    int8_type = 1,
-    int16_type = 2,
-    number_type = 3,
-    int64_type = 4,
-    string_type = 5,
-    bool_type = 6,
-    number_expression = 7
+    number_type = 1,
+    string_type = 2,
+    bool_type = 3,
+    number_expression = 4
 };
 
 enum type_func {
@@ -65,7 +63,8 @@ enum type_command {
     LOAD_VALUE_BOOL_COND = 28,
     END_SELECTION_WHILE = 29,
     ALLOC_STR = 30,
-    CHANGE_POINTER_STRING_VAR = 31
+    CHANGE_POINTER_STRING_VAR = 31,
+    CHANGE_CALL_FUNC = 32
 };
 
 struct struct_ep {
@@ -93,7 +92,7 @@ enum error_id {
     COMPILER_CONDITION_VARIABLE_DONT_FOUND = 15,
     ABSTRACT_COMMAND_DONT_FOUND = 16,
     ALLOC_STR_FAIL = 17,
-    MACRO_ERROR = 18
+    MACRO_ERROR = 18,
 
 };
 

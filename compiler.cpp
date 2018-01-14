@@ -42,7 +42,7 @@ void magenta_compiler::create_function(std::string name)
     (*f.f_cond_) = 0;
     f.__l = new int;
     (*f.__l) = 0;
-    f.stack = new std::vector<std::pair<int, int> >;
+    f.stack = new std::vector<std::tuple<int, int, std::vector<std::string> > >;
     func_s.push_back(f);
     func_map[name] = &func_s[func_s.size() - 1];
 }
@@ -233,13 +233,13 @@ void magenta_compiler::create_call_func(std::string name, std::string value, std
     command_ command;
     command_ var__f;
     command.command_name = name;
-    command.x_ = CALL_FUNC;
+    command.x_ = var_e(value) ? CHANGE_CALL_FUNC : CALL_FUNC;
     var__f.command_name = value;
     var__f.value = name;
     var__f.type = unknow_type;
-    if (value != "call func") {
+    if (value != "call func" && value != "%auto") {
         f->var_map[value] = var__f; // variables which recevied function values are untypeds
-    }
+    } 
     command.value = value;
     command.len = new int;
 
@@ -479,7 +479,7 @@ void magenta_compiler::compile(std::string name__)
                 module->end_selection(cod__, (*i_).__l, (*i_).stack);
             }
             if (c_.x_ == END_SELECTION_WHILE) {
-                module->while_selection(cod__, (*i_).__l, (*i_).stack);
+                module->while_selection(cod__, (*i_).__l, (*i_).stack, (*i_).q, (*i_).__e);
             }
             if (c_.x_ == IF_COND) {
                 module->create_if_condition(cod__, c_.type, c_.value, c_.__par, (*i_).q, (*i_).__e, (*i_).__l, (*i_).stack);
@@ -531,6 +531,9 @@ void magenta_compiler::compile(std::string name__)
             }
             if (c_.x_ == CALL_FUNC) {
                 module->create_call_func(cod__, c_.command_name, c_.__par, c_.value, (*i_).q);
+            }
+            if (c_.x_ == CHANGE_CALL_FUNC) {
+                module->change_call_func(cod__, c_.command_name, c_.__par, c_.value, (*i_).q);
             }
             if (c_.x_ == UNKNOW_TYPE_TO_POINTER) {
                 module->pointer_to_point(cod__, c_.command_name, c_.value, (*i_).q);

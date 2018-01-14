@@ -126,7 +126,7 @@ st_ lex_::check__()
 {
     char* __;
     bool check_b;
-    
+    int i = 0;
     st_ st = char___(sym_, (char*)__input.c_str());
 
     if (st._) {
@@ -140,6 +140,13 @@ st_ lex_::check__()
         sep = char_ign[___i][0];
         sep_ = char_ign[___i][1];
         _lex_buffer = l__(_lex_buffer, sep, sep_);
+    }
+ 
+    while(_lex_buffer.find("  ", i) != std::string::npos && i <= _lex_buffer.length()) { //to format more secure str
+        if (_lex_buffer.substr(i, 2) == "  ") {
+            _lex_buffer  = _lex_buffer.substr(0, i)+_lex_buffer.substr(i+1, _lex_buffer.length()-(i+1));
+        }
+        else {i = i+1;}
     }
 
     __ = (char*)malloc(sizeof(char) * (_lex_buffer.length() + 1));

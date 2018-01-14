@@ -263,7 +263,7 @@ void magneta_module::load_value(__code& x, std::string name, std::string v, std:
     x.s_();
 }
 
-void create_continue_label(__code& x_, int* q, int* __l, std::vector<std::pair<int, int> >* __stack)
+void create_continue_label(__code& x_, int* q, int* __l, std::vector<std::tuple<int, int, std::vector<std::string> > > * __stack)
 {
     std::string label;
     std::string _n = int_to_string((*q) - 1);
@@ -298,28 +298,13 @@ std::string magneta_module::cond__if(__code& x, std::string cond_1, std::string 
     return n;
 }
 
-void magneta_module::end_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >* __stack) // if you understood this please contact me
+void magneta_module::end_selection(std::string& cod__, int* __l,     std::vector<std::tuple<int, int, std::vector<std::string> > > * __stack) // if you understood this please contact me
 {
     __code x_;
-    std::pair<int, int> x__ = *(__stack->end() - 1);
+    std::tuple<int, int, std::vector<std::string> > x__ = *(__stack->end() - 1);
     x_.insert_t(3, "br", "label", ((std::string) "%" + (std::string) "label_." + int_to_string(std::get<1>(x__))).c_str());
     x_.s_();
     create_lab(x_, "label_." + std::string(int_to_string(std::get<1>((*(__stack->end()-1)))))); // the last selection opened
-    __stack->pop_back();
-    cod__ = cod__ + x_.string();
-}
-
-void magneta_module::while_selection(std::string& cod__, int* __l, std::vector<std::pair<int, int> >* __stack)
-{
-    __code x_;
-    std::pair<int, int> x__ = *(__stack->end() - 1);
-    x_.insert_t(2, "br i1", ("%" + std::string(int_to_string((std::get<0>(x__))))).c_str());
-    x_.insert(", ", true);
-    x_.insert("label %label_." + std::string(int_to_string((std::get<1>(x__)-1))));
-    x_.insert(", ");
-	x_.insert(("label %label_." + std::string(int_to_string(std::get<1>(x__)))).c_str());
-    x_.s_();
-    create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened
     __stack->pop_back();
     cod__ = cod__ + x_.string();
 }
@@ -336,6 +321,23 @@ std::string re_load(__code& x, int* q, std::string bit_name, std::string type_)
     return _;
 }
 
+void magneta_module::while_selection(std::string& cod__, int* __l, std::vector<std::tuple<int, int, std::vector<std::string> > > * __stack, int* q, int* __e)
+{
+    __code x_;
+    std::tuple<int, int, std::vector<std::string> >  x__ = *(__stack->end() - 1);
+    std::vector<std::string> cond_ = std::get<2>(x__);
+ 
+    x_.insert_t(2, "br i1", ("%" + cond__if(x_, re_load(x_, q, cond_[0], cond_[2]), re_load(x_, q, cond_[1], cond_[2]), cond_[2], cond_[3], q, __e)).c_str());
+    x_.insert(", ", true);
+    x_.insert("label %label_." + std::string(int_to_string((std::get<1>(x__)-1))));
+    x_.insert(", ");
+	x_.insert(("label %label_." + std::string(int_to_string(std::get<1>(x__)))).c_str());
+    x_.s_();
+    create_lab(x_, "label_." + std::string(int_to_string(std::get<1>(x__)))); // the last selection opened
+    __stack->pop_back();
+    cod__ = cod__ + x_.string();
+}
+
 void magneta_module::create_return_function(std::string& cod__, std::string v_)
 {
     __code x_;
@@ -343,7 +345,7 @@ void magneta_module::create_return_function(std::string& cod__, std::string v_)
     cod__ = cod__ + x_.string();
 }
 
-void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l, std::vector<std::pair<int, int> >* __stack)
+void magneta_module::create_if_condition(std::string& cod__, type_ type, std::string op, std::vector<std::string> __cond, int* q, int* __e, int* __l,     std::vector<std::tuple<int, int, std::vector<std::string> > > * __stack)
 {
     __code x_;
     std::string operator_;
@@ -359,13 +361,13 @@ void magneta_module::create_if_condition(std::string& cod__, type_ type, std::st
         type__ = "i1";
     }
     
-    std::pair<int, int> x__n;
+    std::tuple<int, int, std::vector<std::string> >  x__n;
     std::get<1>(x__n) = (*__l) + 1;
     __stack->push_back(x__n);
     std::string n = cond__if(x_, __cond[0], __cond[1], type__, operator_, q, __e);
     create_continue_label(x_, q, __l, __stack);
-    cond__if(x_, re_load(x_, q, __cond[0], type__), re_load(x_, q, __cond[1], type__), type__, operator_, q, __e); //second condition to eventual loop
     std::get<0>(*(__stack->end() - 1)) = (*q) - 1;
+    std::get<2>(*(__stack->end() - 1)) = {__cond[0], __cond[1], type__, operator_};
     (*__l) = std::get<1>(*(__stack->end()-1)) + 1; // GOD WROTES STRAIGHT WITH CROOKED LINES
     cod__ = cod__ + x_.string();
 }
@@ -470,10 +472,8 @@ std::string magneta_module::load_bool_value_cond(std::string& cod__, int* __e, s
 void magneta_module::create_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q)
 {
     __code x_;
-    std::string s_ = v_;
-    if (v_ == "%auto") {
-        s_ = int_to_string((*q));
-    }
+    std::string s_ = int_to_string((*q));
+    std::string andr;
 
     x_.insert_t(5, ("%" + s_).c_str(), "=", "call", "i8*", ("@" + func_name).c_str());
     x_.insert("(", true);
@@ -485,10 +485,35 @@ void magneta_module::create_call_func(std::string& cod__, std::string func_name,
     }
     x_.insert(")");
     x_.s_();
-
+    (*q)++;
     if (v_ == "%auto") {
-        (*q)++;
+        cod__ = cod__ + x_.string();
+        return;
     }
+    andr  = __aloc_n(x_, ("___________.storedfunc." + v_), "i8*");
+    __store_i8_p(x_, andr, "%" + s_);
+    load_value(x_, v_, andr, "i8*");
+
+    cod__ = cod__ + x_.string();
+}
+
+void magneta_module::change_call_func(std::string& cod__, std::string func_name, std::vector<std::string> par__, std::string v_, int* q)
+{
+    __code x_;
+    std::string s_ = int_to_string((*q));
+
+    x_.insert_t(5, ("%" + s_).c_str(), "=", "call", "i8*", ("@" + func_name).c_str());
+    x_.insert("(", true);
+
+    for (std::vector<std::string>::iterator i = par__.begin(); i != par__.end(); i++) {
+        x_.insert("i8* %");
+        x_.insert((*i).c_str());
+        x_.insert((i + 1) == par__.end() ? "" : ", ");
+    }
+    x_.insert(")");
+    x_.s_();
+    (*q)++;
+    __store_i8_p(x_, ("___________.storedfunc." + v_), s_);
 
     cod__ = cod__ + x_.string();
 }

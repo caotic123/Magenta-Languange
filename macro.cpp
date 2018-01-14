@@ -173,7 +173,7 @@ std::tuple<bool, std::map<std::string, std::string>, int> macro::is_mac(std::vec
             return std::make_tuple(false, map_context, i);
         }
         if (is_context((*i_))) {
-            map_context["$" + (*i_).substr(((*i_).find(f_[0]) + f_[0].length()) + 1, (*i_).find(symbol_of_context[1]) - (((*i_).find(f_[0]) + f_[0].length()) + 1))] = _.substr(i, must_ins(_, i + 1, 1, true) - i);
+            map_context["$" + (*i_).substr(((*i_).find(f_[0]) + f_[0].length()) + 1, (*i_).find(symbol_of_context[1]) - (((*i_).find(f_[0]) + f_[0].length()) + 1))] = _.substr(i, must_ins(_, i + 1, 1, true) - i).substr(1, (_.substr(i, must_ins(_, i + 1, 1, true) - i).length()-2));
         }
         i = i + (is_context((*i_)) ? must_ins(_, i + 1, 1, true) - i : (*i_).length());
     }
@@ -324,7 +324,6 @@ std::string macro::load(const char* abstract_logic[__abs][2], char char_ign[ig__
     }
 
     for (std::vector<mac_>::iterator _ = ____macro.begin(); _ != ____macro.end(); _++) {
-        ;
         code_x = _macro(code_x, (*_).s_objs, char_ign, (*_).rule, abstract_logic);
     }
 

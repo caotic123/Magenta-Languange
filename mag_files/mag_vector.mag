@@ -4,12 +4,12 @@ return {(new_vector())}
 #end macro
 
 #define macro-syntax (var vec)<n>[] = (var value)
-return {func vec_push_value(($vec), ($value))}
+return {func vec_push_value((($vec)), (($value)))}
 #end macro
 
 #define macro-syntax (var vector)[(var index)]
 vars {($val)}
-top {#($val) = (value_vector(($vector), ($index)))}
+top {#($val) = (value_vector((($vector)), (($index))))}
 return {($val)}
 #end macro
 
