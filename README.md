@@ -14,7 +14,7 @@ The syntax of magenta is very simple every values is defined through of "()" (ex
 function do()
 #x = (3)
 #limit = (36)
-if ((x) < (limit))
+if ((x) <= (limit))
 func print_n((x))
 #x = ((x+3)*(x-2))
 while
@@ -80,7 +80,7 @@ Now, just add code generation.
 #macro
 #define macro-syntax [(var y)]
 vars {($x)}
-top {#($x) = ($y)}
+top {#($x) = (($y))}
 return {($x)}
 #end macro
 #macro
