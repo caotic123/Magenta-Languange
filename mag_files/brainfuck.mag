@@ -1,0 +1,33 @@
+#macro #define macro-syntax BRAINFUCK! return {#state = (brainf_state())} #end macro
+#define macro-syntax ++ return {func brainf_plus((state))} #end macro
+#define macro-syntax -- return {func brainf_min((state))} #end macro
+#define macro-syntax >> return {func brainf_pplus((state))} #end macro
+#define macro-syntax << return {func brainf_pmin((state))} #end macro
+#define macro-syntax [[(var brain)]] vars {($x)} vars {($y)} top {#($y) = (brainf_get((state)))} return {($brain) if ((($y)) != (nil)) ($brain) while}  #end macro
+#define macro-syntax ,, return {func brainf_print((state))} #end macro
+#define macro-syntax nil vars {($k)} top {#($k) = (0)} return {($k)} #end macro
+#macro
+
+function brainf_state() #n = (number()) #n = (0) #y = (number()) #y = (0) #d = (number()) #d = (0) #state = (mag_alloc((3))) #vec_ = (mag_alloc((1)))
+func _put((state), (0), (n)) func _put((vec_), (0), (y)) func _put((state), (1), (vec_)) func _put((state), (2), (d))
+ret (state)
+
+function brainf_plus(state) #vec_ = (_get((state), (1))) #ind = (_get((state), (0))) #add = (_get((vec_), (ind))) #add = (add+1) ret (0)
+
+function brainf_pplus(state)
+#y = (number()) #y = (0) #vec_ = (_get((state), (1))) #ind = (_get((state), (0))) #ind = (ind+1) #max = (_get((state), (2)))
+if ((ind) > (max))
+  #new_vec_ = (mag_realloc((vec_), (ind))) func _put((state), (1), (new_vec_)) func _put((new_vec_), (ind), (y)) #max = (max+1)
+end
+ret (0)
+
+function brainf_pmin(state) #ind = (_get((state), (0))) #ind = (ind-1) ret (0)
+
+function brainf_min(state) #vec_ = (_get((state), (1))) #ind = (_get((state), (0))) #add = (_get((vec_), (ind))) #add = (add-1) ret (0)
+
+function brainf_get(state) #vec_ = (_get((state), (1))) #ind = (_get((state), (0))) #a = (_get((vec_), (ind))) ret (a)
+
+function brainf_print(state) #vec_ = (_get((state), (1))) #ind = (_get((state), (0))) #a = (_get((vec_), (ind))) func print_n((a)) ret (a)
+
+function main()
+BRAINFUCK! ++ ++ ++ ++ ++ ++ [[( -- ,, >> ++ ++ ++ ++ ++ [[( -- ,, )]] << )]]
