@@ -653,7 +653,7 @@ void magneta_module::div_value(std::string& cod__, std::string x, std::string y,
     x_.insert(s_);
     x_.insert_t(1, " =");
 
-    x_.insert_t(3, "fudiv", "double", __add.c_str());
+    x_.insert_t(3, "fdiv", "double", __add.c_str());
     x_.insert(", ", true);
     x_.insert(y);
     (*q)++;
